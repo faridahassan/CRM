@@ -1,0 +1,148 @@
+
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+    <link rel="stylesheet" href="assets/js/devexpress-web-14.1/css/dx.common.css">
+	<link rel="stylesheet" href="assets/js/devexpress-web-14.1/css/dx.light.css">
+	<link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+{% endblock %}
+{% block page_data %}
+	<script>
+		var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+	</script>
+{% endblock %}
+{% block page_content %}
+<!-- <i class="fa fa-asterisk"></i> -->
+
+<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Documents</h3>
+					
+					<div class="panel-options">
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					
+					<script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#example-4").dataTable({
+							
+							tableTools: {
+								sSwfPath: "assets/js/datatables/tabletools/copy_csv_xls_pdf.swf"
+							}
+						});
+					});
+					</script>
+					
+					<table class="table table-bordered table-striped" id="example-4">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Doc 1</th>
+								<th>Doc 2</th>
+								<th>Doc 3</th>
+								<th>Doc 4</th>
+							</tr>
+						</thead>
+					 
+					
+						<tbody>
+							<tr>
+								<td>Brenden Wagner</td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Fiona Green</td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></td>
+								<td><i class="fa fa-asterisk"></td>
+							</tr>
+							<tr>
+								<td>Shou Itou</td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Michelle House</td>
+								<td></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Suki Burks</td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+							</tr>
+							<tr>
+								<td>Prescott Bartlett</td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+								<td><i class="fa fa-asterisk"></td>
+							</tr>
+							<tr>
+								<td>Gavin Cortez</td>
+								<td></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Martena Mccray</td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+								<td><i class="fa fa-asterisk"></i></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{parent()}}
+
+	<script src="assets/js/devexpress-web-14.1/js/dx.chartjs.js"></script>
+	<script src="assets/js/xenon-custom.js"></script>
+	<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+
+
+	<!-- Imported scripts on this page -->
+	<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+	<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+	<script src="{{asset('assets/js/datatables/tabletools/dataTables.tableTools.min.js')}}"></script>
+
+
+	<!-- JavaScripts initializations and stuff -->
+	<script src="{{asset('assets/js/xenon-custom.js')}}"></script>
+    
+{% endblock %}

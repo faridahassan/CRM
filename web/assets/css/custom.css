@@ -1,0 +1,23 @@
+/**
+ *
+ * Apply your custom CSS here
+ *
+*/
+
+body {	
+}
+
+a {
+}
+.margin-top{
+  margin-top: 50px !important;
+}
+.gallery-image-container img {
+	float:left !important;
+}
+.green-border{
+  border:1px solid green;
+}
+.margin1x{
+	margin-top:20px;
+}

@@ -1,0 +1,1002 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/daterangepicker/daterangepicker-bs3.css')}}">
+
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+<script type="text/javascript">
+var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+</script>
+<style type="text/css">
+	select option[disabled]:first-child {
+	display: none;
+}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+	<div class="col-md-12">
+
+		{% for flashMessage in app.session.flashbag.get('notice') %}
+		    
+		    <div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<strong>Well done!</strong> {{ flashMessage }}
+			</div>
+		{% endfor %}
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Log Details</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				{{form_start(callForm, {'attr':{'class':'form-horizontal', 'role':'form'}})}}
+				{% if isCall %}
+					{{form_widget(callForm.properties ,{attr:{'class':'hidden'}})}}
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Orientation</label>
+						
+						<div class="col-sm-7">
+
+							<div class="date-and-time">
+								{{form_widget(callForm.orientation, {'attr' :{'class':'form-control'}})}}
+								<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#crm_sandboxbundle_call_orientation").selectBoxIt().on('open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+									});
+								});
+								</script>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<div class="form-group">
+					<label class="col-sm-3 control-label">Property</label>
+
+					<div class="col-sm-7">
+
+						<div class="date-and-time">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+								{
+									$("#crm_sandboxbundle_call_properties").select2({
+										placeholder: 'Choose the properties',
+										allowClear: true
+									}).on('select2-open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+									});
+									
+								});
+							</script>
+							{{form_widget(callForm.properties, {'attr' :{'class':'form-control'}})}}
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Objective</label>
+
+					<div class="col-sm-7">
+
+						<div class="date-and-time">
+							{{form_widget(callForm.objective, {'attr' :{'class':'form-control'}})}}
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#crm_sandboxbundle_call_objective").selectBoxIt().on('open', function()
+								{
+												// Adding Custom Scrollbar
+												$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+											});
+							});
+							</script>
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Interested in / Outcome</label>
+
+					<div class="col-sm-7">
+						{{form_widget(callForm.interestedIn, {'attr':{'class':'form-control autogrow'}})}}
+					</div>
+				</div>
+
+				<div class="form-group-separator"></div>
+				<div class="form-group">
+					<h4 class="col-md-4" style="color:black;">Next Action</h4>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Type</label>
+					<div class="col-md-7">
+						{{form_widget(callForm.task.type, {'attr' :{'class':'form-control','required':'required'}})}}	
+						<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#crm_sandboxbundle_call_task_type").selectBoxIt().on('open', function()
+								{
+												// Adding Custom Scrollbar
+												$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+											});
+							});
+							</script>
+				</div>
+				<label for="crm_sandboxbundle_call_task_type" generated="true" class="error"></label>
+
+			</div>
+
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Comment</label>
+					<div class="col-md-7">
+						{{form_widget(callForm.task.comment, {'attr' :{'class':'form-control'}})}}	
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Date</label>
+					<div class="col-md-7">
+						<div class="date-and-time">
+							{{form_widget(callForm.task.date, {'attr' :{'class':'form-control datepicker', 'type': 'text'}})}}	
+							{{form_widget(callForm.time, {'attr' :{'class':'form-control timepicker', 'type': 'text','data-template':'dropdown','data-default-time':'2:00 PM','data-show-meridian':'true','data-minute-step':'5'}})}}	
+
+						</div>
+					</div>
+					<label for="{{callForm.task.date.vars.id}}" generated="true" class="error"></label>
+				</div>
+				<div class="form-group">
+					<div class="col-md-12" id="upcoming_meetings">
+						
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-10">
+						{% if isCall %}
+							{{form_widget(callForm.submit, {'label' : 'Save','attr':{'class':'btn btn-info pull-right'}})}}
+						{% else %}
+							{{form_widget(callForm.submit, {'label' : 'Save','attr':{'class':'btn btn-success pull-right'}})}}
+						{% endif %}
+					</div>
+				
+				</div>
+				<div class="hidden">
+					{{form_widget(callForm.outcome, {'attr':{'class':'form-control autogrow'}})}}
+					{{form_widget(callForm.isCall,{attr:{'class':'hidden'}})}}
+					{{form_widget(callForm.lead,{attr:{'class':'hidden'}})}}	
+				</div>
+				{{form_end(callForm)}}
+				{% if contact.database.id is defined %}
+					<div class="row">
+						<div class="col-md-11">
+							<button onClick="$('#modal-4').modal('show', {backdrop: 'static'});" class="btn btn-success btm-sm pull-right"> More from database</button> 	
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-sm-12">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Contact</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Name</label>
+					
+					<div class="col-sm-4">
+						<p>
+							{% if contact.name is defined %}
+							<label>
+								<a href="{{path('sales_representative_contact_history', {contact:contact.id})}}">{{contact.name}}</a>
+								</label>
+							{% else %}
+							<label>Name not set!</label>
+							{% endif %}
+						</p>
+						
+					</div>
+
+					<label class="col-sm-2 control-label">Email</label>
+					
+					<div class="col-sm-4">
+						<p>
+							{% if contact.email is not null %}
+							<label>{{contact.email}}</label>
+							{% else %}
+							<label>N/A</label>
+							{% endif %}
+						</p>
+						
+					</div>
+				</div>
+				<br />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Mobile</label>
+					
+					<div class="col-sm-4">
+						<p>
+							{% if contact.mobile is not null %}
+							<label>{{contact.mobile}}</label>
+							{% else %}
+							<label>N/A</label>
+							{% endif %}
+						</p>
+						
+					</div>
+
+					<label class="col-sm-2 control-label">Mobile 2</label>
+					
+					<div class="col-sm-4">
+						<p>
+							{% if contact.mobile2 is not null %}
+							<label>{{contact.mobile2}}</label>
+							{% else %}
+							<label>N/A</label>
+							{% endif %}
+						</p>
+						
+					</div>
+				</div>
+				<br />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Database Name</label>
+					
+					<div class="col-sm-4">
+						<p>
+							{% if contact.database.id is defined %}
+								<label>{{contact.database.name}}</label>
+							{% else %}
+								<label>N/A</label>
+							{% endif %}
+						</p>
+						
+					</div>
+				</div>
+				<br />
+				<div class="form-group">
+					<div class="row">
+						<div class="col-md-12">
+						<label class="col-sm-2 control-label"><strong>Qualified Lead</strong></label>
+						<div class="col-sm-4">
+							<input type="checkbox" class="iswitch iswitch-info" id="potentialLead" {{(leadPotential) ? 'checked' : 'disabled'}}>	
+							
+							<div id="help-qualified" class="label label-default popover-primary {{(leadPotential)? 'hidden'}} " data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Please contact the marketing department to re-activate this lead!" data-original-title="Help!">?</div>
+						</div>
+						<div class="col-sm-2">
+							<label class="control-label reason{% if leadPotential %} hidden {% endif %}"><strong>Reason</strong></label>
+						</div>
+						<div class="col-sm-4">
+							<div class="reason {% if leadPotential %} hidden {% endif %}">
+								<select class="form-control" id="reason">
+									<option>Select Reason</option>
+									<option  {% if leadPotentialReason =="Income" %} selected{% endif %}>Income</option>
+									<option {% if leadPotentialReason =="Age" %} selected{% endif %}>Age</option>
+									<option {% if leadPotentialReason =="Score" %} selected{% endif %}>Score</option>
+								</select>
+								<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#reason").selectBoxIt().on('open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+										});
+									});
+								</script>
+							</div>
+						</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+						<div class="form-group">
+							<div class="col-sm-2">
+								<label class="control-label"><strong>Interested Lead</strong></label>
+							</div>
+							<div class="col-sm-4">
+								<input type="checkbox" class="iswitch iswitch-info" id="interestLead" {{(leadInterest) ? 'checked' : 'disabled'}}>
+								<div id="help-interested" class="label label-default popover-primary {{(leadInterest)? 'hidden'}}" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Please contact the marketing department to re-activate this lead!" data-original-title="Help!">?</div>
+								
+							</div>
+							<div class="col-sm-2">
+								<label class="control-label reason-interest{% if leadInterest %} hidden {% endif %}"><strong>Reason</strong></label>
+							</div>
+							<div class="col-sm-4">
+								<div class="reason-interest {% if leadInterest %} hidden {% endif %}">
+									<select class="form-control" id="interest">
+										<option>Select Reason</option>
+										<option  {% if leadInterestReason =="Income - Int" %} selected{% endif %}>Income - Int</option>
+										<option {% if leadInterestReason =="Age - Int" %} selected{% endif %}>Age - Int</option>
+										<option {% if leadInterestReason =="Score - Int" %} selected{% endif %}>Score - Int</option>
+									</select>
+									<script type="text/javascript">
+										jQuery(document).ready(function($)
+										{
+											$("#interest").selectBoxIt().on('open', function()
+											{
+															// Adding Custom Scrollbar
+															$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+											});
+										});
+									</script>
+								</div>
+							</div>
+
+						</div>
+					</div>
+						</div>
+				</div>
+
+				<div class="row ">
+					<div class="col-md-12 margin-top">
+						<div class="form-group">
+							<a href="javascript:;"  onClick="$('#modal-6').modal('show', {backdrop: 'static'});" class=" margin-top-40 btn btn-primary btn-single btn-sm pull-right">Edit Lead Details</a>
+						</div>		
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-6">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Edit Lead Information</h4>
+			</div>
+			
+			<div class="modal-body">
+			
+				{{form_start(leadForm, {'attr':{'id':'leadEditForm', novalidate: 'novalidate'}})}}
+				
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-1" class="control-label">Name</label>
+							
+							{{form_widget(leadForm.contact.name, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-2" class="control-label">Number</label>
+							
+							{{form_widget(leadForm.contact.mobile, {'attr':{'class':'form-control'}})}}
+						</div>	
+					
+					</div>
+				</div>
+			
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-3" class="control-label">E-mail</label>
+							
+							{{form_widget(leadForm.contact.email, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-3" class="control-label">Budget</label>
+							
+							{{form_widget(leadForm.budget, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+			
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-4" class="control-label">Status</label>
+							
+							{{form_widget(leadForm.status, {'attr':{'class':'form-control'}})}}
+							<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#{{leadForm.status.vars.id}}").select2({
+										placeholder: 'Select database',
+										allowClear: true
+									}).on('select2-open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+									});
+									
+								});
+							</script>
+						</div>	
+						
+					</div>
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-4" class="control-label">Mobile 2</label>
+							
+							{{form_widget(leadForm.contact.mobile2, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					
+				</div>
+			
+				<div class="row">
+					<div class="col-md-12">
+						
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Description</label>
+							
+							{{form_widget(leadForm.description, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Info</label>
+							
+							{{form_widget(leadForm.info, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<label class="control-label">Interested in</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Property Features</label>
+								{{form_widget(leadForm.features)}}
+								<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#crm_sandboxbundle_lead_features").select2({
+										placeholder: 'Write a feature',
+										allowClear: true
+										}).on('select2-open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+										});
+									});
+								</script>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Locations </label>
+							{{form_widget(leadForm.locations)}}
+							<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#{{leadForm.locations.vars.id}}").select2({
+									placeholder: 'Write a location name',
+									allowClear: true
+									}).on('select2-open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+									});
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Property Types </label>
+							{{form_widget(leadForm.typeFeatures)}}
+							<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#crm_sandboxbundle_lead_typeFeatures").select2({
+									placeholder: 'Write a property type',
+									allowClear: true
+									}).on('select2-open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+									});
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<br>
+						<div class="form-group">
+							<label for="field-3" class="control-label">Campaign</label>
+							
+							<div>
+
+								<div class="date-and-time">
+									
+									<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#crm_sandboxbundle_lead_subChannel").selectBoxIt().on('open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+										});
+									});
+									</script>
+								</div>
+							</div>
+							{{form_widget(leadForm.subChannel, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					<div class="col-md-6">
+						<br>
+						<div class="form-group">
+							<label for="field-3" class="control-label">Database</label>
+
+							<div>
+
+								<div class="date-and-time">
+									<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#crm_sandboxbundle_lead_contact_database").selectBoxIt().on('open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+										});
+									});
+									</script>
+								</div>
+							</div>
+							
+							{{form_widget(leadForm.contact.database, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+				
+			</div>
+			<div class="hidden">
+				{{form_widget(leadForm.evaluation)}}
+				{{form_widget(leadForm.assignedSalesRep)}}
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				
+				{{form_widget(leadForm.submit, {'attr':{'class':'btn btn-info','label':'hello'}})}}
+				{{form_end(leadForm)}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal 4 (Confirm)-->
+<div class="modal fade" id="modal-4" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				
+				<div class="modal-header">
+					<h4 class="modal-title">Could not reach contact?</h4>
+				</div>
+				
+				<div class="modal-body">
+				
+					Please tell us what happened
+					
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning" onclick =" nextUser('No Answer')"       data-dismiss="modal">No Answer</button>
+					<button type="button" class="btn btn-danger"  onclick =" nextUser('Wrong Number')"    data-dismiss="modal">Wrong Number</button>
+				</div>
+			</div>
+		</div>
+</div>
+
+<div class="modal fade" id="modal-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Confirmation!</h4>
+			</div>
+			
+			<div class="modal-body">
+				Changing lead Interest/Qualification can not be changed once set. Are you sure you want to proceed?
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white to-disable" data-dismiss="modal" data-type="" id="dismiss-button">Close</button>
+				<button type="button" class="btn btn-info to-disable" data-type="" id="proceed-button">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+<!-- Imported scripts on this page -->
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+<script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+<script src="{{asset('assets/js/handlebars.min.js')}}"></script>
+<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('assets/js/jquery-validate/jquery.validate.min.js')}}"></script>
+<script type="text/javascript">
+$('form').validate({
+  ignore:'', //i.e. do not ignore hidden elements
+  //rules, etc
+});
+$('#{{callForm.task.date.vars.id}}').datepicker({
+          format: 'yyyy-mm-dd',
+          startDate: 'd',
+          endDate  :'+5y'
+});
+$( "#leadEditForm" ).on( "submit", function( event ) {
+  	event.preventDefault();
+
+  	var post_data = $(this).serialize();
+	var post_url = $(this).attr('action');
+	//var post_data = form.serialize();
+	$.ajax({
+	    type: 'PUT',
+	    url: post_url, 
+	    data: post_data,
+	    success: function(msg) {
+			$('#modal-6').modal('hide');
+	    }
+	});
+});
+	$("#dismiss-button").click(function(){
+    	var type = $(this).attr('data-type')
+    	var m = parseInt($(this).attr('data-value'))
+    	switch(type) {
+    		case 'potential':
+    			if(m){
+    				$("#potentialLead").removeAttr('checked')
+    			}
+    			else{
+    				$("#potentialLead").prop('checked',true)
+    			}
+    			break;
+    		case 'interest':
+    			if(m){
+    				$("#interestLead").removeAttr('checked')
+    			}
+    			else{
+    				$("#interestLead").prop('checked', true)
+    			}
+    			break;
+    	}
+    })
+    $("#proceed-button").click(function(){
+    	$(".to-disable").prop('disabled', true)
+    	var type = $(this).attr('data-type')
+    	var leadId = {{leadId}}
+		var m = parseInt($(this).attr('data-value'))
+		var url;
+
+		switch(type) {
+			case 'potential':
+				url = Routing.generate('lead_potential', {id: leadId, potential: m});
+				if(m)
+					$(".reason").addClass('hidden')
+				else {
+					$(".reason").removeClass('hidden')
+					$("#potentialLead").prop('disabled', true)
+					$("#help-qualified").removeClass('hidden')
+				}
+				break;
+			case 'interest':
+				url = Routing.generate('lead_interest', {id: leadId, interest: m});
+				if(m)
+					$(".reason-interest").addClass('hidden')
+				else {
+					$(".reason-interest").removeClass('hidden')
+					$("#interestLead").prop('disabled', true)
+					$("#help-interested").removeClass('hidden')
+				}
+				break;
+		}
+
+
+		
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: function(response){
+				if (m){
+					$("#modal-1").modal("toggle")
+					toastr.success('Updated successfully')
+				}
+				else{
+					$("#modal-1").modal("toggle")
+					toastr.success('Updated successfully')
+				}
+				$(".to-disable").prop('disabled', false)
+			},
+			error: function() {
+				toastr.error('<i class=fa-info></i>An error has occured, please try again!')
+			}
+		});
+    })
+
+	$("#potentialLead").change(function(){
+		jQuery('#modal-1').modal('show', {backdrop: 'fade'});
+		if($(this).is(":checked")) {
+			$("#proceed-button").attr('data-value', 1)
+			$("#dismiss-button").attr('data-value', 1)
+		} else {
+			$("#proceed-button").attr('data-value', 0)
+			$("#dismiss-button").attr('data-value', 0)
+		}
+		$("#proceed-button").attr('data-type', 'potential')
+		$("#dismiss-button").attr('data-type', 'potential')
+	});
+
+	$("#interestLead").change(function(){
+		jQuery('#modal-1').modal('show', {backdrop: 'fade'})
+	    if($(this).is(":checked")) {
+			$("#proceed-button").attr('data-value', 1)
+			$("#dismiss-button").attr('data-value', 1)
+		} else {
+			$("#proceed-button").attr('data-value', 0)
+			$("#dismiss-button").attr('data-value', 0)
+		}
+		$("#proceed-button").attr('data-type', 'interest')
+		$("#dismiss-button").attr('data-type', 'interest')
+
+	});
+	$('#reason').change(function(){
+		var leadId = {{leadId}};
+		var m;
+		var value = $( "#reason option:selected" ).text();
+		if ( value == "Select Reason")
+		{
+			value = "undefiend";
+		}
+		
+		if($($("#potentialLead")).is(":checked")){
+			var url = Routing.generate('lead_potential', {id: leadId, potential: 1, reason:value});
+			m = true;
+			$(".reason").toggle("hidden");
+		}
+		else {
+			//Uncheck
+			var url = Routing.generate('lead_potential', {id: leadId, potential: 0, reason: value});
+			m = false;
+
+			$(".reason").removeClass("hidden");
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: function(response){
+					toastr.success('Lead updated successfully!');
+			},
+			error: function() {
+				toastr.error('<i class=fa-info></i>An error has occured while setting lead\'s potential, please try again!')
+			}
+		});
+		
+	});
+	$('#interest').change(function(){
+
+		var leadId = {{leadId}};
+		var m;
+		var value = $( "#interest option:selected" ).text();
+		var url;
+		if ( value == "Select interest")
+		{
+			value = "undefiend";
+		}
+		
+		if($($("#interestLead")).is(":checked")){
+			url = Routing.generate('lead_interest', {id: leadId, interest: 1, reason:value});
+			m = true;
+			$(".interest").toggle("hidden");
+		}
+		else {
+			//Uncheck
+			url = Routing.generate('lead_interest', {id: leadId, interest: 0, reason: value});
+			m = false;
+
+			$(".interest").removeClass("hidden");
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: function(response){
+				toastr.success('Lead updated successfully!');
+			},
+			error: function() {
+				toastr.error('<i class=fa-info></i>An error has occured while setting lead\'s potential, please try again!')
+			}
+		});
+		
+	});
+$('#selectbox1').change(function() {
+	var toSend = $('#selectbox1 option:selected').text();
+	var leadId = '{{leadId}}';
+	var url = Routing.generate('lead_assignment', { id : leadId, slug : toSend});
+	$.ajax({
+		type:"GET",
+		url : url,
+		success : function(response) {
+			
+		},
+		error: function() {
+			alert("An error has occured, please re-evaluate the lead. Your evaluation was: " + toSend);
+		}
+	});
+});
+</script>
+
+<script type="text/javascript">
+$('#crm_sandboxbundle_call_task_type').change(function(){
+	var value = $( "#crm_sandboxbundle_call_task_type option:selected" ).text();
+	console.log(value)
+	if ( value == "Appointment" && $("#{{callForm.task.date.vars.id}}").val()!="")
+	{
+		var user = '{{app.user.id}}';
+		$('#upcoming_meetings').html("Loading..");
+		getMeetingsOn(user,$("#{{callForm.task.date.vars.id}}").val())
+	}
+	else
+	{
+		$('#upcoming_meetings').html("");
+	}
+	
+	
+});
+	oldDate = $("#{{callForm.task.date.vars.id}}").val();
+	$('#{{callForm.task.date.vars.id}}').change(function() {
+		var date = $("#{{callForm.task.date.vars.id}}").val();
+		if( oldDate !=  date)
+		{
+			oldDate = date;
+			var user = '{{app.user.id}}';
+			if($('#crm_sandboxbundle_call_task_type option:selected').text() =="Appointment")
+			{
+				$('#upcoming_meetings').html("Loading..");
+				getMeetingsOn(user,date)
+			}
+		}
+	});
+	function getMeetingsOn(user,date)
+	{
+		var url = Routing.generate('task_meetings_on_date', { user : user, date : date});			
+		$.ajax({
+		type: 'GET',
+		url: url,
+		success: function(response){
+			$('#upcoming_meetings').html(response);
+		},
+		error: function() {
+			toastr.error('<i class=fa-info></i>An error has occured while setting lead\'s potential, please try again!')
+			// alert("An error has occured while setting potential lead, please try again!");
+		}
+	});
+	}
+		function nextUser(message){
+			if ( message == "Wrong Number")
+			{
+				var leadId = {{leadId}};
+				m= false
+				var url = Routing.generate('lead_potential', {id: leadId, potential: 1, reason: message});
+				$.ajax({
+						type: 'GET',
+						url: url,
+						success: function(response){
+							if (m)
+								toastr.success('Lead now has potential!');
+							else
+								toastr.success('Lead now has NO potential');
+								{% if contact.database.id is defined %}
+								var databaseid = {{contact.database.id}}
+								{% endif %}
+								var url = Routing.generate('callcenter_database_call_next_user', {database: databaseid});
+								window.location = url;
+						},
+						error: function() {
+							toastr.error('<i class=fa-info></i>An error has occured while setting lead\'s potential, please try again!')
+							// alert("An error has occured while setting potential lead, please try again!");
+						}
+					});
+			}
+			else
+			{
+				{% if contact.database.id is defined %}
+				var databaseid = {{contact.database.id}}
+				{% endif %}
+				var url = Routing.generate('callcenter_database_call_next_user', {database: databaseid});
+				window.location = url;
+
+			}
+		} 
+</script>
+
+{% endblock %}

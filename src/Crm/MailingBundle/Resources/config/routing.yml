@@ -1,0 +1,3 @@
+crm_mailing_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: CrmMailingBundle:Default:index }

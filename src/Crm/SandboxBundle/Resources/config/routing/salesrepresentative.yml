@@ -1,0 +1,36 @@
+
+
+sales_representative_assigned_leads:
+    path:     /assignedleads
+    defaults: { _controller: CrmSandboxBundle:SalesRepresentative\AssignedLeads:index }
+
+sales_representative_call_orientation:
+    path: /call_orientation
+    defaults: {_controller: "CrmSandboxBundle:Common/CallsOrientation:index"}
+
+sales_representative_deals:
+    path: /deals
+    defaults: { _controller: "CrmSandboxBundle:SalesRepresentative/Deals:index" }
+sales_representative_new_deal:
+    path: /deals/new
+    defaults: { _controller: "CrmSandboxBundle:SalesRepresentative/Deals:new" }
+sales_representative_update_property_price:
+    path: /ajax_update_property_price/{property}
+    defaults: { _controller: "CrmSandboxBundle:SalesRepresentative/Deals:updatePropertyPrice" }
+    options:
+        expose: true
+sales_representative_dashboard:
+    path: /dashboardsalesrep
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboardSalesRep" }
+
+sales_representative_dashboard_rep:
+    path: /dashboardsalesrep/rep/{action}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboardRep" }
+
+sales_representative_contact_history:
+    path:  /dashboardsalesrep/contact_history/{contact}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:contactHistory" }
+
+sales_representative_dashboard_leads:
+    path: /dashboardsalesrep/leads/{agent}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboardLeads" }

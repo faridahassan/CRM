@@ -1,0 +1,33 @@
+callcenter_log_outbound_call:
+    path: /logaction/{id}/{orientation}
+    defaults: { _controller: "CrmSandboxBundle:Common/LogCall:outbound" }
+
+callcenter_log_inbound_call:
+    path: /select_lead_inbound_call/
+    defaults: { _controller: "CrmSandboxBundle:Common/LogCall:selectLead" }
+
+callcenter_create_lead:
+    path: /create_lead/{orientation}
+    defaults: { _controller: "CrmSandboxBundle:Common/LogCall:createLead" }
+
+callcenter_database_list:
+    path: /database_list
+    defaults: {_controller: "CrmSandboxBundle:CallCenter/DatabaseList:index"}
+
+callcenter_database_upload:
+    path: /upload_database
+    defaults: {_controller: "CrmSandboxBundle:CallCenter/DatabaseList:uploadDatabase"}
+
+callcenter_call_orientation:
+    path: /call_orientation
+    defaults: {_controller: "CrmSandboxBundle:Common/CallsOrientation:index"}
+
+callcenter_database_call_next_user:
+    path: /database_call_next_user/{database}
+    defaults: {_controller: "CrmSandboxBundle:CallCenter/DatabaseList:findNextUser"}
+    options:
+        expose: true
+
+callcenter_assign_leads:
+    path: /assign_leads
+    defaults: { _controller: "CrmSandboxBundle:Sales/AssignLeads:index" }

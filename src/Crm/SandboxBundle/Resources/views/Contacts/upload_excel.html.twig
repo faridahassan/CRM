@@ -1,0 +1,60 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+	{{parent()}}
+
+{% endblock %}
+{% block page_content %}
+	<div class="panel panel-default">
+			
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Upload Contacts <small></small>
+					</h3>
+					<a href="{{asset('templates/template_contacts_upload.csv')}}">
+					<button class="btn btn-primary btn-icon btn-icon-standalone pull-right">
+						<i class="fa-download"></i>
+						<span>Download Template</span>
+					</button>
+					</a>
+				</div>
+				
+				<div class="panel-body">
+					
+
+					<br>
+					{{form_start(form)}}
+					<div class="form-group">
+						<div>
+							{{form_widget(form.file,
+								{ 'attr' : { 'class' : ''  } }
+							)}}
+						</div>
+					</div>
+					
+						
+					
+					
+					<div class="form-group">
+						<label class="col-sm-3">Database name</label>
+						{{form_widget(form.database_name)}}
+					</div>
+					
+					<div class="form-group">
+						<div class="col-sm-1">
+							{{form_widget(form.submit, {'label' : 'Upload','attr':{'class':'btn btn-success'}})}}
+						</div>
+					</div>
+					
+				</div>
+			
+			</div>
+
+				{{form_end(form)}}
+{% endblock %}
+
+
+{% block javascripts %}
+	{{parent()}}
+	<script src="{{ asset('assets/js/dropzone/dropzone.min.js') }}"></script>
+
+{% endblock %}

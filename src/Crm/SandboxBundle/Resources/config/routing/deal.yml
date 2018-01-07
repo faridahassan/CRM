@@ -1,0 +1,30 @@
+deal:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Deal:index" }
+
+deal_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:Deal:show" }
+
+deal_new:
+    path:     /{id}/new
+    defaults: { _controller: "CrmSandboxBundle:Deal:new" }
+
+deal_create:
+    path:     /{id}/create
+    defaults: { _controller: "CrmSandboxBundle:Deal:create" }
+    methods:  POST
+
+deal_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Deal:edit" }
+
+deal_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Deal:update" }
+    methods:  [POST, PUT]
+
+deal_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Deal:delete" }
+    methods:  [POST, DELETE]

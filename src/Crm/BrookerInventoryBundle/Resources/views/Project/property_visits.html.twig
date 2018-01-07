@@ -1,0 +1,99 @@
+{% extends '::base.html.twig' %}
+{% block page_data %}
+{{parent()}}
+
+<link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+
+<script type="text/javascript">
+	
+	var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+
+</script>
+
+{% endblock %}
+
+{% block page_content %}
+	
+
+
+
+
+<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Projects</h3>
+					
+					<div class="panel-options">
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					
+					<script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#example-4").dataTable({
+							
+							tableTools: {
+								sSwfPath: "assets/js/datatables/tabletools/copy_csv_xls_pdf.swf"
+							}
+						});
+					});
+					</script>
+					
+					<table class="table table-bordered table-striped" id="example-4">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Visits</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+					 
+					
+						<tbody>
+						{% for entity in entities %}
+							<tr>
+								<td>{{entity.name}}</td>
+								<td>{{entity.visits|length}}</td>
+								<td><a href="{{path('inventory_property_breakdown', {property: entity.id})}}">View</a></td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	    {{parent()}}
+	<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+
+
+	<!-- Imported scripts on this page -->
+	<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+	<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+	<script src="{{asset('assets/js/datatables/tabletools/dataTables.tableTools.min.js')}}"></script>
+
+
+	<!-- JavaScripts initializations and stuff -->
+	<script src="{{asset('assets/js/xenon-custom.js')}}"></script>
+	{% endblock %}

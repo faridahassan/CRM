@@ -1,0 +1,30 @@
+database:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Database:index" }
+
+database_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:Database:show" }
+
+database_new:
+    path:     /new
+    defaults: { _controller: "CrmSandboxBundle:Database:new" }
+
+database_create:
+    path:     /create
+    defaults: { _controller: "CrmSandboxBundle:Database:create" }
+    methods:  POST
+
+database_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Database:edit" }
+
+database_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Database:update" }
+    methods:  [POST, PUT]
+
+database_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Database:delete" }
+    methods:  [POST, DELETE]

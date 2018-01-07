@@ -1,0 +1,601 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+
+<style type="text/css">
+	.nav.nav-tabs>li.active>a {
+    border: 0;
+    background-color: #f4f4f4;
+}
+.nav.nav-tabs>li>a {
+    border: none;
+    background-color: #fff;
+    margin-right: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+}
+.nav.nav-tabs+.tab-content {
+    background: #f4f4f4;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+</style>
+{% endblock %}
+
+{% block page_content %}
+
+<div class="row">
+	<div class="col-md-12">
+
+		{% for flashMessage in app.session.flashbag.get('notice') %}
+		    
+		    <div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<strong>Well done!</strong> {{ flashMessage }}
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Inventory</h3>
+
+				<div class="panel-options">
+					<a href="{{path('inventory_upload')}}">
+                    	<button class="btn btn-blue btn-icon">
+							<i class="fa-upload"></i>
+                    		<span class="title">Upload Excel</span>
+                    	</button>
+                    </a>
+					<a href="{{path('property_new')}}" data-toggle="add">
+						<button class="btn btn-success btn-icon">
+							<i class="fa-check"></i>
+							<span>Add Property</span>
+						</button>
+					</a>
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-10">
+
+						<ul class="nav nav-tabs">
+							{# <li class="active">
+								<a href="#filter" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-Filter"></i></span>
+									<span class="hidden-xs">Date</span>
+								</a>
+							</li> #}
+							<li class="active">
+								<a href="#current_month" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-user"></i></span>
+									<span class="hidden-xs">Location</span>
+								</a>
+							</li>
+							<li>
+								<a href="#builduparea_panel" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-user"></i></span>
+									<span class="hidden-xs">Built Area</span>
+								</a>
+							</li>
+							<li>
+								<a href="#landarea_panel" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-user"></i></span>
+									<span class="hidden-xs">Land Area</span>
+								</a>
+							</li>
+							<li>
+								<a href="#price_panel" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-envelope-o"></i></span>
+									<span class="hidden-xs">Price Range</span>
+								</a>
+							</li>
+							<li>
+								<a href="#contact_panel" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-envelope-o"></i></span>
+									<span class="hidden-xs">Contact</span>
+								</a>
+							</li>
+							<li>
+								<a href="#serial_panel" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-envelope-o"></i></span>
+									<span class="hidden-xs">Property ID</span>
+								</a>
+							</li>
+							<li>
+								<a href="#sales_rep_panel" data-toggle="tab">
+									<span class="visible-xs"><i class="fa-envelope-o"></i></span>
+									<span class="hidden-xs">Agent</span>
+								</a>
+							</li>	
+						</ul>
+
+						<div class="tab-content">
+							<div class="tab-pane active" id="current_month">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Location</label>
+
+											<div class="col-sm-8">
+												<select class="form-control" id="locationName">
+												<option value="0">Select a location</option>
+												{% for location in locations %}
+													<option value="{{location.id}}">{{location.name}}</option>
+												{% endfor %}
+												</select>
+												<script type="text/javascript">
+												jQuery(document).ready(function($)
+												{
+													$("#example-4 tr").css('cursor', 'pointer');
+													$("#locationName").selectBoxIt().on('open', function()
+													{
+														// Adding Custom Scrollbar
+														$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+													});	
+												});
+												</script>
+												<br/>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
+
+							<div class="tab-pane" id="price_panel">
+								<div class="row">
+									<div class="col-sm-12">
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Min.</label>
+
+											<div class="col-sm-8">
+												<p>
+													<input id="minPrice" type="text" class="form-control">
+												</p>
+											</div>
+										</div>
+										<br />
+										<br />
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Max.</label>
+
+											<div class="col-sm-8">
+													<p>
+														<input id="maxPrice" type="text" class="form-control">
+													</p>
+											</div>
+										</div>
+
+										
+
+									</div>
+								</div>
+
+							</div>
+
+
+							<div class="tab-pane" id="builduparea_panel">
+								<div class="row">
+									<div class="col-sm-12">
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Min.</label>
+
+											<div class="col-sm-8">
+												<p>
+													<input id="minBuildup" type="number" class="form-control">
+												</p>
+											</div>
+										</div>
+										<br />
+										<br />
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Max.</label>
+
+											<div class="col-sm-8">
+													<p>
+														<input id="maxBuildup" type="number" class="form-control">
+													</p>
+											</div>
+										</div>
+
+										
+
+									</div>
+								</div>
+
+							</div>
+
+							<div class="tab-pane" id="landarea_panel">
+								<div class="row">
+									<div class="col-sm-12">
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Min.</label>
+
+											<div class="col-sm-8">
+												<p>
+													<input id="minLand" type="number" class="form-control">
+												</p>
+											</div>
+										</div>
+										<br />
+										<br />
+
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Max.</label>
+
+											<div class="col-sm-8">
+													<p>
+														<input id="maxLand" type="number" class="form-control">
+													</p>
+											</div>
+										</div>
+
+										
+
+									</div>
+								</div>
+
+							</div>
+
+							<div class="tab-pane " id="contact_panel">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Name</label>
+
+											<div class="col-sm-8">
+												<select class="form-control" id="contactName">
+												{% for contact in contacts %}
+													<option>{{contact}}</option>
+												{% endfor %}
+												</select>
+												<script type="text/javascript">
+												jQuery(document).ready(function($)
+												{
+													$("#contactName").selectBoxIt().on('open', function()
+													{
+														// Adding Custom Scrollbar
+														$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+													});	
+												});
+												</script>
+												<br/>
+											</div>
+										</div>
+
+										
+
+									</div>
+								</div>
+								
+							</div>
+
+							<div class="tab-pane " id="serial_panel">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Property ID</label>
+
+											<div class="col-sm-8">
+												<p>
+													<input id="serialNo" type="number" class="form-control">
+												</p>
+											</div>
+										</div>
+
+									</div>
+								</div>
+								
+							</div>
+
+							<div class="tab-pane" id="sales_rep_panel">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="form-group">
+											<label class="col-sm-4 control-label">Agents</label>
+
+											<div class="col-sm-8">
+												<select class="form-control" id="sales_reps">
+												<option value="0">Select an agent</option>
+												{% for agent in sales_reps %}
+													<option value="{{agent.id}}">{{agent.name}}</option>
+												{% endfor %}
+												</select>
+												<script type="text/javascript">
+													jQuery(document).ready(function($)
+													{
+														$("#sales_reps").selectBoxIt().on('open', function()
+														{
+															// Adding Custom Scrollbar
+															$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+														})
+														
+													});
+												</script>
+												<br/>
+											</div>
+										</div>
+
+										</div>
+
+									</div>
+								</div>
+								
+							</div>	
+
+						</div>
+
+
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-3">
+							<label>Sold</label>
+							<input type="checkbox" id="soldFilter" class="iswitch iswitch-yellow bool-filters">
+							</input>
+						</div>
+						<div class="col-md-3">
+							<label>Deposited</label>
+							<input type="checkbox" id="depositFilter" class="iswitch iswitch-yellow bool-filters">
+						</input>
+						</div>	
+					</div>
+				</div>	
+				<div class="row">
+					<div class="col-sm-12">
+						<script type="text/javascript">
+						jQuery(document).ready(function($)
+						{
+							var myTable = $("#example-4").DataTable({
+								responsive:true,
+								"aaSorting": [],
+								tableTools: {
+									sSwfPath: "assets/js/datatables/tabletools/copy_csv_xls_pdf.swf"
+								}
+							});
+							// change onclick to exclude first cell
+							// $('#example-4').delegate('tbody > tr > td', 'click', function ()
+							// 	{
+							// 	    window.location = ($(this).parent().data("href"))
+							// 	});
+							$('#minBuildup, #maxBuildup').keyup( function() {
+						        myTable.draw();
+						    } );
+						    $('#minLand, #maxLand').keyup( function() {
+						        myTable.draw();
+						    } );
+						    $('#minPrice, #maxPrice').keyup( function() {
+						        myTable.draw();
+						    } );
+						    $("#contactName").on("change",function(){
+						        var value = $("#contactName option:selected" ).text();
+								myTable.columns(9).search(value).draw();
+							});
+							$("#serialNo").on("keyup", function(){
+								var value = this.value;
+								if(value == "")
+									myTable.columns(11).search('', true, false).draw()
+									else
+										myTable.columns(11).search( '^'+value+'$', true, false).draw();
+							});
+							$("#soldFilter").change(function(){
+								if(this.checked)
+									myTable.columns(13).search('true', true, false).draw()
+								else
+									myTable.columns(13).search('false', true, false).draw()
+							})	
+							$("#depositFilter").change(function(){
+								if(this.checked)
+									myTable.columns(12).search('true', true, false).draw()
+								else
+									myTable.columns(12).search('false', true, false).draw()
+							})	
+							$("#sales_reps").change(function(){
+								var current = $(this).val()
+								if(current == 0)
+									myTable.columns(14).search('', true, false).draw()
+								else
+									myTable.columns(14).search($(this).val(), true, false).draw()
+							})
+							$("#locationName").change(function(){
+								var current = $(this).val()
+								if(current == 0)
+									myTable.columns(15).search('', true, false).draw()
+								else
+									myTable.columns(15).search($(this).val(), true, false).draw()
+							})
+						});
+
+						</script>
+
+						<table class="table table-bordered table-striped table-hover" width="100%"id="example-4">
+							<thead>
+								<tr>
+									<th>Location</th>
+									<th>Project</th>
+									<th>Phase</th>
+									<th>Property Type</th>
+									<th>Price</th>
+									<th>Land Area</th>
+									<th>Built Area</th>
+									<th>Bedrooms</th>
+									<th>Bathrooms</th>
+									<th class="text-center">Actions</th>
+									<th class="none">contact name</th>
+									<th class="none">serial no.</th>
+									<th class="none">is deposited</th>
+									<th class="none">is sold</th>
+									<th class="none">sales rep id</th>
+									<th class="none">location id</th>
+								</tr>
+							</thead>
+
+
+							<tbody>
+							{% for entity in entities %}
+								{% set isDeposited = false %}
+								{% if entity.deal is not null %}
+								 {% if entity.deal.deposit > 0 %}
+									{% set isDeposited = true %}
+							   	 {% endif %}
+								{% endif %}	
+								<tr {% if entity.isSold %} style="background-color: #EF9A9A !important" {% endif %} {% if isDeposited %} style="background-color: #FFFDE7" {% endif %} class='clickable-row' data-href='{{path('property_show', { 'id': entity.id })}}' >
+									{% if entity.location.name is defined %}
+									<td class="location {{entity.location.name}}">{{entity.location.name}}</td>
+									{% else %}
+									<td></td>
+									{% endif %}
+									{% if entity.project.name is defined %}
+										<td>{{entity.project.name}}</td>
+										{% else %}
+										<td></td>
+									{% endif %}
+									<td>{{entity.phase}}</td>
+									<td>{{entity.propertyTypeDynamic.name | default('')}}</td>
+									{# <td class="sellingType {{entity.sellingType}}">{{entity.sellingType}}</td> #}
+									<td class="price {{entity.askingPrice}}" price="{{entity.askingPrice}}">{{entity.askingPrice|number_format}}</td>
+									{#  class="buildup {{entity.buildupArea}}" buildup="{{entity.buildupArea}}"> #}
+									<td>{{entity.landArea}}</td>
+									<td>{{entity.buildupArea}}</td>
+									<td>{{entity.bathrooms}}</td>
+									<td>{{entity.bedrooms}}</td>
+
+									<td>
+										<a  class="btn btn-success" href="{{path('property_show', {id: entity.id})}}">Show</a>
+										<a  class="btn btn-info" href="{{path('property_edit', {id: entity.id})}}">Edit</a>
+										<a  class="btn btn-danger" href="{{path('property_edit', {id: entity.id})}}">Deactivate</a>
+										<a  class="btn btn-warning" href="{{path('property_edit', {id: entity.id})}}">Pending</a>
+									</td>
+									<td>{{entity.contactName}}</td>
+									<td>{{entity.id}}</td>
+									<td>{% if isDeposited %}true{%else%}false{%endif%}</td>
+									<td> {% if entity.isSold %}true{%else%}false{%endif%}</td>
+									<td>
+										{% if entity.createdBy is not null %}
+											{{entity.createdBy.id}}
+										{% endif %}	
+									</td>
+									<td>
+										{% if entity.location is not null %}
+											{{entity.location.id}}
+										{% endif %}	
+									</td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<!-- Imported scripts on this page -->
+
+<!-- JavaScripts initializations and stuff -->
+
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+
+<script type="text/javascript">
+
+//Functino to filter on buildup area
+$.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = parseInt( $('#minBuildup').val(), 10 );
+        var max = parseInt( $('#maxBuildup').val(), 10 );
+        var age = parseFloat( data[6] ) || 0; // use data for the age column
+ 
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && age <= max ) ||
+             ( min <= age   && isNaN( max ) ) ||
+             ( min <= age   && age <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+
+$.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = parseInt( $('#minLand').val(), 10 );
+        var max = parseInt( $('#maxLand').val(), 10 );
+        var age = parseFloat( data[5] ) || 0; // use data for the age column
+ 
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && age <= max ) ||
+             ( min <= age   && isNaN( max ) ) ||
+             ( min <= age   && age <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+// Price bound function
+$.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = parseInt($('#minPrice').val().replace(/\,/g,''), 10 );
+        var max = parseInt( $('#maxPrice').val().replace(/\,/g,''), 10 );
+        var age = parseFloat( data[4].replace(/\,/g,'') ) || 0; // use data for the age column
+
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && age <= max ) ||
+             ( min <= age   && isNaN( max ) ) ||
+             ( min <= age   && age <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+$("#minPrice, #maxPrice").on('keyup',function(){
+	var formatted_number = numberWithCommas($(this).val().replace(/\,/g,''))
+	$(this).val(formatted_number)
+})
+$("#add_filter").click(function(){
+	temp = $( "#filter_search" ).clone()
+	
+	temp.appendTo( "#filter_container" );
+
+
+});
+$("#dateSearchButton").on("click", function(){
+
+	console.log($("#fromDate").val());
+});
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+</script>
+
+{% endblock %}

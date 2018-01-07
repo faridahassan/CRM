@@ -1,0 +1,3 @@
+crm_auditing_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: CrmAuditingBundle:Default:index }

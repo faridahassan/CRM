@@ -1,0 +1,47 @@
+complaint:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Complaint:index" }
+complaint_search:
+    path:     /search
+    defaults: { _controller: "CrmSandboxBundle:Complaint:search" }
+
+complaint_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:Complaint:show" }
+
+complaint_new:
+    path:     /new/{id}
+    defaults: { _controller: "CrmSandboxBundle:Complaint:new" }
+
+complaint_create:
+    path:     /create/{id}
+    defaults: { _controller: "CrmSandboxBundle:Complaint:create" }
+    methods:  POST
+
+complaint_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Complaint:edit" }
+
+complaint_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Complaint:update" }
+    methods:  [POST, PUT]
+
+complaint_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Complaint:delete" }
+    methods:  [POST, DELETE]
+complaint_close:
+    path: /close/{id}
+    defaults: { _controller: "CrmSandboxBundle:Complaint:close" }
+    options:
+        expose: true
+
+complaint_new_lead:
+    path:     /newlead
+    defaults: { _controller: "CrmSandboxBundle:Complaint:newLead" }
+
+complaint_create_lead:
+    path:     /createlead
+    defaults: { _controller: "CrmSandboxBundle:Complaint:createLead" }
+    methods:  POST

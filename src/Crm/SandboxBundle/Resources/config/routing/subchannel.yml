@@ -1,0 +1,33 @@
+subchannel:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:index" }
+
+subchannel_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:show" }
+
+subchannel_new:
+    path:     /new
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:new" }
+
+subchannel_create:
+    path:     /create
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:create" }
+    methods:  POST
+
+subchannel_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:edit" }
+subchannel_hide:
+    path:     /{id}/hide
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:hide" }
+
+subchannel_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:update" }
+    methods:  [POST, PUT]
+
+subchannel_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:SubChannel:delete" }
+    methods:  [POST, DELETE]

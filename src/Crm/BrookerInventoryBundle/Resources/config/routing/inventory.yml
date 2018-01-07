@@ -1,0 +1,26 @@
+inventory_projects:
+    path:     /projects
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:index" }
+inventory_project_visits:
+    path: /project/visits/{location}
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:projectvisits" }
+inventory_property_breakdown:
+    path: /project/visits/breakdown/{property}
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:propertyVisitsBreakdown" }
+inventory_inventory:
+    path: /inventory
+    defaults: { _controller: "CrmBrookerInventoryBundle:Inventory:index" ,sold: false }
+inventory_sold:
+    path: /sold
+    defaults: { _controller: "CrmBrookerInventoryBundle:Inventory:index" ,sold: true }
+inventory_manage:
+    path: /configurations
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:manage" }
+inventory_manage_edit_location:
+    path: /manage_location/{location}/{name}
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:editLocation" }
+inventory_rename_location_ajax:
+    path: /rename_location/{location}/{name}
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:updateLocationAjax" }
+    options: 
+        expose: true

@@ -1,0 +1,454 @@
+{% extends '::base.html.twig' %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Locations</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						{{form_start(form, {'attr': {'class':'form-horizontal', 'role':'form'}})}}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-8">
+								<div>
+									{{form_widget(form.name, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+							<div class="col-sm-2">
+							{{form_widget(form.submit, {'label' : 'add','attr':{'class':'btn btn-success'}})}}
+							</div>
+							{{form_end(form)}}
+						</div>
+						
+						
+					</div>
+
+					<div class="col-sm-12">
+						<div class="panel-body">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#locations").dataTable({
+									responsive:true
+								});
+							});
+							</script>
+							<table class="table table-bordered table-striped"width="100%" id="locations">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="text-center">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for location in locations %}
+										<tr>
+											<td>{{location.name}}</td>
+											
+											<td class="text-right">
+												
+												<a href="{{path('location_edit', {id:location.id})}}" class="btn btn-info  btm-sm">Edit</a>
+											</td>
+											
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>	
+	</div>	
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Features</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						{{form_start(featureItemForm, {'attr': {'class':'form-horizontal', 'role':'form'}})}}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-8">
+								<div>
+									{{form_widget(featureItemForm.name, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+
+							<div class="col-sm-2">
+							{{form_widget(featureItemForm.submit, {'label' : 'add','attr':{'class':'btn btn-success'}})}}
+							</div>
+						{{form_end(featureItemForm)}}
+						</div>
+						
+						
+					</div>
+					<div class="col-sm-12">
+						<div class="panel-body">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#features").dataTable({
+									responsive:true
+								});
+							});
+							</script>
+							<table class="table table-bordered table-stripedwidth="100%"" id="features">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="text-center">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for feature in features %}
+										<tr>
+											<td>{{feature.name}}</td>
+
+											<td class="text-right">
+
+												<a href="{{path('features_edit', {id:feature.id})}}" class="btn btn-info  btm-sm">Edit</a>
+											</td>
+
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>	
+	</div>	
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Projects</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						
+					<a href="{{path('project_new')}}" class="btn btn-success pull-right"> Add </a>
+							
+					</div>
+					<div class="col-sm-12">
+						<div class="panel-body">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#projects").dataTable({
+									responsive:true
+								});
+							});
+							</script>
+							<table class="table table-bordered table-stripedwidth="100%"" id="projects">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="text-center">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for project in projects %}
+										<tr>
+											<td>{{project.name}}</td>
+											
+											<td class="text-right">
+												<a href="{{path('project_show', {id:project.id})}}" class="btn btn-success  btm-sm">Show</a>
+												<a href="{{path('project_edit', {id:project.id})}}" class="btn btn-info  btm-sm">Edit</a>
+											</td>
+											
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>	
+	</div>	
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Developers</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						{{form_start(developerForm, {'attr': {'class':'form-horizontal', 'role':'form'}})}}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-8">
+								<div>
+									{{form_widget(developerForm.name, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+							<div class="col-sm-2">
+							{{form_widget(developerForm.submit, {'label' : 'add','attr':{'class':'btn btn-success'}})}}
+							</div>
+						</div>
+						{{form_end(developerForm)}}
+					</div>
+					<div class="col-sm-12">
+						<div class="panel-body">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#developers").dataTable({
+									responsive:true
+								});
+							});
+							</script>
+							<table class="table table-bordered table-striped" width="100%"id="developers">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="text-center">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for developer in developers %}
+										<tr>
+											<td>{{developer.name}}</td>
+
+											<td class="text-right">
+
+												<a href="{{path('developer_edit', {id:developer.id})}}" class="btn btn-info  btm-sm">Edit</a>
+											</td>
+
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>	
+	</div>	
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Brokers</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						{{form_start(brokerForm, {'attr': {'class':'form-horizontal', 'role':'form'}})}}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-8">
+								<div>
+									{{form_widget(brokerForm.name, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Mobile</label>
+							<div class="col-sm-4">
+								<div>
+									{{form_widget(brokerForm.mobile, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div>
+									{{form_widget(brokerForm.mobile2, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Email</label>
+							<div class="col-sm-8">
+								<div>
+									{{form_widget(brokerForm.email, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Address</label>
+							<div class="col-sm-8">
+								<div>
+									{{form_widget(brokerForm.address, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 col-sm-offset-10">
+							{{form_widget(brokerForm.submit, {'label' : 'add','attr':{'class':'btn btn-success'}})}}
+							</div>
+						</div>
+						{{form_end(brokerForm)}}
+					</div>
+					<div class="col-sm-12">
+						<div class="panel-body">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#brokers").dataTable({
+									responsive:true
+								});
+							});
+							</script>
+							<table class="table table-bordered table-striped" width="100%"id="brokers">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="text-center">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for broker in brokers %}
+										<tr>
+											<td>{{broker.name}}</td>
+
+											<td class="text-right">
+
+												<a href="{{path('broker_edit', {id:broker.id})}}" class="btn btn-info  btm-sm">Edit</a>
+											</td>
+
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>	
+	</div>	
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default ">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Property Types</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12">
+						{{form_start(propertyTypeForm, {'attr': {'class':'form-horizontal', 'role':'form'}})}}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-8">
+								<div>
+									{{form_widget(propertyTypeForm.name, {'attr':{'class':'form-control'}})}}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 col-sm-offset-10">
+							{{form_widget(propertyTypeForm.submit, {'label' : 'add','attr':{'class':'btn btn-success'}})}}
+							</div>
+						</div>
+						{{form_end(propertyTypeForm)}}
+					</div>
+					<div class="col-sm-12">
+						<div class="panel-body">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#propertytypes").dataTable({
+									responsive:true
+								});
+							});
+							</script>
+							<table class="table table-bordered table-striped" width="100%"id="propertytypes">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th class="text-center">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for propertytype in propertyTypes %}
+										<tr>
+											<td>{{propertytype.name}}</td>
+
+											<td class="text-right">
+
+												<a href="{{path('propertytype_edit', {id:propertytype.id})}}" class="btn btn-info  btm-sm">Edit</a>
+											</td>
+
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>	
+			</div>	
+		</div>	
+	</div>	
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<!-- Imported scripts on this page -->
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<script src="{{asset('assets/js/colorpicker/bootstrap-colorpicker.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+<script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+<script src="{{asset('assets/js/handlebars.min.js')}}"></script>
+<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+{% endblock %}

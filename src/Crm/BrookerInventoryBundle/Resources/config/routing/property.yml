@@ -1,0 +1,59 @@
+property:
+    path:     /
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:index" }
+
+property_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:show" }
+
+property_gallery:
+    path:     /{id}/gallery
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:showGallery" }
+
+property_new:
+    path:     /new
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:new" }
+
+property_create:
+    path:     /create
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:create" }
+    methods:  POST
+
+property_ajax:
+    path:     /ajax
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:ajax" }
+
+property_sell:
+    path:     /sell/{property}/{isSell}
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:sold" }
+    options:
+        expose: true
+property_remove_slider:
+    path:     /remove/{id}
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:removeFromSlider" }
+    options:
+        expose: true
+
+property_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:edit" }
+
+property_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:update" }
+    methods:  [POST, PUT]
+
+property_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:delete" }
+    methods:  [POST, DELETE]
+
+property_email:
+    path:     /sendmail
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:sendPropertyEmail" }
+    options:
+        expose: true
+
+property_history:
+    path:     /history/{propertyId}
+    defaults: { _controller: "CrmBrookerInventoryBundle:Property:history" }

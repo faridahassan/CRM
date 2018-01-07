@@ -1,0 +1,30 @@
+location:
+    path:     /
+    defaults: { _controller: "CrmBrookerInventoryBundle:Location:index" }
+
+location_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmBrookerInventoryBundle:Location:show" }
+
+location_new:
+    path:     /new
+    defaults: { _controller: "CrmBrookerInventoryBundle:Location:new" }
+
+location_create:
+    path:     /create
+    defaults: { _controller: "CrmBrookerInventoryBundle:Location:create" }
+    methods:  POST
+
+location_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmBrookerInventoryBundle:Location:edit" }
+
+location_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmBrookerInventoryBundle:Location:update" }
+    methods:  [POST, PUT]
+
+location_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmBrookerInventoryBundle:Location:delete" }
+    methods:  [POST, DELETE]

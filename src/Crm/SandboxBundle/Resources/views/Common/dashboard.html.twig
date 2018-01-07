@@ -1,0 +1,819 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<style type="text/css">
+   .xe-widget:hover {
+      background:#f7f7f7;
+   }
+   .badge{
+      margin-left: 15px;
+   }
+      .tab-content {
+       background-color: white !important;
+   }
+   .white{
+      background:#fff!important;
+   }
+   .datepicker{
+    z-index: 1100 !important;
+}
+</style>
+
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_content %}
+   
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-body">
+            <div class="row">
+               <div class="col-md-12">
+                   <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}"  class="btn pull-right" style="background-color:#2196f3;color:white" alt="Sign in with Goole">Integerate Your Tasks with Google!</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <label class="col-sm-2 control-label">Filter Range <i class="fa fa-calendar"></i></label>
+                  <div class="col-sm-8">
+                     <input type="text" id="reportrange" class="form-control" name="daterange" />
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+{% if is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_ADMIN') %}
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-body">
+            <div class="row">
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Users</label>
+                  <div class="col-sm-3">
+                     <div class="date-and-time">
+                        <select id="selectAgent" class="form-control">
+                           <option value="" disabled selected>Select a user</option> 
+                           {% if is_granted('ROLE_ADMIN') %} 
+                              <optgroup label="AGents">
+                              {% for agent in agents %}
+                              <option value="{{agent.id}}">{{agent.name}}</option>
+                              {% endfor %}
+                              </optgroup>
+                              <optgroup label="Sales Managers">
+                              {% for teamLeader in teamLeaders %}
+                              <option value="{{teamLeader.id}}">{{teamLeader.name}}</option>
+                              {% endfor %}
+                              </optgroup>
+                           {% elseif is_granted('ROLE_SALES_MANAGER') %}
+                              <option value="{{app.user.id}}">Me</option>
+                              {% for agent in agents %}
+                              <option value="{{agent.id}}">{{agent.name}}</option>
+                              {% endfor %}
+                           {% endif %}
+                        </select>
+                        <script type="text/javascript">
+                           $("#selectAgent").val({{showingId}});
+                           jQuery(document).ready(function($)
+                           {
+                           	$("#selectAgent").selectBoxIt().on('open', function()
+                           	{
+                                 // Adding Custom Scrollbar
+                                 $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                              });
+                              $("#selectAgent").change(function(){
+                                 // alert($(this).val())
+                                 // window.location.href = "{{path('sales_dashboard', {type: 1, id: 0})}} this.options[this.selectedIndex].value;"
+                                 var user_id = $(this).val()
+                                 window.location.href = Routing.generate('sales_dashboard', {type: 0, id: user_id})
+                              })
+                           });
+                        </script>
+                     </div>
+                  </div> 
+                  {% if is_granted('ROLE_ADMIN') %}
+                  <div class="col-sm-2 text-center">   
+
+                     <input id="team_salesrep_switcher" type="checkbox" class="iswitch-xlg iswitch-red"> 
+                     <i style="display:block" id="switch"></i>
+                  </div>
+                  <label class="col-sm-2 control-label">Teams</label>
+                  <div class="col-sm-3">
+                     <div class="date-and-time">
+                        <select id="selectTeam" class="form-control" onchange="window.location = this.options[this.selectedIndex].value;">
+                           <option value="0">All</option>
+                           {% for agent in teams %}
+                           <option value="{{agent.id}}">{{agent.name}}</option>
+                           {% endfor %}
+                        </select>
+                        <script type="text/javascript">
+                           $("#selectTeam").val({{showingId}});
+                           jQuery(document).ready(function($)
+                           {
+                              $("#selectTeam").selectBoxIt().on('open', function()
+                              {
+                           // Adding Custom Scrollbar
+                           $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                           });
+                           });
+                        </script>
+                     </div>
+                  </div>
+
+
+
+                      <script type="text/javascript">
+                        // jQuery(document).ready(function($) {
+                           if ( {{type}} == '1' ) {
+                             $("#team_salesrep_switcher").prop( "checked", true ); 
+                             $("#selectAgent").prop("disabled", true)
+                             $("#selectTeam").prop("disabled", false)
+                             $("#switch").html("switch to view users progress")
+                             $("#selectTeam").addClass( "green-border", 1000, "easeOutBounce" );
+                           } 
+                           else {
+                             $("#selectAgent").prop("disabled", false)
+                             $("#selectAgent").addClass( "green-border", 1000, "easeOutBounce" );
+                             $("#switch").html("switch to view team progress")
+                             $("#selectTeam").prop("disabled", "disabled")
+                           }
+                           $("#team_salesrep_switcher").change(function(){
+                              if($(this).is(':checked')) {
+                                  window.location.href = "{{path('sales_dashboard', {type: 1, id: 0})}}"
+                              }
+                              else {
+                                  window.location.href = "{{path('sales_dashboard', {type: 0, id: app.user.id})}}"   
+                              }
+                           })
+                        // }
+                     </script>
+                     {% endif %}
+
+
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+{% endif %}
+
+
+<div class="row">
+   <div id="total_leads_widget">
+      
+   </div>
+   
+</div>
+<div class="row">
+   <div class="col-sm-12">
+
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title">Target Progress</h3>
+            <div class="panel-options">
+               <a href="#" data-toggle="panel">
+                  <span class="collapse-icon">&ndash;</span>
+                  <span class="expand-icon">+</span>
+               </a>
+               <a href="#" data-toggle="remove">
+                  &times;
+               </a>
+            </div>
+         </div>
+         <div class="panel-body">   
+            <div id="teams" style="height: 400px; width: 100%;"></div>
+         </div>
+      </div>
+         
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title">Call Source</h3>
+            <div class="panel-options">
+               <a href="#" data-toggle="panel">
+               <span class="collapse-icon">&ndash;</span>
+               <span class="expand-icon">+</span>
+               </a>
+               <a href="#" data-toggle="remove">
+               &times;
+               </a>
+            </div>
+         </div>
+         <div class="panel-body">
+            <div id="call_source">
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-md-12">
+      <div class="row">
+         <div class="col-md-12"><h3>Tasks</h3></div>
+      </div>
+      <br>
+      <div class="row">
+                  <div class="col-md-12">
+                     <ul class="nav nav-tabs nav-tabs-justified">
+                        <li >
+                           <a href="#pending" data-toggle="tab">
+                              <span class="visible-xs"><i class="fa-Filter"></i></span>
+                              <span class="hidden-xs">Pending</span>
+                              {% set pendingTotal = pendingTasks.calls|length + pendingTasks.meetings|length %}
+                              {% if pendingTotal == 0  %}
+                                 <span class="badge badge-success">{{pendingTotal}}</span>
+                                 {% else %}
+                                 <span class="badge badge-danger">{{pendingTotal}}</span>     
+                              {% endif %}
+                           </a>
+                        </li>
+                        <li class="active">
+                           <a href="#today" data-toggle="tab">
+                              <span class="visible-xs"><i class="fa-user"></i></span>
+                              <span class="hidden-xs">Today</span>
+                              {% set todayTotal = todaysTasks.calls|length + todaysTasks.meetings|length %}
+                              {% if todayTotal == 0  %}
+                                 <span class="badge badge-success">{{todayTotal}}</span>
+                                 {% else %}
+                                 <span class="badge badge-danger">{{todayTotal}}</span>     
+                              {% endif %}
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#upcoming" data-toggle="tab">
+                              <span class="visible-xs"><i class="fa-user"></i></span>
+                              <span class="hidden-xs">Upcoming</span>
+                              {% set upcomingTotal = upcomingTasks.calls|length + upcomingTasks.meetings|length %}
+                              {% if upcomingTotal == 0  %}
+                                 <span class="badge badge-success">{{upcomingTotal}}</span>
+                                 {% else %}
+                                 <span class="badge badge-danger">{{upcomingTotal}}</span>     
+                              {% endif %}
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#cancelled" data-toggle="tab">
+                              <span class="visible-xs"><i class="fa-user"></i></span>
+                              <span class="hidden-xs">Cancelled</span>
+                              {% set cancelledTotal = cancelledTasks.calls|length + cancelledTasks.meetings|length %}
+                              {% if cancelledTotal == 0  %}
+                                 <span class="badge badge-success">{{cancelledTotal}}</span>
+                                 {% else %}
+                                 <span class="badge badge-danger">{{cancelledTotal}}</span>     
+                              {% endif %}
+                           </a>
+                        </li>
+                     </ul>
+
+                     <div class="tab-content">
+                        <div class="tab-pane" id="pending">
+                           <div class="row">
+                              <div class="col-md-12">
+                                 {% if pendingTotal == 0 %}
+                                       {{pendingTotal}}
+                                       <h3 class="text-center">You have no pending tasks</h3>
+                                 {% else %}
+                                    <table class="display responsive no-wrap table table-bordered table-striped table-hover" width="100%" id="followups">
+                                       <thead>
+                                          <tr>
+                                             {% if type == 1 %}
+                                             <th>User</th>
+                                             {% endif %}
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Type</th>
+                                             <th class="text-center">Action</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          {% for task in pendingTasks.calls if not task.canceled %}
+                                             <tr>
+                                                {% if type == 1 %}
+                                                <td>{{task.user.name}}</td>
+                                             {% endif %}
+                                                <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold"> Snoozed</span></td>{% endif %}
+                                                <td>
+                                                  Follow Up   
+                                                </td>
+                                                <td class="text-center">
+                                                   {% if app.user.id == task.user.id %}
+                                                   <a class="btn btn-info" href="{{path('callcenter_log_outbound_call', {id: task.lead.id, orientation: 1, task: task.id }) }}">
+                                                      Log Call
+                                                   </a>
+                                                   <button class="btn btn-warning" onclick="snoze({{task.id}},'Snooze')">
+                                                      <i class="fa-clock-o"></i>
+                                                      <span>Snooze</span>
+                                                   </button>
+                                                   <button class="btn btn-danger" onclick="cancel({{task.id}})">
+                                                      <i class="fa fa-close"></i>
+                                                   </button>
+
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                           {% for task in pendingTasks.meetings if not task.canceled %}
+                                             <tr>
+                                                {% if type == 1 %}
+                                                <td>{{task.user.name}}</td>
+                                             {% endif %}
+                                                <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold"> Rescheduled</span></td>{% endif %}
+                                                <td>
+                                                   Appointment
+                                                </td>
+                                                <td class="text-center">
+                                                {% if app.user.id == task.user.id %}
+                                                   <a class="btn btn-success" href="{{path('callcenter_log_outbound_call', {id: task.lead.id, orientation: 0, task: task.id }) }}">
+                                                      Log Meeting
+                                                   </a>
+                                                   <button class="btn btn-warning" onclick="snoze({{task.id}},'Reschedule')">
+                                                      <i class="fa-clock-o"></i>
+                                                      <span>Reschedule</span>
+                                                   </button>
+                                                   <button class="btn btn-danger" onclick="cancel({{task.id}})">
+                                                      <i class="fa fa-close"></i>
+                                                   </button>
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                       $("#followups").dataTable({
+                                          responsive: true,
+                                       });
+                                    });
+                                 </script>
+                                 {% endif %}
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane active" id="today">
+                           <div class="row">
+                              <div class="col-md-12">
+                                     <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                       $("#followups2").dataTable({});
+                                    });
+                                 </script>
+                                 {% if todayTotal == 0 %}
+                                       <h3 class="text-center">You have no tasks today</h3>
+                                    {% else %}
+                                    <table class="table table-bordered table-striped" id="followups2">
+                                       <thead>
+                                          <tr>
+                                             {% if type == 1 %}
+                                             <th>User</th>
+                                             {% endif %}
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Type</th>
+                                             <th>Action</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          {% for task in todaysTasks.calls if not task.canceled %}
+                                             <tr>
+                                                {% if type == 1 %}
+                                                <td>{{task.user.name}}</td>
+                                             {% endif %}
+                                                <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold"> Snoozed</span></td>{% endif %}
+                                                <td>
+                                                   Follow up
+                                                </td>
+                                                <td class="text-center">
+                                                   {% if app.user.id == task.user.id %}
+                                                   <a class="btn btn-info" href="{{path('callcenter_log_outbound_call', {id: task.lead.id, orientation: 1, task: task.id }) }}">
+                                                      Log Call
+                                                   </a>
+                                                   <button class="btn btn-warning" onclick="snoze({{task.id}},'Snooze')">
+                                                      <i class="fa-clock-o"></i>
+                                                      <span>Snooze</span>
+                                                   </button>
+                                                   <button class="btn btn-danger" onclick="cancel({{task.id}})">
+                                                      <i class="fa fa-close"></i>
+                                                   </button>
+
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                          {% for task in todaysTasks.meetings if not task.canceled %}
+                                             <tr>
+                                                {% if type == 1 %}
+                                                <td>{{task.user.name}}</td>
+                                             {% endif %}
+                                                <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold"> Rescheduled</span></td>{% endif %}
+                                                <td>
+                                                   Appointment
+                                                </td>
+                                                <td class="text-center">
+                                                {% if app.user.id == task.user.id %}
+                                                   <a class="btn btn-success" href="{{path('callcenter_log_outbound_call', {id: task.lead.id, orientation: 0, task: task.id }) }}">
+                                                      Log Meeting
+                                                   </a>
+                                                   <button class="btn btn-warning" onclick="snoze({{task.id}},'Reschedule')">
+                                                      <i class="fa-clock-o"></i>
+                                                      <span>Reschedule</span>
+                                                   </button>
+                                                   <button class="btn btn-danger" onclick="cancel({{task.id}})">
+                                                      <i class="fa fa-close"></i>
+                                                   </button>
+
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 {% endif %}
+                        </div>
+                     </div>
+                  </div>
+                        <div class="tab-pane white" id="upcoming">
+                           <div class="row white">
+                              <div class="col-md-12 white">
+                                  <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                       $("#followups3").dataTable({});
+                                    });
+                                 </script>
+                                    {% if upcomingTotal == 0 %}
+                                       <h3 class="text-center">You have no upcoming tasks</h3>
+                                    {% else %}
+                                       <table class="table table-bordered table-striped" id="followups3">
+                                          <thead>
+                                             <tr>
+                                                {% if type == 1 %}
+                                                <th>User</th>
+                                                {% endif %}
+                                                <th>Name</th>
+                                                <th>Comment</th>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>Action</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             {% for task in upcomingTasks.calls if not task.canceled %}
+                                                <tr>
+                                                   {% if type == 1 %}
+                                                   <td>{{task.user.name}}</td>
+                                                {% endif %}
+                                                   <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                   <td>{{task.comment|nl2br}}</td>
+                                                   <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold"> Snoozed</span></td>{% endif %}
+                                                   <td>
+                                                      Follow Up
+                                                   </td>
+                                                   <td class="text-center">
+                                                      {% if app.user.id == task.user.id %} 
+                                                      <a class="btn btn-info" href="{{path('callcenter_log_outbound_call', {id: task.lead.id, orientation: 1, task: task.id }) }}">
+                                                         Log Call
+                                                      </a>
+                                                      
+                                                      <button class="btn btn-warning" onclick="snoze({{task.id}},'Snooze')">
+                                                         <i class="fa-clock-o"></i>
+                                                         <span>Snooze</span>
+                                                      </button>
+                                                      <button class="btn btn-danger" onclick="cancel({{task.id}})">
+                                                      <i class="fa fa-close"></i>
+                                                      </button>
+                                                      {% endif %}
+                                                   </td>
+                                                </tr>
+                                             {% endfor %}
+                                             {% for task in upcomingTasks.meetings if not task.canceled %}
+                                                <tr>
+                                                   {% if type == 1 %}
+                                                   <td>{{task.user.name}}</td>
+                                                {% endif %}
+                                                   <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                   <td>{{task.comment|nl2br}}</td>
+                                                   <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold">Rescheduled</span></td>{% endif %}
+                                                   <td>
+                                                      Appointment
+                                                   </td>
+                                                   <td class="text-center">
+                                                   {% if app.user.id == task.user.id %}
+                                                      <a class="btn btn-success" href="{{path('callcenter_log_outbound_call', {id: task.lead.id, orientation: 0, task: task.id }) }}">
+                                                         Log Meeting
+                                                      </a>
+                                                      <button class="btn btn-warning" onclick="snoze({{task.id}},'Reschedule')">
+                                                      <i class="fa-clock-o"></i>
+                                                         <span>Reschedule</span>
+                                                      </button>
+                                                      <button class="btn btn-danger" onclick="cancel({{task.id}})">
+                                                      <i class="fa fa-close"></i>
+                                                      </button>
+                                                      {% endif %}
+                                                   </td>
+                                                </tr>
+                                             {% endfor %}
+                                          </tbody>
+                                       </table>
+                                    {% endif %}
+                                    
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane" id="cancelled">
+                           <div class="row">
+                              <div class="col-md-12">
+                                     <script type="text/javascript">
+                                    jQuery(document).ready(function($)
+                                    {
+                                       $("#cancelledTasks").dataTable({});
+                                    });
+                                 </script>
+                                 {% if cancelledTotal == 0 %}
+                                       <h3 class="text-center">You have no cancelled tasks in the last 30 days.</h3>
+                                    {% else %}
+                                    <table class="table table-bordered table-striped" id="cancelledTasks">
+                                       <thead>
+                                          <tr>
+                                             {% if type == 1 %}
+                                             <th>User</th>
+                                             {% endif %}
+                                             <th>Name</th>
+                                             <th>Date</th>
+                                             <th>Cancellation Date</th>
+                                             <th>Type</th>
+                                             <th>Reason</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+                                          {% for task in cancelledTasks.calls %}
+                                             <tr>
+                                                {% if type == 1 %}
+                                                <td>{{task.user.name}}</td>
+                                             {% endif %}
+                                                <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                
+                                                <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold"> Snoozed</span></td>{% endif %}
+                                                <td>{{task.canceldate | date('d-M-Y')}}</td>
+                                                <td>
+                                                   Follow up
+                                                </td>
+                                                <td class="text-center">
+                                                  {{task.reason}}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                          {% for task in cancelledTasks.meetings %}
+                                             <tr>
+                                                {% if type == 1 %}
+                                                <td>{{task.user.name}}</td>
+                                             {% endif %}
+                                                <td>{% if task.lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:task.lead.contact.id})}}">{{task.lead.contact.name}}</a>{%endif%}</td>
+                                                <td>{{task.date | date('d-M-Y H:i')}} {% if task.postponed %}<span class="label-danger label pull-right" style="color:white;font-weight:bold"> Rescheduled</span></td>{% endif %}
+                                                <td>{{task.canceldate | date('d-M-Y')}}</td>
+                                                <td>
+                                                   Appointment
+                                                </td>
+                                                <td class="text-center">
+                                                   {{task.reason}}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                                 {% endif %}
+                        </div>
+                     </div>
+                  </div>
+                     </div>
+                  </div>
+      </div>      
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-md-12">
+      {{ render(controller('CrmSandboxBundle:SalesRepresentative/AssignedLeads:assginedLeads',{id:showingId,type:type}))}}
+   </div>
+</div>
+<div class="modal fade" id="taskReminder" data-backdrop="static">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            
+            <div class="modal-header">
+               <h4 class="modal-title">Remind me at?</h4>
+            </div>
+            
+            <div class="modal-body">
+               <div class="date-and-time">
+                     <input type="text" id="date" class="form-control datepicker" data-format="D, dd MM yyyy" data-provide="datepicker">
+                     <input type="text" id="time" class="form-control timepicker" data-template="dropdown" data-default-time="2:00 PM" data-show-meridian="true" data-minute-step="5" />
+               </div>
+            </div>
+            
+            <div class="modal-footer" style="margin-top:10px">
+               <button type="button" class="btn btn-gray" data-dismiss="modal">Cancel</button>
+               <button type="button" class="btn btn-warning"  onclick =" snoozeMe()"    data-dismiss="modal"><i class="fa-clock-o"></i><span id="taskReminderText">Snooze</span></button>
+            </div>
+         </div>
+      </div>
+</div>
+<div class="modal fade" id="taskCancel" data-backdrop="static">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            
+            <div class="modal-header">
+               <h4 class="modal-title">Are you sure you want to cancel?</h4>
+            </div>
+            
+            <div class="modal-body">
+               <p>Please state the reason</p>
+               <input type="text" id="reason" class="form-control">
+            </div>
+            
+            <div class="modal-footer" style="margin-top:10px">
+               <button type="button" class="btn btn-gray" data-dismiss="modal">Dismiss</button>
+               <button type="button" class="btn btn-danger"  onclick =" cancelTask()"    data-dismiss="modal"><span>Continue</span></button>
+            </div>
+         </div>
+      </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+<link rel="stylesheet" href="{{asset('assets/js/daterangepicker/daterangepicker-bs3.css')}}">
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+<script src="{{asset('assets/js/moment.min.js')}}"></script>
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
+<script src="{{asset('assets/js/jvectormap/regions/jquery-jvectormap-world-mill-en.js')}}"></script>
+<script src="{{asset('assets/js/devexpress-web-14.1/js/globalize.min.js')}}"></script>
+<script src="{{asset('assets/js/devexpress-web-14.1/js/dx.chartjs.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+
+<script>
+   $(function() {
+       
+   	function cb(start, end) {
+   		console.log("callback");
+   		$("#reportrange").val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+   		var syear = start.format('YYYY');
+   		var smonth = start.format('MM');
+   		var sday = start.format('DD');
+   		var eyear = end.format('YYYY');
+   		var emonth = end.format('MM');
+   		var eday = end.format('DD');
+          
+         // Check on teamId, get the type from controller
+   		var url1 = Routing.generate('sales_dashboard_ajax_widgets', { beginDate : sday, endDate: eday, emonth: emonth, smonth:smonth, syear :syear, eyear:eyear, id: {{teamId}}, type: {{type}} });
+   		var url2 = Routing.generate('sales_dashboard_ajax_call_source', { beginDate : sday, endDate: eday, emonth: emonth, smonth:smonth, syear :syear, eyear:eyear, id: {{teamId}}, type: {{type}} });
+   		var url3 = Routing.generate('sales_dashboard_ajax_team_completion', { beginDate : sday, endDate: eday, emonth: emonth, smonth:smonth, syear :syear, eyear:eyear, id: {{teamId}}, type: {{type}} });
+   		$.ajax({
+   			type:"GET",url : url2,
+   			success : function(response) {
+   				$("#call_source").html(response);
+   			},
+   			error: function() {
+   				$("#call_source").html("An error has occured while trying to update the dashboard");
+   			}
+   		});
+   		$.ajax({
+   			type:"GET",url : url1,
+   			success : function(response) {
+   				$("#total_leads_widget").html(response);
+   			},
+   			error: function() {
+   				$("#chart").html("An error has occured while trying to update the dashboard");
+   			}
+   		});
+   		$.ajax({
+   			type:"GET",url : url3,
+   			success : function(response) {
+   				$("#teams").html(response);
+   			},
+   			error: function() {
+   				$("#teams").html("An error has occured while trying to update the dashboard");
+   			}
+   		});
+   	}
+   	cb(moment().startOf('month'), moment().endOf('month'));
+   	$('#reportrange').daterangepicker({
+   		locale: {
+   			format: 'DD/MM/YYYY'
+   		},
+   		autoUpdateInput: true,
+   		"autoApply": false,
+   		startDate: moment(),
+   		endDate: moment(),
+   		ranges: {
+   			'Today': [moment(), moment().add(1, 'days')],
+   			'Yesterday': [moment().subtract(1, 'days'), moment()],
+   			'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+   			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+   			'This Month': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+   			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')],
+   			'Q1': [moment().month(0).startOf('month'),moment().month(2).endOf('month').add(1, 'days')],
+   			'Q2': [moment().month(3).startOf('month'),moment().month(5).endOf('month').add(1, 'days')],
+   			'Q3': [moment().month(6).startOf('month'),moment().month(8).endOf('month').add(1, 'days')],
+   			'Q4': [moment().month(9).startOf('month'),moment().month(11).endOf('month').add(1, 'days')],
+   
+   		}
+   
+   	}, cb);
+   
+   });
+   
+</script>
+
+<script>
+      $('#date').datepicker({
+          format: 'yyyy-mm-dd',
+          startDate: '+0d'
+      });
+   var taskId;
+
+      function cancel(id){
+         taskId = id;
+         $('#taskCancel').modal('show', {backdrop: 'static'});
+      }
+      function cancelTask()
+      {
+         reason = $('#reason').val();
+         var url = Routing.generate('task_cancel', { id : taskId, reason: reason });
+         $.ajax({
+               type:"GET",url : url,
+               success : function(response) {
+                  toastr.success('Success!');
+                  location.reload();
+               },
+               error: function() {
+                  toastr.error('failure, please try agian later!');
+               }
+            });
+      }
+      function snoze(id,name)
+      {
+         taskId = id;
+         $('#taskReminder').modal('show', {backdrop: 'static'});
+         $('#taskReminderText').html(name);
+      }
+      function snoozeMe()
+      {
+         date = $('#date').val();
+         time = $('#time').val();
+         var url = Routing.generate('task_reschudle', { id : taskId, date: date, time: time });
+         $.ajax({
+               type:"GET",url : url,
+               success : function(response) {
+                  toastr.success('Success!');
+                  location.reload();
+               },
+               error: function() {
+                  toastr.error('failure, please try agian later!');
+               }
+            });
+         console.log(date+time);
+      }
+   
+</script>
+{% endblock %}

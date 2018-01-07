@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Assigned Leads</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				
+				{% for flashMessage in app.session.flashbag.get('notice') %}
+				<div class="alert alert-success">
+					{{flashMessage}}
+				</div>
+
+				{% endfor %}	
+				<table class="display responsive no-wrap table table-bordered table-striped table-hover" width="100%"id="users">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Mobile</th>
+							<th>Assignment Date</th>
+							<th>Description</th>
+							<th>Total Calls</th>
+							<th>Total Meetings</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+
+					
+					<tbody>
+						{% for lead in leads %}
+						<tr>
+							<td><a href="{{path('sales_representative_contact_history', {contact:lead.contact.id})}}">{{lead.contact.name}}</a></td>
+							{% if lead.contact is not null %}
+								<td>{{lead.contact.mobile}}</td>
+							{% else %}
+								<td></td>
+							{% endif %}
+							<td>
+							{% if lead.salesRepAssignDate is not null %}
+								{{lead.salesRepAssignDate|date('Y-m-d')}}
+							{% else %}
+								None
+							{% endif %}
+							
+							</td>
+							<td>{{lead.description}}</td>
+							<td>{{lead.getCallsOnly | length }}</td>
+							<td>{{lead.getMeetingsOnly | length }}</td>
+							<td>
+									<a href="{{path('callcenter_log_outbound_call',{'id':lead.id, 'orientation':1})}}" class="btn btn-info btn-sm">Call</a>
+									<a href="javascript:void(0);" class="btn btn-warning btn-sm">SMS</a>
+									<a href="javascript:void(0);" class="btn btn-danger btn-sm">EMAIL</a>
+								{% if is_granted('ROLE_SALES_REPRESENTATIVE') or is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') %}
+									<a href="{{path('callcenter_log_outbound_call',{'id':lead.id, 'orientation':0})}}" class="btn btn-success btn-sm">Meeting</a>
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#users").dataTable({
+						responsive: true,
+						"order": [[ 3, "desc" ]]
+					});
+				});
+				</script>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

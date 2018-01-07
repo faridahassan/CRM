@@ -1,0 +1,105 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_content -%}
+<div class="row">
+	<div class="col-sm-12">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">New Team</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+			{{form_start(form, {'attr':{'class':'form-horizontal', 'role':'form'}})}}
+				<div class="form-group">
+					
+					<label class="col-sm-3 control-label">Name</label>
+					
+					<div class="col-sm-7">
+
+						<div class="date-and-time">
+							{{form_widget(form.name, {'attr' :{'class':'form-control'}})}}
+							<script type="text/javascript">
+							
+							</script>
+						</div>
+					</div>
+				</div>
+				<div class="form-group-separator"></div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Leader</label>
+
+					<div class="col-sm-7">
+
+							{{form_widget(form.leader, {'attr' :{'class':'form-control'}})}}
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#{{form.leader.vars.id}}").removeAttr('required')
+								$("#{{form.leader.vars.id}}").selectBoxIt().on('open', function()
+								{
+									$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+								});
+							});
+							</script>
+					</div>
+				</div>
+				<div class="form-group-separator"></div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Agents</label>
+
+					<div class="col-sm-7">
+
+						<div class="date-and-time">
+							<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#{{form.users.vars.id}}").select2({
+									placeholder: 'Write a name',
+									allowClear: true
+									}).on('select2-open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+									});
+								});
+							</script>
+							{{form_widget(form.users, {'attr' :{'class':'form-control'}})}}
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="form-group-separator"></div>
+				<div class="col-md-10">
+					{{form_widget(form.submit, {'attr' :{'class':'btn btn-success pull-right'}})}}
+				</div>
+				{{form_end(form)}}
+
+			
+			</div>
+		</div>
+	</div>
+</div>
+	{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<!-- Imported scripts on this page -->
+
+{% endblock %}

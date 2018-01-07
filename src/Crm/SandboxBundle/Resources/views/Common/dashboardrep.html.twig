@@ -1,0 +1,443 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
+
+{% block page_content %}
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-body">
+            <div class="row">
+               <div class="col-md-12">
+                   <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}"  class="btn pull-right" style="background-color:#2196f3;color:white" alt="Sign in with Goole">Integerate Your Tasks with Google!</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-body">
+            <div class="row">
+               <div class="col-md-12">
+                  <label class="col-sm-2 control-label">Filter Range <i class="fa fa-calendar"></i></label>
+                  <div class="col-sm-8">
+                     <input type="text" id="reportrange" class="form-control" name="daterange" />
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row">
+	<div class="col-sm-3">
+		<div class="row">
+			<div class="col-sm-12">
+				<a href="{{path('sales_representative_dashboard_rep', {action: 1})}}">
+					<div class="xe-widget xe-counter text-center"  data-count=".num" data-from="0" data-to="{{callsNumber}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-cloud"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>Calls</span>
+						</div>
+					</div>
+				</a>
+				<a href="{{path('sales_dashboard_all_leads', {agent: app.user.id})}}">
+					
+					<div class="xe-widget xe-counter text-center xe-counter-red"  data-count=".num" data-from="0" data-to="{{leadsNumber}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-user"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>Leads</span>
+						</div>
+					</div>
+				</a>
+				<a href="{{path('sales_representative_dashboard_rep', {action: 2})}}">
+					<div class="xe-widget xe-counter text-center xe-counter-blue"  data-count=".num" data-from="0" data-to="{{meetingsNumber}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-lightbulb"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>Meetings</span>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-9">
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-yellow"  data-count=".num" data-from="0" data-to="{{target}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Target</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-yellow"  data-count=".num" data-from="0" data-to="{{totalValue}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Total Value Of Deals</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-purple"  data-count=".num" data-from="0" data-to="{{totalClosedDeals}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Total Closed Deals</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-gray"  data-count=".num" data-from="0" data-to="{{totalDealsInProgress}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Total Deals In Progress</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+	
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Call Source</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">	
+				<script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						if( ! $.isFunction($.fn.dxChart))
+							return;
+							
+						var dataSource = [
+							{ 
+								state: "", 
+								oil: {{inbound}}, 
+								gas: {{outbound}}, 
+								coal: 7 },
+							
+							
+						];
+						
+						$("#bar-2").dxChart({
+							equalBarWidth: false,
+							dataSource: dataSource,
+							commonSeriesSettings: {
+							    argumentField: "state",
+							    type: "bar"
+							},
+							series: [
+							    { valueField: "oil", name: "Inbound", color: "#0e62c7" },
+							    { valueField: "gas", name: "Outbound", color: "#2c2e2f" },
+							    
+							],
+							legend: {
+							    verticalAlignment: "bottom",
+							    horizontalAlignment: "center"
+							},
+							title: "Inbound vs Outbound"
+						});
+					});
+				</script>
+				<div id="bar-2" style="height: 400px; width: 100%;"></div>
+			</div>
+		</div>
+			
+	</div>
+</div>
+<div class="row">
+   <div class="col-md-12">
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            Tasks
+         </div>
+         <div class="panel-body">
+               <div class="row">
+                  <div class="col-md-12">
+
+                     <ul class="nav nav-tabs">
+                        <li >
+                           <a href="#pending" data-toggle="tab">
+                              <span class="visible-xs"><i class="fa-Filter"></i></span>
+                              <span class="hidden-xs">Pending</span>
+                           </a>
+                        </li>
+                        <li class="active">
+                           <a href="#today" data-toggle="tab">
+                              <span class="visible-xs"><i class="fa-user"></i></span>
+                              <span class="hidden-xs">Today</span>
+                           </a>
+                        </li>
+                        <li>
+                           <a href="#upcoming" data-toggle="tab">
+                              <span class="visible-xs"><i class="fa-user"></i></span>
+                              <span class="hidden-xs">Upcoming</span>
+                           </a>
+                        </li>
+                     </ul>
+
+                     <div class="tab-content">
+                        <div class="tab-pane " id="pending">
+                           <div class="row">
+                              <div class="col-md-12">
+                                    <table class="table table-bordered table-striped" id="example-4">
+                                       <thead>
+                                          <tr>
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Done</th>
+                                          </tr>
+                                       </thead>
+
+
+                                       <tbody>
+                                          {% for task in pendingTasks.calls %}
+                                             <tr>
+                                                <td>{{task.lead.contact.name}}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d')}}</td>
+                                                <td>
+                                                   {% if task.done %}
+                                                      Done
+                                                      {% else %}
+                                                      Pending    
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                              </div>
+                           </div>
+                           <div class="row">
+                              <div class="col-md-12">
+                                    <table class="table table-bordered table-striped" id="example-4">
+                                       <thead>
+                                          <tr>
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Done</th>
+                                          </tr>
+                                       </thead>
+
+
+                                       <tbody>
+                                          {% for task in pendingTasks.meetings %}
+                                             <tr>
+                                                <td>{{task.lead.contact.name}}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d')}}</td>
+                                                <td>
+                                                   {% if task.done %}
+                                                      Done
+                                                      {% else %}
+                                                      Pending    
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane active" id="today">
+                           <div class="row">
+                              <div class="col-md-12">
+                                    <table class="table table-bordered table-striped" id="example-4">
+                                       <thead>
+                                          <tr>
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Done</th>
+                                          </tr>
+                                       </thead>
+
+
+                                       <tbody>
+                                          {% for task in todaysTasks.calls %}
+                                             <tr>
+                                                <td>{{task.lead.contact.name}}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d')}}</td>
+                                                <td>
+                                                   {% if task.done %}
+                                                      Done
+                                                      {% else %}
+                                                      Pending    
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                              </div>
+                           </div>
+                           <div class="row">
+                              <div class="col-md-12">
+                                    <table class="table table-bordered table-striped" id="example-4">
+                                       <thead>
+                                          <tr>
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Done</th>
+                                          </tr>
+                                       </thead>
+
+
+                                       <tbody>
+                                          {% for task in todaysTasks.meetings %}
+                                             <tr>
+                                                <td>{{task.lead.contact.name}}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d')}}</td>
+                                                <td>
+                                                   {% if task.done %}
+                                                      Done
+                                                      {% else %}
+                                                      Pending    
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="tab-pane " id="upcoming">
+                           <div class="row">
+                              <div class="col-md-12">
+                                    <table class="table table-bordered table-striped" id="example-4">
+                                       <thead>
+                                          <tr>
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Done</th>
+                                          </tr>
+                                       </thead>
+
+
+                                       <tbody>
+                                          {% for task in upcomingTasks.calls %}
+                                             <tr>
+                                                <td>{{task.lead.contact.name}}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d')}}</td>
+                                                <td>
+                                                   {% if task.done %}
+                                                      Done
+                                                      {% else %}
+                                                      Pending    
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                              </div>
+                           </div>
+                           <div class="row">
+                              <div class="col-md-12">
+                                    <table class="table table-bordered table-striped" id="example-4">
+                                       <thead>
+                                          <tr>
+                                             <th>Name</th>
+                                             <th>Comment</th>
+                                             <th>Date</th>
+                                             <th>Done</th>
+                                          </tr>
+                                       </thead>
+
+
+                                       <tbody>
+                                          {% for task in upcomingTasks.meetings %}
+                                             <tr>
+                                                <td>{{task.lead.contact.name}}</td>
+                                                <td>{{task.comment|nl2br}}</td>
+                                                <td>{{task.date | date('d')}}</td>
+                                                <td>
+                                                   {% if task.done %}
+                                                      Done
+                                                      {% else %}
+                                                      Pending    
+                                                   {% endif %}
+                                                </td>
+                                             </tr>
+                                          {% endfor %}
+                                       </tbody>
+                                    </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-md-12">
+      {{ render(controller('CrmSandboxBundle:SalesRepresentative/AssignedLeads:assginedLeads',{id:app.user.id}))}}
+   </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+   <script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+
+
+<script src="{{asset('assets/js/xenon-widgets.js')}}"></script>
+<script src="{{asset('assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
+<script src="{{asset('assets/js/jvectormap/regions/jquery-jvectormap-world-mill-en.js')}}"></script>
+
+<script src="{{asset('assets/js/devexpress-web-14.1/js/globalize.min.js')}}"></script>
+<script src="{{asset('assets/js/devexpress-web-14.1/js/dx.chartjs.js')}}"></script>
+
+{% endblock %}

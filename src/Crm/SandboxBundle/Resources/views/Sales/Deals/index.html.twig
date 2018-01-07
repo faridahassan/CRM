@@ -1,0 +1,132 @@
+{% extends '::base.html.twig' %}
+
+
+{% block page_content -%}
+	<div class="row">
+		<div class="col-md-12">
+
+			{% for flashMessage in app.session.flashbag.get('notice') %}
+			    
+			    <div class="alert alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<strong>Well done!</strong> {{ flashMessage }}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Deals</h3>
+
+			{% if is_granted('ROLE_SALES_REPRESENTITIVE') %}
+
+
+			{% endif %}
+			<div class="panel-options">
+				<a href="#" data-toggle="panel">
+					<span class="collapse-icon">&ndash;</span>
+					<span class="expand-icon">+</span>
+				</a>
+				<a href="#" data-toggle="remove">
+					&times;
+				</a>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-12">
+
+					<script type="text/javascript">
+						jQuery(document).ready(function($)
+						{
+							$("#example-4").dataTable({
+								responsive:true
+								
+							});
+						});
+					</script>
+					<div class="table-resonsive">
+						<table class="table table-bordered table-striped table-responsive display" style="width:100%" id="example-4">
+							<thead>
+								<tr>
+									<th>Unit</th>
+									<th>Lead</th>
+									<th>Price</th>
+									<th>Commission</th>
+									<th>Date</th>
+									<th>Approval</th>
+									<th>Status</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for deal in deals %}
+									<tr>
+										{% if deal.property is not null %}
+											<td><a href="{{path('property_show', {'id' : deal.property.id})}}">{{deal.user.name|default('')}} - {{deal.lead.contact.name|default('')}} - {{deal.property.number|default('')}} {{deal.property.project.name|default('')}} {{deal.property.location.name|default('')}} {{deal.property.id|default('')}}</a></td>
+											{% else %}
+											<td></td>
+										{% endif %}
+										{% if deal.lead is not null %}
+											<td><a href="{% if is_granted('ROLE_SALES_REPRESENTATIVE') %} {{path('sales_representative_contact_history', {'contact' : deal.lead.contact.id})}}{% else %} {{path('sales_dashboard_admin_contact_history', {'contact' : deal.lead.contact.id})}} {% endif %}">{{deal.lead.contact.name}}</a></td>
+											{% else %}
+											<td></td>
+										{% endif %}
+										<td>{{deal.price|number_format}}</td>
+										<td>{{deal.commission}}</td>
+										<td>{{deal.date|date('Y-m-d H:i:s')}}</td>
+										<td>
+											{% if is_granted("ROLE_ADMIN") %}
+												{% if deal.approved %}
+													{# <a href="{{path('sales_disapprove_deal',{'deal':deal.id})}}" class="btn btn-danger btn-sm">Disapprove</a> #}
+													Approved
+													{% elseif deal.closed %}
+
+													<a href="{{path('sales_approve_deal',{'deal':deal.id})}}" class="btn btn-success btn-sm">Approve</a>
+													{% else %}
+													Close first
+												{% endif %}
+												{% else %}
+												{% if deal.approved %}
+													Approved
+													{% else %}
+													Pending
+												{% endif %}
+											{% endif %}
+
+										</td>
+										<td>
+											{% if deal.closed %}
+												Closed
+												{% else %}
+												<a href="{{path('sales_close_deal',{'deal':deal.id})}}" class="btn btn-success btn-sm">Close</a>
+											{% endif %}
+										</td>
+										<td>
+
+											<a href="{{path('sales_show_deal',{'deal':deal.id})}}" class="btn btn-success btn-sm">Show</a>
+									
+										{% if is_granted("ROLE_ADMIN") %}
+											
+												<a href="{{path('deal_edit',{'id':deal.id})}}" class="btn btn-info btn-sm">Edit</a>
+											
+												{{form_start(deleteForms[deal.id], {'attr':{'class':'inline'}})}}
+												{{ form_widget(deleteForms[deal.id].submit,{'attr':{'class':'btn btn-danger btn-sm'}})}}
+												{{ form_end(deleteForms[deal.id]) }}
+											</td>
+
+										{% endif %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

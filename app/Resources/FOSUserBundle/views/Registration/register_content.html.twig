@@ -1,0 +1,136 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Add User</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="member-form-add-header">
+					<div class="row">
+						<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+						
+						<div class="col-md-10 col-sm-8">
+
+							<div class="user-img">
+								<img src="{{asset('assets/images/user-4.png')}}" class="img-circle" alt="user-pic">
+							</div>
+							<div class="user-name">
+								<a href="#">New User</a>
+								<span>New User Role</span>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="member-form-inputs">	
+					
+						<div class="row">
+
+						
+						
+			                    	
+				            <div class="form-group">
+
+
+								
+								<label class="col-sm-3 control-label" for="name">Name</label>
+
+								
+								<div class="col-sm-6">
+									{{ form_widget(form.name, {'attr': {'class': 'form-control placeholder-no-fix', 'placeholder': 'Name', 'required': 'required'}}) }}
+
+								</div>
+								<span class="col-sm-3 help-block">{{ form_errors(form.name) }}</span>
+							</div>
+						</div>
+						<div class="row">
+							{% if  form_errors(form.username) %}
+							    	
+				                {# <div class="form-group has-error"> #}
+				                	<div class="form-group">
+		                    {% else %}
+		                    	
+			                    <div class="form-group">
+		                    {% endif %}
+								
+									<label class="col-sm-3 control-label" for="username">Username</label>
+								
+									<div class="col-sm-6">
+										{{ form_widget(form.username, {'attr': {'class': 'form-control placeholder-no-fix', 'placeholder': 'User Name', 'required': 'required'}}) }}
+									</div>
+								
+									<span class="col-sm-3 help-block">{{ form_errors(form.username) }}</span>
+							</div>
+						</div>
+						<div class="row">
+							
+							<label class="col-sm-3 control-label" for="username">Email</label>
+
+							<div class="col-sm-6">
+								{{ form_widget(form.email, {'attr': {'class': 'form-control placeholder-no-fix', 'placeholder': 'Email', 'required': 'required'}}) }}
+							</div>
+							<span class="col-sm-3 help-block">{{ form_errors(form.email) }}</span>
+						</div>
+						<div class="row">
+							
+							<label class="col-sm-3 control-label" for="username">Password</label>
+							
+							<div class="col-sm-6">
+								{{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control placeholder-no-fix', 'placeholder': 'Password', 'required': 'required'}}) }}
+
+							</div>
+
+						</div>
+						<div class="row">
+							
+								<label class="col-sm-3 control-label" for="Pserpassword">Re-Type Password</label>
+							
+							<div class="col-sm-6">
+								{{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control placeholder-no-fix', 'placeholder': 'Password', 'required': 'required'}}) }}
+
+							</div>
+						</div>
+						<div class="row">
+							
+							<label class="col-sm-3 control-label" for="Pserpassword">Roles</label>
+
+							<div class="col-sm-6">
+								{{ form_widget(form.roles, {'id': 's2example-3','attr': {'class': 'form-control '}}) }}
+							</div>
+						</div>
+						
+							<div class="col-sm-2 col-sm-offset-10">
+								
+							</div>
+
+
+						
+					</div>
+
+						
+					<div class="col-md-2 col-sm-4 pull-right-sm">
+
+						<div class="action-buttons">
+							<input type="submit" class="btn btn-block btn-secondary" value="Add" />
+							
+							
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		{{ form_widget(form) }}
+	</form>
+</div>

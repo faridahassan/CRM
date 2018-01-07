@@ -1,0 +1,78 @@
+{% extends 'websitebase.html.twig' %}
+{% block page_content %}
+	<section class="page-top">
+		<div class="container">
+			<div class="page-top-in">
+				<h2><span>Contact Us</span></h2>
+			</div>
+		</div>
+	</section>
+	<!-- End page top -->
+	
+	<!-- Begin content with sidebar -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 content">
+				
+				<div class="contact">
+					<p>Nam nec tellus a odio tincidunt auctor a ornare odio. Sed non  mauris vitae erat consequat auctor eu in elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris in erat justo. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit.</p>
+					<div id="contact-map" class="pgl-bg-light">
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<strong>Your address</strong>
+							<address>129/6 tristique eu eleifend sit amet, tincid unt afringilla rhoncus lacus in condimentum.</address>
+						</div>
+						<div class="col-sm-6">
+							<address>
+								<strong>Phone.</strong> 012.666.999<br>
+								<strong>Fax.</strong> 012.666.999<br>
+								<strong>Email.</strong> pixelgeeklab@gmail.com
+							</address>
+						</div>
+					</div>
+					<hr>
+					  {{form_start(form)}}
+					        {% for flash_message in app.session.flashbag.get('notice') %}
+			                    <p class="message bg-success text-success"><strong>Thank You!</strong> Your message has been sent.<button type="button" class="close">×</button></p>
+		                    {% endfor %}
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="name">Your Name*</label>
+									{{form_widget(form.name,{'attr':{'class':'form__in form__in--text form-control'}}) }}
+								</div>
+								<div class="col-sm-6">
+									<label for="customer_mail">Your Email*</label>
+									{{form_widget(form.email,{'attr':{'class':'form__in form__in--text form-control'}}) }}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="subject">Phone*</label>
+									{{form_widget(form.phone,{'attr':{'class':'form__in form__in--text form-control'}}) }}
+								</div>
+								<div class="col-sm-6">
+									<label for="subject">Subject*</label>
+									{{form_widget(form.subject,{'attr':{'class':'form__in form__in--text form-control'}}) }}
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="comments">Your Message*</label>
+							{{form_widget(form.message,{'attr':{'class':'form__in form__in--text form-control','rows':'5'}}) }}
+						</div>
+						<div class="form-group">
+							{{form_widget(form.submit,{'attr':{'class':'btn btn-primary min-wide'}}) }}
+							
+						</div>
+					{{form_end(form)}}
+				</div>
+				
+			</div>
+		</div>	
+	</div>
+	<!-- End content with sidebar -->    
+{% endblock %}

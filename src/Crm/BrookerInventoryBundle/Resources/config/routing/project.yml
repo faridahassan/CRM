@@ -1,0 +1,46 @@
+
+project_index:
+    path:     /
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:index" }
+
+project_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:show" }
+project_gallery:
+    path:     /{id}/gallery
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:gallery" }
+project_all:
+    path:     /all
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:all" }
+
+project_all:
+    path:     /all
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:all" }
+
+project_new:
+    path:     /new
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:new" }
+
+project_create:
+    path:     /create
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:create" }
+    methods:  POST
+
+project_full_create:
+    path:     /full_create
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:fullCreate" }
+    methods:  POST
+
+project_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:edit" }
+
+project_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:update" }
+    methods:  [POST, PUT]
+
+project_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmBrookerInventoryBundle:Project:delete" }
+    methods:  [POST, DELETE]

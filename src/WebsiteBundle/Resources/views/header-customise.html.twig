@@ -1,0 +1,34 @@
+ <div id="header-nav-offset "></div>
+      <nav id="header-nav" class="navbar navbar--header navbar--overlay navbar--brand smaller-header">
+         <div class="container ">
+          <div class="navbar__row js-navbar-row "><a href="{{url('WebsiteBundle_homepage') }}" class="navbar__brand">
+              
+              <!--   <use xlink:href="#icon-logo" href="{{url('WebsiteBundle_homepage') }}"></use> -->
+                <img src="{{asset('website_assets/img/logo.png')}}">
+              
+              <!-- <svg class="navbar__brand-logo navbar__brand-logo--sm">
+                <use xlink:href="#icon-logo--mob"></use>
+                <img src="{{asset('website_assets/img/logo.png')}}">
+              </svg> --></a>
+            <div id="navbar-collapse-1" class="navbar__wrap ">
+              <ul class="navbar__nav margin-top-15">
+                
+                <li class="navbar__item {% if app.request.attributes.get('_route') == 'WebsiteBundle_homepage' %}active{% endif %}"><a onclick="myFunction()" id="my" href="{{url('WebsiteBundle_homepage') }}" class="navbar__link">Home</a></li>
+                <li class="navbar__item {% if app.request.attributes.get('_route') == 'WebsiteBundle_properties' %}active{% endif %}"><a href="{{url('WebsiteBundle_properties') }}" class="navbar__link">Properties</a></li>
+                <li class="navbar__item {% if app.request.attributes.get('_route') == 'WebsitedasBundle_projects' %}active{% endif %}"><a href="{{url('WebsiteBundle_projects') }}" class="navbar__link">Projects</a></li>
+                <li class="navbar__item {% if app.request.attributes.get('_route') == 'WebsiteBundle_contact' %}active{% endif %}"><a href="{{url('WebsiteBundle_contact') }}" class="navbar__link">Contact us</a></li>
+                <li class="navbar__item {% if app.request.attributes.get('_route') == 'WebsiteBundle_contact' %}active{% endif %}">
+                  <button class="search__btn btn  btn-lg" style="width:100%" data-toggle="modal" data-target="#myModal">
+                   Rent / Sale Your Property 
+                  </button>
+                    
+                </li>
+                
+              </ul>
+              <!-- end of block  navbar__nav-->
+            </div>
+
+          </div>
+        </div>
+      </nav>
+      <!-- Modal -->

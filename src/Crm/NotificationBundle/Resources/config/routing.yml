@@ -1,0 +1,6 @@
+crm_notification_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: CrmNotificationBundle:Default:index }
+crm_notification_lead_markall:
+    path:     /markall
+    defaults: { _controller: CrmNotificationBundle:LeadNotification:markAllRead }

@@ -1,0 +1,322 @@
+{% extends 'websitebase.html.twig' %}
+{% block page_content %}
+    <!-- Begin page top -->
+			<section class="page-top">
+				<div class="container">
+					<div class="page-top-in">
+						<h2><span>Property Detail</span></h2>
+					</div>
+				</div>
+			</section>
+			<!-- End page top -->
+			
+			<!-- Begin content with sidebar -->
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 content">
+						
+						<section class="pgl-pro-detail pgl-bg-light">
+							<div id="slider" class="flexslider">
+								<ul class="slides">
+								{% for item in property.gallery %}
+									<li>
+										<img src="{{asset('/images/properties/' ~ property.folder ~ '/gallery/' ~ item)}}" alt="">
+										<span class="property-thumb-info-label">
+											<span class="label price">EGP {{property.totalPrice|number_format}}</span>
+											<span class="label forrent">Rent</span>
+										</span>
+									</li>
+								{% endfor %}
+								</ul>
+							</div>
+							<div id="carousel" class="flexslider">
+								<ul class="slides">
+										{% for item in property.gallery %}
+									<li> <img src="{{asset('/images/properties/' ~ property.folder ~ '/gallery/' ~ item)}}" alt=""></li>
+										{% endfor %}	
+									
+								</ul>
+							</div>
+							<div class="pgl-detail">
+								<div class="row">
+									<div class="col-sm-4">
+										<ul class="list-unstyled amenities amenities-detail">
+											<li><strong>Type:</strong> {{property.type | default('')}}</li>
+											<li><strong>Area:</strong> {{property.buildupArea | default('')}}<sup>m2</sup></li>
+											<li><address><i class="icons icon-location"></i> {{property.address | default('')}} </address></li>
+											<li><i class="icons icon-bedroom"></i> {{property.bedrooms | default('')}} Bedrooms</li>
+											<li><i class="icons icon-bathroom"></i> {{property.bathrooms | default('')}} Bathrooms</li>
+										</ul>
+									</div>
+									<div class="col-sm-8">
+										<h2>{{property.address | default('')}}</h2>
+										<p><strong>{{property.websiteTitle | default('')}}</strong></p>
+										<p>{{(property.websiteInfo|nl2br) | default('')}}</p>	
+									</div>
+								</div>
+							
+								<div class="tab-detail">
+									<h3>More Infomation</h3>
+									<div class="panel-group" id="accordion">
+										{% if property.features is not empty %}
+										<div class="panel panel-default pgl-panel">
+											<div class="panel-heading">
+												<h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Additional Details</a> </h4>
+											</div>
+											<div id="collapseOne" class="panel-collapse collapse in">
+												<div class="panel-body">
+													<ul>
+													{% for feature in property.features %}
+														<li><strong>{{feature | default('')}}</strong>    <!-- Ceiling Fan(s), Central --></li>
+													{% endfor %}	
+													</ul>
+												</div>
+											</div>
+										</div>
+										{% endif %}
+										<!-- <div class="panel panel-default pgl-panel">
+											<div class="panel-heading">
+												<h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed">Video</a> </h4>
+											</div>
+											<div id="collapseTwo" class="panel-collapse collapse">
+												<div class="panel-body"> <p>Sed perspiciatis unde omnisiste natus error voluptatem remopa accusantium doloremque laudantium, totam rem aperiam.</p> </div>
+											</div>
+										</div> -->
+										<div class="panel panel-default pgl-panel">
+											<div class="panel-heading">
+												<h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" class="collapsed">Map</a> </h4>
+											</div>
+											<div id="collapseThree" class="panel-collapse collapse">
+												<div class="panel-body">
+													<p>Sed perspiciatissss unde omnisiste natus error voluptatem remopa accusantium doloremque laudantium, totam rem aperiam.</p>
+													<div id="contact-map" class="pgl-bg-light"></div>
+												</div>
+											</div>
+										</div>
+										<!-- <div class="panel panel-default pgl-panel">
+											<div class="panel-heading">
+												<h4 class="panel-title"> <a data-toggle="collapse" data-parent="#accordion" href="#collapseFouth" class="collapsed">Agent</a> </h4>
+											</div>
+											<div id="collapseFouth" class="panel-collapse collapse">
+												<div class="panel-body">
+													<div class="pgl-agent-item pgl-bg-light">
+														<div class="row pgl-midnarrow-row">
+															<div class="col-xs-4">
+																<div class="img-thumbnail-medium">
+																	<a href="agentprofile.html"><img alt="" class="img-responsive" src="{{asset('website_assets/images/agents/temp-agent.png')}}"></a>
+																</div>
+															</div>
+															<div class="col-xs-8">
+																<div class="pgl-agent-info">
+																	<small>NO.1</small>
+																	<h4><a href="agentprofile.html">John Smith</a></h4>
+																	<address>
+																		<i class="fa fa-map-marker"></i> Office : 1-800-666-8888<br>
+																		<i class="fa fa-phone"></i> Mobile : 0800-666-6666<br>
+																		<i class="fa fa-fax"></i> Fax : 1-800-666-8888<br>
+																		<i class="fa fa-envelope-o"></i> Mail: <a href="mailto:JohnSmith@gmail.com">JohnSmith@gmail.com</a>
+																	</address>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div> -->
+										<div class="panel panel-default pgl-panel">
+											<div class="panel-heading">
+												<h4 class="panel-title"> <a data-parent="#accordion" href="{{path('website_contact')}}" class="collapsed">Contact us</a> </h4>
+											</div>
+											<div id="collapseFive" class="panel-collapse collapse">
+												<div class="panel-body">
+													<p>Sed perspiciatis unde omnisiste natus error voluptatem remopa accusantium doloremque laudantium, totam rem aperiam.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+						
+						<!-- Begin Related properties -->
+						<section class="pgl-properties">
+							<h2>Related Properties</h2>
+							<div class="row">
+								<div class="owl-carousel pgl-pro-slide" data-plugin-options='{"items": 3, "itemsDesktop": 3, "singleItem": false, "autoPlay": false, "pagination": false}'>
+									<div class="col-md-12 animation">
+										<div class="pgl-property">
+											<div class="property-thumb-info">
+												<div class="property-thumb-info-image">
+													<img alt="" class="img-responsive" src="{{asset('website_assets/images/properties/property-1.jpg')}}">
+													<span class="property-thumb-info-label">
+														<span class="label price">$358,000</span>
+														<span class="label forrent">Rent</span>
+													</span>
+												</div>
+												<div class="property-thumb-info-content">
+													<h3><a href="property-detail.html">Poolside character home on a wide 422sqm</a></h3>
+													<address>Ferris Park, Jersey City Land in Sales</address>
+												</div>
+												<div class="amenities clearfix">
+													<ul class="pull-left">
+														<li><strong>Area:</strong> 450<sup>m2</sup></li>
+													</ul>
+													<ul class="pull-right">
+														<li><i class="icons icon-bedroom"></i> 3</li>
+														<li><i class="icons icon-bathroom"></i> 2</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12 animation">
+										<div class="pgl-property">
+											<div class="property-thumb-info">
+												<div class="property-thumb-info-image">
+													<img alt="" class="img-responsive" src="{{asset('website_assets/images/properties/property-2.jpg')}}">
+													<span class="property-thumb-info-label">
+														<span class="label price">$358,000</span>
+														<span class="label forrent">Rent</span>
+													</span>
+												</div>
+												<div class="property-thumb-info-content">
+													<h3><a href="property-detail.html">Poolside character home on a wide 422sqm</a></h3>
+													<address>Ferris Park, Jersey City Land in Sales</address>
+												</div>
+												<div class="amenities clearfix">
+													<ul class="pull-left">
+														<li><strong>Area:</strong> 450<sup>m2</sup></li>
+													</ul>
+													<ul class="pull-right">
+														<li><i class="icons icon-bedroom"></i> 3</li>
+														<li><i class="icons icon-bathroom"></i> 2</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12 animation">
+										<div class="pgl-property">
+											<div class="property-thumb-info">
+												<div class="property-thumb-info-image">
+													<img alt="" class="img-responsive" src="{{asset('website_assets/images/properties/property-3.jpg')}}">
+													<span class="property-thumb-info-label">
+														<span class="label price">$358,000</span>
+														<span class="label forrent">Rent</span>
+													</span>
+												</div>
+												<div class="property-thumb-info-content">
+													<h3><a href="property-detail.html">Poolside character home on a wide 422sqm</a></h3>
+													<address>Ferris Park, Jersey City Land in Sales</address>
+												</div>
+												<div class="amenities clearfix">
+													<ul class="pull-left">
+														<li><strong>Area:</strong> 450<sup>m2</sup></li>
+													</ul>
+													<ul class="pull-right">
+														<li><i class="icons icon-bedroom"></i> 3</li>
+														<li><i class="icons icon-bathroom"></i> 2</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12 animation">
+										<div class="pgl-property">
+											<div class="property-thumb-info">
+												<div class="property-thumb-info-image">
+													<img alt="" class="img-responsive" src="{{asset('website_assets/images/properties/property-4.jpg')}}">
+													<span class="property-thumb-info-label">
+														<span class="label price">$358,000</span>
+														<span class="label forrent">Rent</span>
+													</span>
+												</div>
+												<div class="property-thumb-info-content">
+													<h3><a href="property-detail.html">Poolside character home on a wide 422sqm</a></h3>
+													<address>Ferris Park, Jersey City Land in Sales</address>
+												</div>
+												<div class="amenities clearfix">
+													<ul class="pull-left">
+														<li><strong>Area:</strong> 450<sup>m2</sup></li>
+													</ul>
+													<ul class="pull-right">
+														<li><i class="icons icon-bedroom"></i> 3</li>
+														<li><i class="icons icon-bathroom"></i> 2</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+						<!-- End Related properties -->
+						
+					</div>
+				</div>	
+			</div>
+			<!-- End content with sidebar -->
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{asset('website_assets/vendor/jquery.gmap.js')}}"></script>
+<script>
+
+		/*
+		Map Settings
+
+			Find the Latitude and Longitude of your address:
+				- http://universimmedia.pagesperso-orange.fr/geo/loc.htm
+				- http://www.findlatitudeandlongitude.com/find-address-from-latitude-and-longitude/
+
+		*/
+
+		// Map Markers
+		var mapMarkers = [{
+			address: "1234 Pine Shade Pl, Salt Lake City, UT 84118",
+			html: "<strong>Your Address</strong><br>129/6 tristique eu eleifend sit amet,<br>tincid unt afringilla rhoncus lacus in condimentum. ",
+			popup: false,
+			icon: {
+				image: "images/makers/marker.png",
+				iconsize: [26, 33],
+				iconanchor: [26, 33]
+			}
+		}];
+
+		// Map Initial Location
+		var initLatitude = 40.65610;
+		var initLongitude = -112.02586;
+
+		// Map Extended Settings
+		var mapSettings = {
+			controls: {
+				panControl: true,
+				zoomControl: true,
+				mapTypeControl: true,
+				scaleControl: true,
+				streetViewControl: true,
+				overviewMapControl: true
+			},
+			scrollwheel: false,
+			markers: mapMarkers,
+			latitude: initLatitude,
+			longitude: initLongitude,
+			zoom: 15
+		};
+		
+		// This map inside Bootstrap's collapse so needs to initialize the map after the 1st click on the collapsible element
+		var map;
+		$('#collapseThree').on('shown.bs.collapse', function() {
+			if( map == undefined) {
+				map = $("#contact-map").gMap(mapSettings);
+			}
+		});
+
+		// Map Center At
+		var mapCenterAt = function(options, e) {
+			e.preventDefault();
+			$("#contact-map").gMap("centerAt", options);
+		}
+
+	</script>										
+{% endblock %}

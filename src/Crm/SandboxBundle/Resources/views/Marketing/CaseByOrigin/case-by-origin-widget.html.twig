@@ -1,0 +1,140 @@
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          
+          <i class="fa-check"></i>
+          <span>Total {{caseByOriginReport.deals |length}} won deals</span>
+        </h3>
+        <div class="panel-options">
+          <a href="#" data-toggle="panel">
+            <span class="collapse-icon">&ndash;</span>
+            <span class="expand-icon">+</span>
+          </a>
+          <a href="#" data-toggle="remove">
+            &times;
+          </a>
+        </div>
+      </div>
+      <div class="panel-body">
+        <script type="text/javascript">
+
+        var vals = [];
+        var names = [];
+
+        {% for caseByOrigin in caseByOriginReport.dealsCount %}
+        names.push('{{caseByOrigin.channelname}}')
+        vals.push({{caseByOrigin.dealcount}})
+        {% endfor %}
+
+        jQuery(document).ready(function($)
+        {
+          Array.prototype.max = function() {
+            return Math.max.apply(null, this);
+          };
+          if( ! $.isFunction($.fn.dxChart))
+            return;
+
+          $('#bar-gauge-1').dxBarGauge({
+            startValue: 0,
+            endValue: vals.max(),
+            values: vals,
+            label: {
+              indent: 30,
+              format: 'fixedPoint',
+              precision: 1,
+              customizeText: function (arg) {
+
+                return ""+names[arg.index];
+              }
+            },
+            title: {
+              text: "Case By Origin",
+              font: {
+                size: 28
+              }
+            },
+            palette: xenonPalette
+          });
+        });
+
+        function between(randNumMin, randNumMax)
+        {
+          var randInt = Math.floor((Math.random() * ((randNumMax + 1) - randNumMin)) + randNumMin);
+
+          return randInt;
+        }
+        </script>
+
+        <div id="bar-gauge-1" style="height: 440px; width: 100%;"></div>
+        <br />
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Case by origin breakdown</h3>
+
+        <div class="panel-options">
+          <a href="#" data-toggle="panel">
+            <span class="collapse-icon">&ndash;</span>
+            <span class="expand-icon">+</span>
+          </a>
+          <a href="#" data-toggle="remove">
+            &times;
+          </a>
+        </div>
+      </div>
+      <div class="panel-body">
+
+        <script type="text/javascript">
+        jQuery(document).ready(function($)
+        {
+          $("#example-4").dataTable({
+
+            tableTools: {
+              sSwfPath: "assets/js/datatables/tabletools/copy_csv_xls_pdf.swf"
+            }
+          });
+        });
+        </script>
+        
+        <table class="table table-bordered table-striped" id="example-4">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Product</th>
+              <th>Source</th>
+              <th>Lead Created on</th>
+              <th>Case Closed on</th>
+              
+            </tr>
+          </thead>
+
+          
+          <tbody>
+            {% for caseByOrigin in caseByOriginReport.deals %}
+            <tr>
+              <td><a href="{{path('sales_dashboard_admin_contact_history', {contact:caseByOrigin.lead.contact.id} )}}">{{caseByOrigin.lead.contact.name}}</a></td>
+              <td>{{caseByOrigin.property}}</td>
+              <td>{{caseByOrigin.lead.subChannel.name}}</td>
+              <td>{{caseByOrigin.lead.date |date('d-M-Y')}}</td>
+              <td>{{caseByOrigin.date |date('d-M-Y')}}</td>
+              
+            </tr>
+            {% endfor %}
+
+            
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+  

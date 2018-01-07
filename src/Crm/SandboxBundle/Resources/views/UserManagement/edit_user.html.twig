@@ -1,0 +1,82 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+{% block page_content %}
+	<div class="row">
+		<div class="col-md-12">
+
+			{% for flashMessage in app.session.flashbag.get('notice') %}
+
+				<div class="alert alert-success">
+					<button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<strong>Well done!</strong> {{ flashMessage }}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+			{% for flashMessage in app.session.flashbag.get('error') %}
+
+				<div class="alert alert-danger">
+					<button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<strong>Bummer!</strong> {{ flashMessage }}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Edit User</h3>
+			<div class="panel-options">
+				<a href="#" data-toggle="panel">
+					<span class="collapse-icon">&ndash;</span>
+					<span class="expand-icon">+</span>
+				</a>
+				<a href="#" data-toggle="remove">
+					&times;
+				</a>
+			</div>
+		</div>
+		<div class="panel-body">
+			{{form_start(form,{attr:{'class':'form-horizontal'}})}}
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Name</label>
+
+				<div class="col-sm-7">
+					{{form_widget(form.name ,{attr:{'class':'form-control'}})}}
+				</div>
+			</div>
+			<div class="form-group ">
+				<label class="col-sm-3 control-label">Email</label>
+				
+				<div class="col-sm-7">
+					{{form_widget(form.email ,{attr:{'class':'form-control'}})}}
+				</div>
+			</div>
+			<div class="form-group ">
+				<label class="col-sm-3 control-label">Username</label>
+				
+				<div class="col-sm-7">
+					{{form_widget(form.username ,{attr:{'class':'form-control'}})}}
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-10">
+					{{form_widget(form.save ,{attr:{'class':'btn btn-success pull-right'}})}}	
+				</div>
+			</div>
+			{{form_end(form)}}
+		</div>
+	</div>
+
+
+{% endblock %}

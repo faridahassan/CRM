@@ -1,0 +1,3 @@
+search_leads:
+    path:     /search
+    defaults: { _controller: "CrmSandboxBundle:Common\SearchLead:index" }

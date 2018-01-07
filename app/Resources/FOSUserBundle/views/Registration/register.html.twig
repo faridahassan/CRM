@@ -1,0 +1,12 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+{% endblock fos_user_content %}
+
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+{% endblock %}

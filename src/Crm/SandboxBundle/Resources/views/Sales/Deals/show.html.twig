@@ -1,0 +1,128 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<script type="text/javascript">
+var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+</script>
+{% endblock %}
+
+{% block page_content %}
+
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Deal Show</h3>
+		<div class="panel-options">
+			<a href="#" data-toggle="panel">
+				<span class="collapse-icon">&ndash;</span>
+				<span class="expand-icon">+</span>
+			</a>
+			<a href="#" data-toggle="remove">
+				&times;
+			</a>
+		</div>
+	</div>
+	<div class="panel-body">
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Unit</label>
+			
+			<div class="col-sm-7">
+				<p>
+					<a href="{{ path('property_show', { 'id': deal.property.id }) }}"><label>{{deal.property}}</label> </a>
+				</p>
+				
+			</div>
+		</div>
+		<br />
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Lead</label>
+			
+			<div class="col-sm-7">
+				<p>
+					{% if is_granted('ROLE_ADMIN') %}
+					<a href="{{ path('sales_dashboard_admin_contact_history', { 'contact': deal.lead.contact.id }) }}"><label>{{deal.lead}}</label> </a>
+					{% endif %}
+					
+					{% if is_granted('ROLE_SALES_REPRESENTATIVE') %}
+					<a href="{{ path('sales_representative_contact_history', { 'contact': deal.lead.contact.id }) }}"><label>{{deal.lead}}</label> </a>
+					{% endif %}
+					
+				</p>
+				
+			</div>
+		</div>
+		<br />
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Price</label>
+			
+			<div class="col-sm-7">
+				<p>
+					<label>{{deal.price|number_format}}</label>
+				</p>
+				
+			</div>
+		</div>
+		<br />
+		{% if is_granted('ROLE_ADMIN') %}
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Agent</label>
+				
+				<div class="col-sm-7">
+					<p>
+						<label>{{deal.user.name}}</label>
+					</p>
+					
+				</div>
+			</div>
+			<br />
+		{% endif %}
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Commission</label>
+			
+			<div class="col-sm-7">
+				<p>
+					<label>{{deal.commission|number_format}}</label>
+				</p>
+				
+			</div>
+		</div>
+		<br />
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Date</label>
+			
+			<div class="col-sm-7">
+				<p>
+					<label>{{deal.date|date("m/d/Y")}}</label>
+				</p>
+				
+			</div>
+		</div>
+		<br />
+		<div class="form-group">
+			<label class="col-sm-3 control-label">Approved</label>
+			
+			<div class="col-sm-7">
+				<p>
+					{% if deal.approved %}
+					<label>Yes</label>
+					{% else %}
+					<label>No</label>
+					{% endif %}
+				</p>
+				
+			</div>
+		</div>
+		<div class="form-group">
+			{{form_start(delete_form)}}
+			{{form_widget(delete_form.submit,{'attr':{'class':'btn btn-danger'}})}}
+			{{form_end(delete_form)}}
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<!-- Imported scripts on this page -->
+
+{% endblock %}

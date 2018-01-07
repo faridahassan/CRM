@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Database List</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#databases").dataTable({});
+				});
+				</script>
+
+				<table class="table table-bordered table-striped" id="databases">
+					<thead>
+						<tr>
+							<th>Database Name </th>
+							<th>Records</th>
+							<th>Leads</th>
+							<th>Calls</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+
+					
+					<tbody>
+						{% for database in databases %}
+						
+						<tr>
+							<td>{{database.name}}</td>
+							<td>{{database.contacts}}</td>
+							<td>{{database.leads}}</td>
+							<td>{{database.calls}}</td>
+							<td><a href="{{path('callcenter_database_call_next_user',{'database':database.id})}}" class="btn btn-success btm-sm"> CALL</td>
+
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+
+{% endblock %}

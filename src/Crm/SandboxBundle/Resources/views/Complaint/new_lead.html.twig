@@ -1,0 +1,169 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_content -%}
+<div class="row">
+	<div class="col-md-12">
+
+		{% for flashMessage in app.session.flashbag.get('error') %}
+		    
+		    <div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<strong>Bummer!</strong> {{ flashMessage }}
+			</div>
+		{% endfor %}
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">New Complaint</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+			{{form_start(form, {'attr':{'class':'form-horizontal', 'role':'form'}})}}
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Name</label>
+
+					<div class="col-sm-7">
+							{{form_widget(form.name, {'attr' :{'class':'form-control'}})}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Mobile</label>
+
+					<div class="col-sm-7">
+							{{form_widget(form.mobile, {'attr' :{'class':'form-control autogrow'}})}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Department</label>
+
+					<div class="col-sm-7">
+
+						<div class="date-and-time">
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+								{
+									$("#{{form.department.vars.id}}").select2({
+										placeholder: 'Choose Department',
+										allowclear: true
+									}).on('select2-open', function()
+									{
+										// adding custom scrollbar
+										$(this).data('select2').results.addclass('overflow-hidden').perfectscrollbar();
+									});
+									
+								});
+							</script>
+							{{form_widget(form.department, {'attr' :{'class':'form-control'}})}}
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Status</label>
+
+					<div class="col-sm-7">
+						<script type="text/javascript">
+							jQuery(document).ready(function($)
+								{
+									$("#{{form.status.vars.id}}").select2({
+										placeholder: 'Choose Department',
+										allowclear: true
+									}).on('select2-open', function()
+									{
+										// adding custom scrollbar
+										$(this).data('select2').results.addclass('overflow-hidden').perfectscrollbar();
+									});
+									
+								});
+							</script>
+							{{form_widget(form.status, {'attr' :{'class':'form-control'}})}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Brief</label>
+
+					<div class="col-sm-7">
+							{{form_widget(form.brief, {'attr' :{'class':'form-control'}})}}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Description</label>
+
+					<div class="col-sm-7">
+							{{form_widget(form.description, {'attr' :{'class':'form-control autogrow'}})}}
+					</div>
+				</div>
+				
+				
+				<div class="form-group-separator"></div>
+				<div class="row">
+					<div class="col-md-10">
+						{{form_widget(form.submit, {'attr' :{'class':'btn btn-success pull-right'}})}}
+					</div>
+				</div>
+				<div class="hidden">
+					{{form_rest(form)}}	
+				</div>
+				{{form_end(form)}}
+
+			
+			</div>
+		</div>
+	</div>
+</div>
+	{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+   <script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+<script src="{{asset('assets/js/devexpress-web-14.1/js/globalize.min.js')}}"></script>
+<script src="{{asset('assets/js/devexpress-web-14.1/js/dx.chartjs.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+
+<script>
+      function find()
+      {
+         mobile = $('#mobile').val();
+         var url = Routing.generate('find_lead', { mobile : mobile});
+         $('#result').html("loading..");
+         $.ajax({
+               type:"GET",url : url,
+               success : function(response) {
+               	$('#result').html(response);
+                  toastr.success('Success!');
+               },
+               error: function() {
+                  toastr.error('failure, please try agian later!');
+               }
+            });
+      }
+   
+</script>
+<!-- Imported scripts on this page -->
+
+{% endblock %}

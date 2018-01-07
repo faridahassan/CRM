@@ -1,0 +1,30 @@
+broker:
+    path:     /
+    defaults: { _controller: "CrmBrookerInventoryBundle:Broker:index" }
+
+broker_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmBrookerInventoryBundle:Broker:show" }
+
+broker_new:
+    path:     /new
+    defaults: { _controller: "CrmBrookerInventoryBundle:Broker:new" }
+
+broker_create:
+    path:     /create
+    defaults: { _controller: "CrmBrookerInventoryBundle:Broker:create" }
+    methods:  POST
+
+broker_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmBrookerInventoryBundle:Broker:edit" }
+
+broker_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmBrookerInventoryBundle:Broker:update" }
+    methods:  [POST, PUT]
+
+broker_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmBrookerInventoryBundle:Broker:delete" }
+    methods:  [POST, DELETE]

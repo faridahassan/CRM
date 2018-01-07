@@ -1,0 +1,22 @@
+services:
+  simplethings_entityaudit.reader:
+    class: Crm\BrookerInventoryBundle\AuditReader
+    factory_method: createAuditReader
+    factory_service: simplethings_entityaudit.manager
+    arguments: ["@doctrine.orm.default_entity_manager"]
+
+  simplethings_entityaudit.manager:
+    class: Crm\AuditingBundle\AuditManager
+    arguments: ['@simplethings_entityaudit.config']
+
+  simplethings_entityaudit.log_revisions_listener:
+    class: Crm\AuditingBundle\LogRevisionsListener
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }
+    arguments: ['@simplethings_entityaudit.manager']
+    
+  simplethings_entityaudit.create_schema_listener:
+    class: Crm\AuditingBundle\CreateSchemaListener
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }
+    arguments: ['@simplethings_entityaudit.manager']

@@ -1,0 +1,7 @@
+contacts_upload:
+    path:     /upload
+    defaults: { _controller: "CrmSandboxBundle:Contacts/Contact:uploadExcel" }
+
+inventory_upload:
+    path:     /inventory_upload
+    defaults: { _controller: "CrmSandboxBundle:Contacts/Contact:uploadInventoryExcel" }

@@ -1,0 +1,247 @@
+{# src/Crm/WebsiteBundle/Resources/views/Page/property.html.twig #}
+{% extends 'WebsiteBundle::layout.html.twig' %}
+
+
+{% block body %}
+      
+        
+        <div class="center">
+
+          <div class="container">
+            <div class="row">
+
+              <!-- BEGIN LISTING-->
+              <div class="listing listing--properties-list">
+                <header class="listing__header">
+                  
+                  <h5 class="listing__headline">Found:<strong> {{properties|length}} List</strong></h5>
+                </header>
+                <div class="listing__offset"></div>
+               {#  <button type="button" data-toggle-target=".js-search-form" data-toggle-hide="Hide Filter" data-toggle-show="Show Filter" class="button__toggle listing__search-toggle js-toggle-btn">Show Filter</button>
+                <div class="listing__panel listing__panel--filter js-listing-filter">
+                  <div class="listing__filter">
+                    <div class="listing__sort">
+                      <div class="form-group">
+                        <label for="in-listing-sort" class="control-label listing__filter-label">Sort by:</label>
+                        <!--div.listing__sort-wrap-->
+                        <select id="in-listing-sort" class="form-control js-in-select">
+                          <option>Price + P&amp;P: Highest First</option>
+                          <option>Time: Ending Soonset</option>
+                          <option>Time: Newly Listed</option>
+                          <option>Price + P&amp;P: Lowest First</option>
+                          <option>Price + P&amp;P: Highest First</option>
+                          <option>Price: Lowest First</option>
+                          <option>Price: Highest First</option>
+                          <option>Distance: Nearest First</option>
+                          <option>Condition: New First</option>
+                          <option>Condition: Used First</option>
+                          <option>Best Match</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--end of block .listing__sort-->
+                    <div class="listing__view"><span class="listing__filter-label">View:</span><a href="properties_listing_grid.html" class="listing__btn listing__btn--grid active"><span class="glyphicon glyphicon-th-large"></span></a><a href="properties_listing.html" class="listing__btn listing__btn--list"><i class="fa fa-bars"></i></a></div>
+                    <!--end of block .listing__view-->
+                    <div class="listing__show">
+                      <div class="form-group">
+                        <label for="in-listing-show" class="control-label listing__filter-label">Show on page:</label>
+                        <!--div.listing__show-wrap-->
+                        <select id="in-listing-show" class="form-control js-in-select">
+                          <option>10</option>
+                          <option>25</option>
+                          <option>50</option>
+                          <option>100</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!--end of block .listing__show-->
+                  </div>
+                </div> #}
+                <!-- <div class="listing__param"><span class="listing__param-item"><a class="listing__param-delete"></a>USA</span><span class="listing__param-item"><a class="listing__param-delete"></a>New Jersey</span><span class="listing__param-item"><a class="listing__param-delete"></a>New York City</span><span class="listing__param-item"><a class="listing__param-delete"></a>California</span><span class="listing__param-item"><a class="listing__param-delete"></a>Los Angeles</span><span class="listing__param-item"><a class="listing__param-delete"></a>For sale</span><span class="listing__param-item"><a class="listing__param-delete"></a>Privat apartment</span><span class="listing__param-item"><a class="listing__param-delete"></a>Price: $50k - $400k</span><span class="listing__param-item"><a class="listing__param-delete"></a>Area: 60 - 145 m2</span><span class="listing__param-item"><a class="listing__param-delete"></a>2 bedrooms</span><span class="listing__param-item"><a class="listing__param-delete"></a>3 bedrooms</span><span class="listing__param-item"><a class="listing__param-delete"></a>4 bedrooms<span class="listing__param-item"></span><a class="listing__param-delete"></a>Clear All</span></div> -->
+                <!--end of block .listing__param-->
+                
+                <div class="listing__main">
+                  <div class="properties properties--grid">
+                    <div class="properties__list">
+                    {%for popular in properties%}
+                                              <div class="properties__item" style="opacity:1 !important;">
+                          <div class="properties__thumb"><a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="item-photo"><img src="{% if popular.gallery|length > 0 %}{{asset('/images/properties/' ~ popular.folder ~ '/gallery/' ~ popular.gallery[0])}}{% endif %}" alt="">
+                            <figure class="item-photo__hover item-photo__hover--params">
+                            {#   <span class="properties__param-type">{{popular.propertyTypeDynamic.name | default('')}}</span>
+                              <span class="properties__param-type">in {{popular.location.name | default('')}}</span>
+                              <span class="properties__param-type">, {{popular.project.name | default('')}}</span> #}
+                              <span class="properties__param"><span class="properties__param-column"><span class="properties__param-label">Land Area:</span><span class="properties__param-value">{{popular.landArea | default('')}} <span class="sqmfont">sqm</span></span></span><span class="properties__param-column"><span class="properties__param-label">Beds:</span><span class="properties__param-value">{{popular.bedrooms | default('')}}</span></span><span class="properties__param-column"><span class="properties__param-label">Baths:</span><span class="properties__param-value">{{popular.bathrooms | default('')}}</span></span></span></figure></a>
+                                {% if popular.sellingType == "Sale" %}
+                                    <span class="properties__ribon">For Sale</span>
+                                {% endif %}
+                                {% if popular.sellingType == "Rent" %}
+                                    <span class="properties__ribon">For Rent</span>
+                                {% endif %}
+                                {% if popular.sellingType == "Both" %}
+                                    <span class="properties__ribon">For Sale / Rent </span>
+                                {% endif %}
+                            </div>
+                            <!-- end of block .properties__thumb-->
+
+                            <div class="properties__info">
+                            <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__address">
+                              <span class="properties__address-street">{{popular.address}}</span>
+                              <span class="properties__address-city">{{popular.propertyTypeDynamic.name | default('')}} in {{popular.location.name|default('')}} ,{{popular.project.name | default('')}} 
+                              </span>
+                            </a>
+                             <span class="properties__price">
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                             </span>
+                            
+
+                           
+                            {#  {% if popular.sellingType == "Sale" %}
+                              <span class="properties__price">
+                               <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                               
+                             </span>
+                           {% endif %}
+                           {% if popular.sellingType == "Rent" %}
+                            <span class="properties__price">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span>{{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              
+                            </span>
+                          {% endif %}
+                          {% if popular.sellingType == "Both" %}
+                            <span class="properties__price" style="display:block">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                            </span>
+                            <span class="properties__price" >
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span> {{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              
+                            </span>
+ #}
+                          {# {% endif %} #}
+                          <!-- end of block .properties__param-->
+                        </div>
+                        <!-- end of block .properties__info-->
+                      </div>
+                      {%endfor%}
+                      
+                      <!-- end of block .properties__item-->
+                    </div>
+                  </div>
+                </div>
+                <div class="listing__footer">
+                  <!-- BEGIN PAGINATION-->
+                  {# <nav class="listing__pagination">
+                    <ul class="pagination-custom">
+                      <li><a href="#"><span aria-hidden="true" class="glyphicon glyphicon-chevron-left"></span><span class="sr-only">Previous</span></a></li>
+                      <li><a href="#">1</a></li>
+                      <li><span>...</span></li>
+                      <li class="active-before"><a href="#">3</a></li>
+                      <li class="active"><span>4</span></li>
+                      <li class="active-after"><a href="#">5</a></li>
+                      <li><span>...</span></li>
+                      <li><a href="#">15</a></li>
+                      <li><a href="#"><span aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span><span class="sr-only">Next</span></a></li>
+                    </ul>
+                  </nav> #}
+                  <!-- END PAGINATION-->
+                </div>
+              </div>
+              <!-- END LISTING-->
+              <!-- BEGIN SIDEBAR-->
+              <div class="sidebar">
+                <!-- BEGIN SEARCH-->
+                <button type="button" data-toggle-target=".js-search-form" data-toggle-hide="Hide Filter" data-toggle-show="Show Filter" class="button__toggle js-toggle-btn">Show Filter</button>
+                <div class="search js-search-form search--sidebar sidebar--listing">
+                  <div class="container">
+                    <div class="search__header">
+                      <h3 class="search__title">Filter</h3>
+                     <!--  <h4 class="search__headline">Find your apartment or house on the exact key parameters.</h4> -->
+                    </div>
+                    <!-- end of block .search__header-->
+                    {{form_start(form)}}
+                      <div class="search__row margin-top">
+                        <div class="search__form-group form-group">
+                          <label for="in-contract-type" class="search__form-label control-label">Looking to</label>
+                          {{form_widget(form.contract_type, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+                        </div>
+                        <div class="search__form-group form-group"><span class="search__form-label control-label">Project</span>
+                          {{form_widget(form.project, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+                        </div>
+                        <div class="search__form-group form-group"><span class="search__form-label control-label">Location</span>
+                          {{form_widget(form.location, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+                        </div>
+                        <div class="search__form-group form-group"><span class="search__form-label control-label">Property type</span>
+                          {{form_widget(form.property_type, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+                        </div>
+                       
+                        <div class="search__form-group search__form-group--column form-group">
+                          <label for="in-area-from" class="search__form-label control-label" style="margin-bottom: 30px">Build Up Area</label>
+                          {{form_widget(form.area, {'attr' : {'class' : 'js-search-range search__ranges-in'}})}}
+                        </div>
+                         <div class="search__form-group search__form-group--column form-group">
+                          <label for="in-area-from" class="search__form-label control-label" style="margin-bottom: 30px">Land Area</label>
+                          {{form_widget(form.landarea, {'attr' : {'class' : 'js-search-range search__ranges-in'}})}}
+                        </div>
+                        <div class="search__form-group search__form-group--column form-group">
+                          <label for="in-area-from" class="search__form-label control-label" style="margin-bottom: 30px">Rooms</label>
+                          {{form_widget(form.rooms, {'attr' : {'class' : 'js-search-range search__ranges-in'}})}}
+                        </div>
+                      </div>
+                      <div class="search__row search__row--buttons">
+                        <div class="search__buttons">
+                          <button type="button" class="search__btn search__btn--reset js-form-reset">Clear</button>
+                          {{form_widget(form.submit, {'attr' : {'class' : 'search__btn search__btn--action', 'label' : 'Search'}})}}
+                        </div>
+                      </div>
+                      {{form_end(form)}}
+                    {# </form> #}
+                    <!-- end of block .search__form#search-form-->
+                  </div>
+                </div>
+                <!-- END SEARCH-->
+                <!-- BEGIN PROPERTIES-->
+                
+                <!-- END PROPERTIES-->
+                <!-- BEGIN WORKER SIDEBAR-->
+               
+                <!-- END WORKER SIDEBAR-->
+                <!-- BEGIN SECTION ARTICLE-->
+                
+                <!-- END SECTION ARTICLE-->
+              </div>
+              <!-- END SIDEBAR-->
+              <div class="clearfix"></div>
+            </div>
+
+          </div>
+        </div>
+
+         
+        <!-- END CENTER SECTION-->
+        <!-- BEGIN AFTER CENTER SECTION-->
+        <!-- END AFTER CENTER SECTION-->
+        <!-- BEGIN PARTNERS-->
+
+
+        
+{% endblock %}
+{% block style%}
+ <script type="text/javascript">
+       var offset = $(".sidebar").offset();
+    var mbOffset = $(".commen").offset();
+    var mbPos = mbOffset.top - $(".sidebar").outerHeight() - 30;
+    var topPadding = 15;
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > offset.top ) {
+            if(  $(window).scrollTop() < mbPos ) {
+                $(".sidebar").stop().animate({
+                    marginTop: $(window).scrollTop() - offset.top + topPadding
+                });
+            }
+        } else {
+            $(".sidebar").stop().animate({
+                marginTop: 0
+            });
+        };
+    });</script>
+    {{ parent() }}
+    {% endblock %}

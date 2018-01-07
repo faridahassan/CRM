@@ -1,0 +1,78 @@
+crm_home_page:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboard", type: null, id: null }
+
+
+crm_sandbox_complaintlog:
+    resource: "@CrmSandboxBundle/Resources/config/routing/complaintlog.yml"
+    prefix:   /complaintlog
+
+crm_sandbox_complaint:
+    resource: "@CrmSandboxBundle/Resources/config/routing/complaint.yml"
+    prefix:   /complaint
+crm_sandbox_common:
+    resource: "@CrmSandboxBundle/Resources/config/routing/common.yml"
+    prefix:   /common
+crm_sandbox_task:
+    resource: "@CrmSandboxBundle/Resources/config/routing/task.yml"
+    prefix:   /task
+
+crm_sandbox_features:
+    resource: "@CrmSandboxBundle/Resources/config/routing/features.yml"
+    prefix:   /features
+
+crm_sandbox_featureitem:
+    resource: "@CrmSandboxBundle/Resources/config/routing/featureitem.yml"
+    prefix:   /featureitem
+
+crm_sandbox_deal:
+    resource: "@CrmSandboxBundle/Resources/config/routing/deal.yml"
+    prefix:   /deal
+
+crm_sandbox_database:
+    resource: "@CrmSandboxBundle/Resources/config/routing/database.yml"
+    prefix:   /database
+
+crm_sandbox_subchannel:
+    resource: "@CrmSandboxBundle/Resources/config/routing/subchannel.yml"
+    prefix:   /subchannel
+
+crm_sandbox_channel:
+    resource: "@CrmSandboxBundle/Resources/config/routing/channel.yml"
+    prefix:   /channel
+
+crm_sandbox_contact:
+    resource: "@CrmSandboxBundle/Resources/config/routing/contact.yml"
+    prefix:   /contact
+
+crm_sandbox_lead:
+    resource: "@CrmSandboxBundle/Resources/config/routing/lead.yml"
+    prefix:   /lead
+
+crm_sandbox_call:
+    resource: "@CrmSandboxBundle/Resources/config/routing/call.yml"
+    prefix:   /call
+
+crm_sandbox_marketing:
+    resource: "@CrmSandboxBundle/Resources/config/routing/marketing.yml"
+    prefix: /marketing
+
+crm_sandbox_sales:
+    resource: "@CrmSandboxBundle/Resources/config/routing/sales.yml"
+    prefix: /sales
+
+crm_sandbox_callcenter_log_call:
+    resource: "@CrmSandboxBundle/Resources/config/routing/callcenter.yml"
+    prefix: /callcenter
+
+crm_sandbox_user_management:
+    resource: "@CrmSandboxBundle/Resources/config/routing/usermanagement.yml"
+    prefix: /usermanagement
+
+crm_sandbox_sales_representative:
+    resource: "@CrmSandboxBundle/Resources/config/routing/salesrepresentative.yml"
+    prefix: /salesrepresentative
+
+crm_sandbox_contacts:
+    resource: "@CrmSandboxBundle/Resources/config/routing/contacts.yml"
+    prefix:   /contacts

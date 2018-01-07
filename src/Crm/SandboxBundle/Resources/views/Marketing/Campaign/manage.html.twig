@@ -1,0 +1,310 @@
+{% extends '::base.html.twig' %}
+{% block page_content %}
+	<div class="row">
+	<div class="col-md-12">
+
+		{% for flashMessage in app.session.flashbag.get('notice') %}
+		    
+		    <div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<strong>Well done!</strong> {{ flashMessage }}
+			</div>
+		{% endfor %}
+		{% for flashMessage in app.session.flashbag.get('error') %}
+		    
+		    <div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<strong>Bummer!</strong> {{ flashMessage }}
+			</div>
+		{% endfor %}
+	</div>
+</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Manage Campaigns</h3>
+
+					<div class="panel-options">
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+
+							<ul class="nav nav-tabs">
+								<li class="active">
+									<a href="#filter" data-toggle="tab">
+										<span class="visible-xs"><i class="fa-Filter"></i></span>
+										<span class="hidden-xs">Add Channel</span>
+									</a>
+								</li>
+								<li>
+									<a href="#current_month" data-toggle="tab">
+										<span class="visible-xs"><i class="fa-user"></i></span>
+										<span class="hidden-xs">Add Campaign</span>
+									</a>
+								</li>
+							</ul>
+
+							<div class="tab-content">
+								<div class="tab-pane" id="filter">
+
+									<div>
+										<div class="row">
+											<div class="col-sm-12">
+												{{form_start(channelForm, {'attr': {'class':'form-horizontal', 'role':'form'}})}}
+												<div class="form-group">
+													<label class="col-sm-2 control-label">Type</label>
+
+													<div class="col-sm-8">
+
+														<div>
+															{{form_widget(channelForm.type, {'attr':{'class':'form-control'}})}}
+														</div>
+													</div>
+													<div class="col-sm-2">
+														{{form_widget(channelForm.submit, {'label' : 'add','attr':{'class':'btn btn-success'}})}}
+													</div>
+												</div>
+												{{form_end(channelForm)}}
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-sm-12">
+
+												<script type="text/javascript">
+													jQuery(document).ready(function($)
+													{
+														$("#example-4").dataTable({
+															responsive:true,
+															tableTools: {
+																sSwfPath: "assets/js/datatables/tabletools/copy_csv_xls_pdf.swf"
+															}
+														});
+													});
+												</script>
+
+												<table class="display responsive no-wrap table  table-striped table-hover"  width="100%" id="example-4">
+													<thead>
+														<tr>
+															<th>Name</th>
+															<th>Total Leads</th>
+															<th>Cost</th>
+															<th>Closed Deals</th>
+															{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+																<th>Actions</th>
+															{% endif %}
+														</tr>
+													</thead>
+
+
+													<tbody>
+														{% for channel in channels %}
+															<tr>
+																<td><a href="{{path('marketing_campaign_subchannels_report', {channel:channel.id})}}">{{channel.name}}</a></td>
+																<td>{{channel.numberOfLeads}}</td>
+																<td>{{channel.costOfChannel|number_format}}</td>
+																<td>{{channel.numberClosedDeals}}</td>
+																{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+																	<td>
+																		<a href="{{path('marketing_campaign_subchannels_report', {channel:channel.id})}}" class="btn btn-success btn-sm">Show</a>
+																		<a href="{{path('channel_edit',{'id':channel.id})}}" class="btn btn-info btn-sm">Edit</a>
+																		<a href="{{path('channel_hide',{'id':channel.id})}}" class="btn btn-danger btn-sm delete" data-confirm="Are you sure you want to delete this campaign? ">Delete</a>
+																	</td>
+																{% endif %}
+															</tr>
+														{% endfor %}
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="tab-pane active" id="current_month">
+									<div class="row">
+										<div class="col-sm-12">
+											{{form_start(subChannelForm, {'attr': {'class':'form-horizontal', 'role':'form','nonvalidation':'nonvalidate'}})}}
+											<div class="form-group">
+												<label class="col-sm-2 control-label">Name</label>
+
+												<div class="col-sm-8">
+
+													<div>
+														{{form_widget(subChannelForm.name, {'attr':{'class':'form-control'}})}}
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label">Channel</label>
+
+												<div class="col-sm-8">
+													{{form_widget(subChannelForm.channel)}}
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label">Cost</label>
+
+												<div class="col-sm-8">
+													{{form_widget(subChannelForm.cost, {'attr':{'class':'form-control number-format'}})}}
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label">Start Date</label>
+
+												<div class="col-sm-8">
+
+													{{form_widget(subChannelForm.startDate,{'attr':{'required':'false','type':'text' , 'class':'form-control datepicker', 'date-start-date':'-2d','date-end-date':'+1'}})}}
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-2 control-label">End Date</label>
+
+												<div class="col-sm-8">
+
+													{{form_widget(subChannelForm.endDate,{'attr':{novalidate: true,'type':'text' , 'class':'form-control datepicker', 'date-start-date':'-2d','date-end-date':'+1'}})}}
+												</div>
+											</div>
+											<div class="form-group">
+
+												<script type="text/javascript">
+													jQuery(document).ready(function($)
+													{
+														$("#crm_sandboxbundle_subchannel_channel").selectBoxIt().on('open', function()
+														{
+																// Adding Custom Scrollbar
+																$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+															});
+													});
+												</script>
+												<div class="col-sm-11">
+													{{form_widget(subChannelForm.submit, {'label' : 'add','attr':{'class':'btn btn-success pull-right'}})}}
+												</div>
+											</div>
+
+											{{form_rest(subChannelForm)}}
+
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<script type="text/javascript">
+												jQuery(document).ready(function($)
+												{
+													$("#example-5").dataTable({
+														responsive:true,
+													});
+												});
+											</script>
+
+												<table class="display responsive no-wrap table  table-striped table-hover"  width="100%"  id="example-5">
+												<thead>
+													<tr>
+														<th>Name</th>
+														<th>Total Leads</th>
+														<th>Cost</th>
+														<th>Start Date</th>
+														<th>End Date</th>
+														<th>Closed Deals</th>
+														{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+															<th>Actions</th>
+														{% endif %}
+													</tr>
+												</thead>
+
+
+												<tbody>
+													{% for subChannel in subChannels %}
+														<tr>
+															<td>{{subChannel.name}}</td>
+															<td>{{subChannel.numberOfLeads}}</td>
+															<td>{{subChannel.costOfSubChannel|number_format}}</td>
+															<td>{{subChannel.startDate | date('d-M-Y')}}</td>
+															<td>{{subChannel.endDate | date('d-M-Y')}}</td>
+															<td>{{subChannel.numberClosedDeals}}</td>
+															{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+																<td><a href="{{path('subchannel_edit',{'id':subChannel.id})}}" class="btn btn-info">Edit</a><a href="{{path('subchannel_hide',{'id':subChannel.id})}}" class="btn btn-danger btn-sm delete" data-confirm="Are you sure you want to delete this campaign? ">Delete</a></td>															{% endif %}
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{parent()}}
+	<!-- Imported scripts on this page -->
+
+
+	<!-- Imported scripts on this page -->
+	
+
+
+	<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+	<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+	<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+	<script src="{{asset('assets/js/colorpicker/bootstrap-colorpicker.min.js')}}"></script>
+	<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+	<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+	<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+	<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+	<script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+	<script src="{{asset('assets/js/handlebars.min.js')}}"></script>
+	<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+
+	<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+	<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+	<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+
+	<script type="text/javascript">
+		$("a[data-toggle=\"tab\"]").on("shown.bs.tab", function (e) {
+          console.log( 'show tab' );
+            $($.fn.dataTable.tables(true)).DataTable()
+              .columns.adjust()
+              .responsive.recalc();
+        });
+	</script>
+
+
+<script type="text/javascript">
+	var deleteLinks = document.querySelectorAll('.delete');
+
+for (var i = 0; i < deleteLinks.length; i++) {
+  deleteLinks[i].addEventListener('click', function(event) {
+      event.preventDefault();
+
+      var choice = confirm(this.getAttribute('data-confirm'));
+
+      if (choice) {
+        window.location.href = this.getAttribute('href');
+      }
+  });
+}	
+</script>
+{% endblock %}

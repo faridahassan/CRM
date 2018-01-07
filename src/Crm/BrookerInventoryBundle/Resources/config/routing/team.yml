@@ -1,0 +1,34 @@
+team:
+    path:     /
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:index" }
+
+team_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:show" }
+
+team_new:
+    path:     /new
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:new" }
+
+team_create:
+    path:     /create
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:create" }
+    methods:  POST
+
+team_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:edit" }
+
+team_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:update" }
+    methods:  [POST, PUT]
+
+team_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:delete" }
+    methods:  [POST, DELETE]
+
+team_assign_target:
+    path:     /assigntargets
+    defaults: { _controller: "CrmBrookerInventoryBundle:Team:assignTargets" }

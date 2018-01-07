@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block page_content -%}
+    <h1>Lead list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Info</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Opportunity</th>
+                <th>Budget</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('lead_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.info }}</td>
+                <td>{{ entity.status }}</td>
+                <td>{{ entity.description }}</td>
+                <td>{{ entity.opportunity }}</td>
+                <td>{{ entity.budget }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('lead_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('lead_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('lead_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

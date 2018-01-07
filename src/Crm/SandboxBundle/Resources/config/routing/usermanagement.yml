@@ -1,0 +1,20 @@
+crm_sandbox_user_management_manage:
+    path:     /manage
+    defaults: { _controller: CrmSandboxBundle:UserManagement\UserManagement:index }
+
+crm_sandbox_user_management_toggle_enable_state:
+    path:     /toggle/{id}
+    defaults: { _controller: CrmSandboxBundle:UserManagement\UserManagement:toggleEnabled}
+
+crm_sandbox_user_management_reset_password:
+    path:     /resetpassword/{id}
+    defaults: { _controller: CrmSandboxBundle:UserManagement\UserManagement:resetPassword}
+
+crm_sandbox_user_management_assign_target:
+    path:    /assigntarget/{user}/{target}
+    defaults: { _controller: CrmSandboxBundle:UserManagement\UserManagement:assignTarget }
+    options:
+        expose: true
+crm_sandbox_user_management_edit_user:
+    path:     /edit_user/{id}
+    defaults: { _controller: CrmSandboxBundle:UserManagement\UserManagement:editUser}

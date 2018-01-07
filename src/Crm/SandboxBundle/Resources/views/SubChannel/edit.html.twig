@@ -1,0 +1,60 @@
+{% extends '::base.html.twig' %}
+
+{% block page_content -%}
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Edit Campaign</h3>
+
+					<div class="panel-options">
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					{{form_start(edit_form, {'attr': {'class':'form-horizontal', 'role':'form'}})}}
+					<div class="form-group">
+						<label class="col-md-2 control-label">Name</label>
+						<div class="col-md-10">{{form_widget(edit_form.name)}}</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">Channel</label>
+						<div class="col-md-10">{{form_widget(edit_form.channel,{'attr':{'class':'form-control'}})}}</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">Cost</label>
+						<div class="col-md-10">{{form_widget(edit_form.cost,{'attr':{'class':'form-control'}})}}</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">Start Date</label>
+						<div class="col-md-10">
+								{{form_widget(edit_form.startDate, {attr:{class:'form-control datepicker', type:'text', 'data-start-view':'2'}})}}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">End Date</label>
+						<div class="col-md-10">
+							
+							{{form_widget(edit_form.endDate,{'attr':{'class':'form-control datepicker', type:'text', 'data-start-view':'2'}})}}
+						</div>
+					</div>
+					<div class="col-md-12">{{form_widget(edit_form.submit,{'attr':{'class':'btn btn-info btn-sm pull-right'}})}}</div>
+					
+					{{form_end(edit_form)}}
+					
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	{{parent()}}
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script
+	{% endblock %}

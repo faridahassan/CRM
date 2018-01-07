@@ -1,0 +1,30 @@
+complaintlog:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:ComplaintLog:index" }
+
+complaintlog_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:ComplaintLog:show" }
+
+complaintlog_new:
+    path:     /new/{id}
+    defaults: { _controller: "CrmSandboxBundle:ComplaintLog:new" }
+
+complaintlog_create:
+    path:     /create/{id}
+    defaults: { _controller: "CrmSandboxBundle:ComplaintLog:create" }
+    methods:  POST
+
+complaintlog_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:ComplaintLog:edit" }
+
+complaintlog_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:ComplaintLog:update" }
+    methods:  [POST, PUT]
+
+complaintlog_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:ComplaintLog:delete" }
+    methods:  [POST, DELETE]

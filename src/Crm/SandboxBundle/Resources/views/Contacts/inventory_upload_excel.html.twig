@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+	{{parent()}}
+
+{% endblock %}
+{% block page_content %}
+	<div class="panel panel-default">
+			
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Upload Inventory <small></small>
+					</h3>
+					<div class="panel-options">
+						<a href="{{asset('templates/template_inventory_crm.csv')}}">
+	                    	<button class="btn btn-blue btn-icon">
+								<i class="fa-download"></i>
+	                    		<span class="title">Download Template</span>
+	                    	</button>
+	                    </a>
+                	</div>
+
+				</div>
+				
+				<div class="panel-body">
+					
+
+					<br>
+					{{form_start(form)}}
+					<div class="form-group">
+						<div>
+							{{form_widget(form.file,
+								{ 'attr' : { 'class' : ''  } }
+							)}}
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-1">
+							{{form_widget(form.submit, {'label' : 'Upload','attr':{'class':'btn btn-success'}})}}
+						</div>
+					</div>
+					
+				</div>
+			
+			</div>
+
+				{{form_end(form)}}
+{% endblock %}
+
+
+{% block javascripts %}
+	{{parent()}}
+	<script src="{{ asset('assets/js/dropzone/dropzone.min.js') }}"></script>
+
+
+{% endblock %}

@@ -1,0 +1,72 @@
+<div class="panel-body" id="leadsByCampaign">
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					if( ! $.isFunction($.fn.dxChart))
+						return;
+					Array.prototype.max = function() {
+						return Math.max.apply(null, this);
+					};
+
+					var vals = [];
+					var names = [];
+					
+					{% for channelName,channeldata in leadsByChannel %}
+					v1 = [];
+					s1 = [];
+					{% for data in channeldata %}
+					v1.push({{data.leadCount}});
+					s1.push('{{data.subChannelName}}');
+					{% endfor %}
+					vals.push(v1);
+					names.push(s1);
+					{% endfor %}
+					var maxvalue;
+					if( typeof vals[0] !== 'undefined' )
+					{
+						maxvalue = vals[0].max();
+					}
+					else
+					{
+						return;
+					}
+					var gauge = $('#bar-gauge-1').dxBarGauge({
+						startValue: 0,
+						endValue: maxvalue,
+						values: vals[0],
+						label: {
+							format: "fixedPoint",
+							precision: 2,
+							customizeText: function (arg) {
+								channel_names = names[0];
+								return "" +arg.value+" "+channel_names[arg.index];
+							}
+						}
+					}).dxBarGauge("instance");
+
+					$('#channel').on('change', function() {
+						index = [this.value];
+						var gauge = $('#bar-gauge-1').dxBarGauge({
+							startValue: 0,
+							endValue: vals[index].max(),
+							values: vals[index],
+							label: {
+								format: "fixedPoint",
+								precision: 1,
+								customizeText: function (arg) {
+									channel_names = names[index];
+									console.log(arg);
+									return "" +arg.value+" "+channel_names[arg.index];
+								}
+							}
+						}).dxBarGauge("instance");
+					});
+				});
+
+</script>
+
+<div id="bar-gauge-1" style="height: 440px; width: 100%;"></div>
+
+
+<br />
+</div>

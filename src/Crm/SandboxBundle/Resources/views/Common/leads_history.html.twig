@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+
+{% endblock %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Leads History</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#users").dataTable({
+						"aaSorting": []
+					});
+				});
+				</script>
+				{% for flashMessage in app.session.flashbag.get('notice') %}
+				<div class="alert alert-success">
+					{{flashMessage}}
+				</div>
+
+				{% endfor %}	
+				<table class="table table-bordered table-striped" id="users">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Mobile</th>
+							<th>Assignment Date</th>
+							<th>Calls/Meetings</th>
+						</tr>
+					</thead>
+
+					
+					<tbody>
+						{% for lead in leads %}
+						<tr>
+							<td><a href="{{path('sales_representative_contact_history', {contact:lead.contact.id|default('0')})}}">{{lead.contact.name|default('')}}</a></td>
+							{% if lead.contact is not null %}
+								<td>{{lead.contact.mobile}}</td>
+							{% else %}
+								<td></td>
+							{% endif %}
+							<td>
+								{% if lead.salesRepAssignDate is not null %}
+									{{lead.salesRepAssignDate|date('Y-m-d')}}
+								{% else %}
+									N/A
+								{% endif %}
+							</td>
+							<td>
+								{{lead.callsOnly|length}} / {{lead.meetingsOnly|length}}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+<script src="{{asset('assets/js/xenon-toggles.js')}}"></script>
+
+{% endblock %}

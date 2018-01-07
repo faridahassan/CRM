@@ -1,0 +1,30 @@
+call:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Call:index" }
+
+call_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:Call:show" }
+
+call_new:
+    path:     /new
+    defaults: { _controller: "CrmSandboxBundle:Call:new" }
+
+call_create:
+    path:     /create
+    defaults: { _controller: "CrmSandboxBundle:Call:create" }
+    methods:  POST
+
+call_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Call:edit" }
+
+call_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Call:update" }
+    methods:  [POST, PUT]
+
+call_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Call:delete" }
+    methods:  [POST, DELETE]

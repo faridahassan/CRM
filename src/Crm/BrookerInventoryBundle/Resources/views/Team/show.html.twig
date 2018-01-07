@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/devexpress-web-14.1/css/dx.common.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/devexpress-web-14.1/css/dx.light.css')}}">
+{% endblock %}
+{% block page_content %}
+    <div class="row">
+    <div class="col-md-12">
+
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Well done!</strong> {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Manage Teams</h3>
+
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                        &times;
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                    $("#teams").dataTable({});
+                    // $(window).bind('resize', function () {
+                    //     oTable.fnAdjustColumnSizing();
+                    // } );
+                });
+                </script>
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    {{flashMessage}}
+                </div>
+
+                {% endfor %}    
+                <table class="table table-bordered table-striped nowrap" id="teams">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Target</th>
+                            <th>Target Completion</th>
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                        {% for user in entity.users %}
+                        <tr>
+                            <td>{{user.name}}</td>
+                            <td>{{user.target|number_format}} ({{user.progressedTarget|number_format}})</td>
+                            <td>
+                                <div class="progress progress-striped active">
+                                    {% if(user.progressedTargetPercentage > 99) %}
+                                        {% set pTP = 100 %}
+                                    {% elseif (user.progressedTargetPercentage is null) %}
+                                        {% set pTP = 0 %}
+                                        {% else %}
+                                        {% set pTP = user.progressedTargetPercentage %}
+                                        {%endif%}                                      
+                                    <div class="progress-bar progress-bar-blue" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{pTP}}%">
+                                        <span class="sr-only">{{pTP}}% Complete (red)</span>
+                                    </div>
+                                </div>
+                                <!-- {{user.progressedTargetPercentage}} -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+{% endblock %}                                

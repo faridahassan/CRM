@@ -1,0 +1,171 @@
+{# src/Crm/WebsiteBundle/Resources/views/Page/project.html.twig #}
+{% extends 'WebsiteBundle::layout.html.twig' %}
+{% block body %}
+<div  class="slider slider--wide slider-wide" >
+         <div class="slider__block js-slick-slider">
+  
+            <div class="slider__item">
+              <div class="slider__preview">
+                {# <div class="slider__img slider__img--lg"><img src="{{asset('/images/projects/' ~ project.folder ~ '/' ~ project.slider)}}"alt=""></div> #}
+                <div class="slider__img slider__img--lg"><img src="{{asset('/images/properties/HXYzBOSgzL/gallery/7948493316990adc59354540ca21713badbfd833.jpg')}}"alt=""></div>
+                <div class="slider__img slider__img--sm"><img src="{{asset('/images/properties/HXYzBOSgzL/gallery/7948493316990adc59354540ca21713badbfd833.jpg')}}" alt=""></div>
+              </div>
+    
+            </div>
+  
+         </div>
+ <!-- end of block .slider__block-->
+         <div class="slider__controls">
+             <button class="slider__control slider__control--prev js-banner-prev"></button>
+             <button class="slider__control slider__control--next js-banner-next"></button>
+         </div>
+</div>
+<section class="">
+   <div class="centre">
+      <div class="container">
+         <h1 class="project-title">{{project.name}}</h1>
+      </div>
+   </div>
+   </div>
+</section>
+
+<div class="achievement">
+   <div class="container">
+      <div class="row">
+         <div data-sr="enter right move 0 over 0 wait 0s" data-animate-callback="countUp" data-animate-end="achievement__item--animate-end" class="achievement__item customise-width-arch">
+            {# <svg class="achievement__icon">
+               <use xlink:href="#icon-transactions"></use>
+            </svg> #}
+            <div data-count-end="5" data-count-duration="1" class="achievement__counter achievement__counter--lg js-count-up"></div>
+            <div class="achievement__counter">5 %</div>
+            <div class="achievement__name">Down Payment</div>
+         </div>
+         <div data-sr="enter right move 0 over 0 wait 0.5s" data-animate-callback="countUp" data-animate-end="achievement__item--animate-end" class="achievement__item customise-width-arch">
+           {#  <svg class="achievement__icon">
+               <use xlink:href="#icon-customers"></use>
+            </svg> #}
+            <div data-count-end="15" data-count-duration="1" class="achievement__counter achievement__counter--lg js-count-up"></div>
+            <div class="achievement__counter">15 %</div>
+            <div class="achievement__name">Contract Payment</div>
+         </div>
+         <div data-sr="enter right move 0 over 0 wait 1s" data-animate-callback="countUp" data-animate-end="achievement__item--animate-end" class="achievement__item customise-width-arch">
+           {#  <svg class="achievement__icon">
+               <use xlink:href="#icon-agency"></use>
+            </svg> #}
+            <div data-count-end="85" data-count-duration="1" class="achievement__counter achievement__counter--lg js-count-up"></div>
+            <div class="achievement__counter">85 %</div>
+            <div class="achievement__name">Over 8 Years</div>
+         </div>
+      </div>
+   </div>
+</div>
+<section class="">
+   <div class="centre">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-6"> 
+               <p class="project-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div class="col-md-6 "><img src="{{asset('/images/pb-logotype-600.png')}}" alt=""></div>
+         </div>
+          <div class="row">
+            <div class="col-md-6 "><img src="{{asset('/images/pb-logotype-600.png')}}" alt=""></div>
+            <div class="col-md-6"> 
+               <p class="project-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+         </div>
+   
+      </div>
+   </div>
+  
+</section>
+<section class="">
+   <div class="centre">
+      <div class="container">
+            <h1 class="project-title">Types</h1>
+            <div  class="slider slider--wide slider-wide" >
+                  <div class="slider__block js-slick-slider">
+           
+                     <div class="slider__item">
+                       <div class="slider__preview">
+                         {# <div class="slider__img slider__img--lg"><img src="{{asset('/images/projects/' ~ project.folder ~ '/' ~ project.slider)}}"alt=""></div> #}
+                         <div class="slider__img slider__img--lg"><img src="{{asset('/images/pb-logotype-600.png')}}"alt=""></div>
+                         <div class="slider__img slider__img--sm"><img src="{{asset('/images/pb-logotype-600.png')}}" alt=""></div>
+                       </div>
+                        <div class="slider__caption slider__caption2">
+                           <h3>Type A</h3>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,.</p>  
+                        </div>
+                       
+                        <div class=" centre slider__caption3">
+                              <ul>
+                                 <li>Type A</li>
+                                 <li>Type B</li>
+                                 <li>Type C</li>
+                                 <li>Type D</li>
+                              </ul>
+                          
+                        </div>
+                           
+                        
+                     </div>
+                      <div class="slider__item">
+                       <div class="slider__preview">
+                         {# <div class="slider__img slider__img--lg"><img src="{{asset('/images/projects/' ~ project.folder ~ '/' ~ project.slider)}}"alt=""></div> #}
+                         <div class="slider__img slider__img--lg"><img src="{{asset('/images/pb-logotype-600.png')}}"alt=""></div>
+                         <div class="slider__img slider__img--sm"><img src="{{asset('/images/pb-logotype-600.png')}}" alt=""></div>
+                       </div>
+                        <div class="slider__caption slider__caption2">
+                           <h3>Type A</h3>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,.</p>  
+                        </div>
+                        <div class=" centre slider__caption3">
+                              <ul>
+                                 <li>Type A</li>
+                                 <li>Type B</li>
+                               
+                              </ul>
+                          
+                        </div>
+                     </div>
+           
+                  </div>
+          <!-- end of block .slider__block-->
+                  <div class="slider__controls">
+                      <button class="slider__control slider__control--prev js-banner-prev"></button>
+                      <button class="slider__control slider__control--next js-banner-next"></button>
+                  </div>
+            </div>
+            <h4>Please feel free to contact us anytime</h4>
+            {{form_start(form)}}
+                    
+                    <div class="form form--contacts">
+                      <form action="#" method="POST" class="form__wrap js-contact-form">
+                        <div class="form__row form-group">
+                          <label for="in-form-name" class="form__label control-label">Your Name</label>
+                          {{form_widget(form.name,{'attr':{'class':'form__in form__in--text form-control'}}) }}
+                        </div>
+                        <div class="form__row form__row--tel form-group">
+                          <label for="in-form-phone" class="form__label control-label">Telephone</label>
+                          {{form_widget(form.phone,{'attr':{'class':'form__in form__in--text form-control'}}) }}
+                        </div>
+                        <div class="form__row form__row--email form-group">
+                          <label for="in-form-email" class="form__label control-label">E-mail</label>
+                          {{form_widget(form.email,{'attr':{'class':'form__in form__in--text form-control'}}) }}
+                        </div>
+                        <div class="form__row form-group">
+                          <label for="in-form-message" class="form__label control-label">Message</label>
+                          {{form_widget(form.message,{'attr':{'class':'form__in form__in--text form-control','rows':'5'}}) }}
+                        </div>
+                        <div class="form__row">
+                          {{form_widget(form.submit,{'attr':{'class':'form__submit'}}) }}
+                        </div>
+                      {{form_end(form)}}
+                    </div>
+      </div>
+   
+   </div>
+</section>
+{% endblock %}
+{% block footer %}
+{% endblock %}

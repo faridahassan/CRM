@@ -1,0 +1,31 @@
+crm_brooker_inventory_propertytype:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/propertytype.yml"
+    prefix:   /propertytype
+
+crm_brooker_inventory_broker:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/broker.yml"
+    prefix:   /broker
+
+crm_brooker_inventory_team:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/team.yml"
+    prefix:   /team
+
+crm_brooker_inventory_developer:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/developer.yml"
+    prefix:   /developer
+
+crm_brooker_inventory_project:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/project.yml"
+    prefix:   /project
+
+crm_brooker_inventory_location:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/location.yml"
+    prefix:   /location
+
+crm_brooker_inventory_property:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/property.yml"
+    prefix:   /inventory/property
+
+crm_brooker_inventory:
+    resource: "@CrmBrookerInventoryBundle/Resources/config/routing/inventory.yml"
+    prefix:   /inventory

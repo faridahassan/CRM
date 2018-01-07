@@ -1,0 +1,84 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{object}}'s Assigned Leads</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#users").dataTable({
+						 responsive: true
+					    } );
+				});
+				</script>
+				{% for flashMessage in app.session.flashbag.get('notice') %}
+				<div class="alert alert-success">
+					{{flashMessage}}
+				</div>
+
+				{% endfor %}
+				
+				<table class="display responsive no-wrap table table-bordered table-striped table-hover" width="100%" id="users">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Mobile</th>
+							<th>Description</th>
+							<th>Created</th>
+							<th>Managed By</th>
+							<th>Agent</th>
+							<th>Total Calls</th>
+							<th>Total Meetings</th>
+						</tr>
+					</thead>
+
+					
+					<tbody>
+						{% for lead in leads %}
+						<tr>
+							<td>{% if lead.contact is not null %}<a href="{{path('sales_representative_contact_history', {contact:lead.contact.id})}}">{{lead.contact.name}}</a>{%endif%}</td>
+							{% if lead.contact is not null %}
+								<td>{{lead.contact.mobile}}</td>
+							{% else %}
+								<td></td>
+							{% endif %}
+							<td width="20%">{{lead.description}}</td>
+								<td>
+							{% if lead.user is not null %}
+								{{lead.user.name}}
+							{% endif %}
+							</td>
+							<td>
+							{% if lead.owner is not null %}
+								{{lead.owner.name}}
+							{% endif %}
+							</td>
+							<td>
+							{% if lead.assignedSalesRep is not null %}
+								{{lead.assignedSalesRep.name}}
+							{% endif %}
+							</td>
+							<td>{{lead.getCallsOnly | length }}</td>
+							<td>{{lead.getMeetingsOnly | length }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>

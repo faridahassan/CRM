@@ -1,0 +1,1075 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{# <link rel="stylesheet" href="{{asset('assets/css/fonts/fontawesome/css/font-awesome.min.css')}}"> #}
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/daterangepicker/daterangepicker-bs3.css')}}">
+
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_content %}
+	<div class="row">
+		<div class="col-sm-12">
+
+			<div id="contactColor" class="
+			{% if lead.closedStatus == 1 %}
+				panel panel-color panel-danger
+			{% else %}
+				panel panel-default
+		    {% endif %}
+			">
+				<div class="panel-heading" style="min-height:55px">
+					<h3 class="panel-title">
+						Contact details
+						<small>Serial number: {{lead.id}}</small>
+					</h3>
+					<div class="panel-options">
+						{% if is_granted('ROLE_ADMIN') %}
+								{% if lead.closedStatus is null %}
+									<button id="trashLead" class="btn btn-red btn-icon btn-icon-standalone btn-sm">
+										<i class="fa-trash"></i>
+										<span>Trash</span>
+									</button>
+									<script>
+										$( document ).ready(function() {
+										    $("#trashLead").click(function(){
+										    	var path = "{{path('sales_dashboard_trash_lead', {lead: lead.id})}}";
+										    	$.ajax({
+										    		type: "GET",
+										    		url: path,
+										    		success: function(response){
+										    			$("#trashLead").hide();
+										    			$("#contactColor").attr('class',  'panel panel-color panel-danger');
+										    		},
+										    		error: function() {
+										    			alert("An error occured while trashing the Lead, please re-trash!");
+										    		}
+										    	});
+										    });
+										    {% if lead.isLead %}
+										    	$("#trashLead").hide();
+										    {% endif %}
+										});
+									</script>
+								{% endif %}
+						{% endif %}
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-sm-2 control-label"><b>Name</b></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.name is defined %}
+									<label>{{contact.name}}</label>
+									{% else %}
+									<label>Name not set!</label>
+									{% endif %}
+								</p>
+								
+							</div>
+
+							<label class="col-sm-2 control-label"><b>Email</b></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.email is not null %}
+									<label>{{contact.email}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-sm-2 control-label"><b>Mobile</b></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.mobile is not null %}
+									<label>{{contact.mobile}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+
+							<label class="col-sm-2 control-label"><b>Mobile 2</b></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.mobile2 is not null %}
+									<label>{{contact.mobile2}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-sm-2 control-label"><b>Database Name</b></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.database.id is defined %}
+										<label>{{contact.database.name}}</label>
+									{% else %}
+										<label>N/A</label>
+									{% endif %}
+								</p>		
+							</div>
+						</div>
+					</div>
+					<br />
+				</div>
+			</div>
+
+		</div>
+	</div>
+{% if contact.lead is not null %}
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading" style="min-height:55px">
+					<h3 class="panel-title">
+						Lead details
+					</h3>
+					<div class="panel-options">
+						<a href="javascript:;" onClick="$('#modal-7').modal('show', {backdrop: 'static'});" class="btn btn-primary btn-single btn-sm" style="color:white">Edit Lead Details</a>
+						{% if hasHistory %}
+		                   <a href="{{url('lead_history', {leadId: contact.lead.id})}}" class="btn btn-primary btn-single btn-sm" style="color:white">
+		                       History
+		                   </a>
+		                {% endif %}
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+					<div class="col-md-12">
+						<label class="col-sm-2 control-label"><strong>Qualified Lead</strong></label>
+						<div class="col-sm-4">
+							{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_MARKETING") %}
+								<input type="checkbox" class="iswitch iswitch-info" id="potentialLead" {{(leadPotential) ? 'checked'}}>	
+								<div id="help-qualified" class="label label-default popover-primary {{(leadPotential)? 'hidden'}} " data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Please contact the marketing department to re-activate this lead!" data-original-title="Help!">?</div>
+								 {% else %}
+	 							<input type="checkbox" class="iswitch iswitch-info" id="potentialLead" {{(leadPotential) ? 'checked' : 'disabled'}}>	
+								<div id="help-qualified" class="label label-default popover-primary {{(leadPotential)? 'hidden'}} " data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Please contact the marketing department to re-activate this lead!" data-original-title="Help!">?</div>
+							{% endif %}
+
+						</div>
+						<div class="col-sm-2">
+							<label class="control-label reason{% if leadPotential %} hidden {% endif %}"><strong>Reason</strong></label>
+						</div>
+						<div class="col-sm-4">
+							<div class="reason {% if leadPotential %} hidden {% endif %}">
+								<select class="form-control" id="reason">
+									<option>Select Reason</option>
+									<option  {% if leadPotentialReason =="Income" %} selected{% endif %}>Income</option>
+									<option {% if leadPotentialReason =="Age" %} selected{% endif %}>Age</option>
+									<option {% if leadPotentialReason =="Score" %} selected{% endif %}>Score</option>
+								</select>
+								<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#reason").selectBoxIt().on('open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+										});
+									});
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-sm-2">
+							<label class="control-label"><strong>Interested Lead</strong></label>
+						</div>
+						<div class="col-sm-4">
+							{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_MARKETING") %}
+								<input type="checkbox" class="iswitch iswitch-info" id="interestLead" {{(leadInterest) ? 'checked' }}>
+								<div id="help-interested" class="label label-default popover-primary {{(leadInterest)? 'hidden'}}" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Please contact the marketing department to re-activate this lead!" data-original-title="Help!">?</div>
+								 {% else %}
+								 <input type="checkbox" class="iswitch iswitch-info" id="interestLead" {{(leadInterest) ? 'checked' : 'disabled'}}>
+								<div id="help-interested" class="label label-default popover-primary {{(leadInterest)? 'hidden'}}" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Please contact the marketing department to re-activate this lead!" data-original-title="Help!">?</div>
+							 {% endif %}
+						</div>
+						<div class="col-sm-2">
+							<label class="control-label reason-interest{% if leadInterest %} hidden {% endif %}"><strong>Reason</strong></label>
+						</div>
+						<div class="col-sm-4">
+							<div class="reason-interest {% if leadInterest %} hidden {% endif %}">
+								<select class="form-control" id="interest">
+									<option>Select Reason</option>
+									<option  {% if leadInterestReason =="Income - Int" %} selected{% endif %}>Income - Int</option>
+									<option {% if leadInterestReason =="Age - Int" %} selected{% endif %}>Age - Int</option>
+									<option {% if leadInterestReason =="Score - Int" %} selected{% endif %}>Score - Int</option>
+								</select>
+								<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#interest").selectBoxIt().on('open', function()
+										{
+														// Adding Custom Scrollbar
+														$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+										});
+									});
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-sm-2 control-label"><strong>Campaign</strong></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.lead.subchannel is not null %}
+									<label>{{contact.lead.subchannel}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+
+							<label class="col-sm-2 control-label"><strong>Status</strong></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.lead.status is not null %}
+									<label>{{contact.lead.status}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-sm-2 control-label"><strong>Budget</strong></label>
+							
+							<div class="col-sm-4">
+								<p>
+									<label> {{(contact.lead.budget) ? (contact.lead.budget|number_format) ~ ' EGP' : 'N/A' }}</label>
+								</p>
+								
+							</div>
+						</div>
+					</div>
+					
+
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-sm-2 control-label"><strong>Assigned To</strong></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.lead.assignedSalesRep is not null %}
+									<label>{{contact.lead.assignedSalesRep.name}}</label>
+									{% elseif contact.lead.owner %}
+									<label>{{contact.lead.owner.name}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+							<label class="col-sm-2 control-label"><strong>Assignment Date</strong></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.lead.salesRepAssignDate is not null %}
+									<label>{{contact.lead.salesRepAssignDate|date('Y/m/d')}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+						</div>
+					</div>					
+					<div class="row">
+						<div class="col-md-12">
+							<label class="col-sm-2 control-label"><strong>Created By</strong></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.lead.user is not null %}
+									<label>{{contact.lead.user.name}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+							<label class="col-sm-2 control-label"><strong>Created Date</strong></label>
+							
+							<div class="col-sm-4">
+								<p>
+									{% if contact.lead.date is not null %}
+									<label>{{contact.lead.date|date('Y/m/d')}}</label>
+									{% else %}
+									<label>N/A</label>
+									{% endif %}
+								</p>
+								
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							
+							<label class="col-sm-2 control-label"><b>Notes</b></label>
+							
+							<div class="col-sm-10">
+								<p>
+									{{(contact.lead.description) ? (contact.lead.description|nl2br) : 'N/A' }}
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							
+							<label class="col-sm-2 control-label"><b>Info</b></label>
+							
+							<div class="col-sm-10">
+								<p>
+									{{(contact.lead.info) ? (contact.lead.info|nl2br) : 'N/A' }}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+{% endif %}
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Calls total: {{calls|length}}</h3>
+
+					<div class="panel-options">
+						{{lastCall}}						
+						<a href="{{path('callcenter_log_outbound_call',{'id':lead.id, 'orientation':1})}}">
+							<button class="btn btn-info btn-icon btn-icon-standalone btn-sm">
+								<i class="fa-phone"></i>
+								<span>Log Call</span>
+							</button>
+						</a>
+
+
+
+						{# <div class="fa-hover"><div class="icon-str"><i class="fa fa-phone"></i> <span>fa-phone</span></div></div> #}
+
+
+
+
+						
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+
+					<script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#calls").dataTable({
+							"order": [[ 3, "desc" ]]
+						});
+					});
+					</script>
+					{% if calls|length > 0 %}
+					<table class="table table-bordered table-striped" id="calls">
+						<thead>
+							<tr>
+								<th>Orientation</th>
+								<th>Interested in/ Outcome</th>
+								<th>Objective</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+
+						
+						<tbody>
+							{% for result in calls %}
+								{# Draw according to action #}
+								
+							
+							<tr>
+								{# But first check if exists #}
+								{% if result.orientation == "outbound" %}
+									<td>OUT</td>
+									{% else %}
+									<td>IN</td>
+								{% endif %}
+								<td>{{result.interestedIn}}</td>
+								<td>{{result.objective}}</td>
+								<td>{{result.date|date('d-m-Y  H:i')}}</td>
+
+							</tr>
+
+							{% endfor %}
+							
+						</tbody>
+					</table>
+					{% else %}
+					    <div class="row">
+					    	<div class="col-md-12 text-center">
+					    		<h3>No calls have been made with this lead.</h3>
+					    	</div>
+					    </div>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Meetings total: {{meetings|length}}</h3>
+
+					<div class="panel-options">
+						{{lastMeet}}
+						<a href="{{path('callcenter_log_outbound_call',{'id':lead.id, 'orientation':0})}}">
+							<button class="btn btn-success btn-icon btn-icon-standalone btn-sm">
+								<i class="fa-users"></i>
+								<span>Log Meeting</span>
+							</button>
+						</a>
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+
+					<script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#meetings").dataTable({
+							"order": [[ 2, "desc" ]]
+						});
+					});
+					</script>
+					{% if meetings|length > 0 %}
+					<table class="table table-bordered table-striped" id="meetings">
+						<thead>
+							<tr>
+								<th>Interested in/ Out come</th>
+								<th>Objective</th>
+								<th>Date</th>
+								<th>Property</th>
+								
+							</tr>
+						</thead>
+
+						
+						<tbody>
+							{% for result in meetings %}
+									{# Draw according to action #}
+								<tr>
+									<td>{{result.interestedIn}}</td>
+									<td>{{result.objective}}</td>
+									<td>{{result.date|date('d-m-Y  H:i')}}</td>
+									<td><a href="javascript:;" properties="{{properties[result.id]|join('{}')}}" onClick="$('#modal-6').modal('show', {backdrop: 'static'});" class="btn btn-primary btn-single btn-sm modalability">View</a></td>
+									
+
+								</tr>
+
+							{% endfor %}	
+							
+						</tbody>
+					</table>
+					{% else %}
+					    <div class="row">
+					    	<div class="col-md-12 text-center">
+					    		<h3>No meetings have been made with this lead.</h3>
+					    	</div>
+					    </div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<div class="modal fade" id="modal-6">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Properties</h4>
+			</div>
+			
+			<div class="modal-body">
+				
+				<div class="row">
+					<div class="col-md-12">
+						
+						<div class="form-group">
+							<label for="field-1" class="control-label">Properties</label>
+							<ul id="modalUL">
+							</ul>
+						</div>	
+						
+					</div>
+					
+				</div>
+			
+			
+				
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-7">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Edit Lead Information</h4>
+			</div>
+			
+			<div class="modal-body">
+			
+				{{form_start(leadForm, {'attr':{'id':'leadEditForm', novalidate: 'novalidate'}})}}
+				
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-1" class="control-label">Name</label>
+							
+							{{form_widget(leadForm.contact.name, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-2" class="control-label">Number</label>
+							
+							{{form_widget(leadForm.contact.mobile, {'attr':{'class':'form-control'}})}}
+						</div>	
+					
+					</div>
+				</div>
+			
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-3" class="control-label">E-mail</label>
+							
+							{{form_widget(leadForm.contact.email, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-3" class="control-label">Budget</label>
+							
+							{{form_widget(leadForm.budget, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+			
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-4" class="control-label">Status</label>
+							
+							{{form_widget(leadForm.status, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					
+				</div>
+			
+				<div class="row">
+					<div class="col-md-12">
+						
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Description</label>
+							
+							{{form_widget(leadForm.description, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Info</label>
+							
+							{{form_widget(leadForm.info, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<label class="control-label">Interested in</label>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Property Features</label>
+								{{form_widget(leadForm.features)}}
+								<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#crm_sandboxbundle_lead_features").select2({
+										placeholder: 'Write a feature',
+										allowClear: true
+										}).on('select2-open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+										});
+									});
+								</script>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Locations </label>
+							{{form_widget(leadForm.locations)}}
+							<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#{{leadForm.locations.vars.id}}").select2({
+									placeholder: 'Write a location name',
+									allowClear: true
+									}).on('select2-open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+									});
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<br>
+						<div class="form-group no-margin">
+							<label for="field-7" class="control-label">Property Types </label>
+							{{form_widget(leadForm.typeFeatures)}}
+							<script type="text/javascript">
+								jQuery(document).ready(function($)
+								{
+									$("#crm_sandboxbundle_lead_typeFeatures").select2({
+									placeholder: 'Write a property type',
+									allowClear: true
+									}).on('select2-open', function()
+									{
+										// Adding Custom Scrollbar
+										$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+									});
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<br>
+						<div class="form-group">
+							<label for="field-3" class="control-label">Sub Channel</label>
+							
+							<div>
+
+								<div class="date-and-time">
+									
+									<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#crm_sandboxbundle_lead_subChannel").selectBoxIt().on('open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+										});
+									});
+									</script>
+								</div>
+							</div>
+							{{form_widget(leadForm.subChannel, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+					<div class="col-md-6">
+						<br>
+						<div class="form-group">
+							<label for="field-3" class="control-label">Database</label>
+
+							<div>
+
+								<div class="date-and-time">
+									<script type="text/javascript">
+									jQuery(document).ready(function($)
+									{
+										$("#crm_sandboxbundle_lead_contact_database").selectBoxIt().on('open', function()
+										{
+											// Adding Custom Scrollbar
+											$(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+										});
+									});
+									</script>
+								</div>
+							</div>
+							
+							{{form_widget(leadForm.contact.database, {'attr':{'class':'form-control'}})}}
+						</div>	
+						
+					</div>
+				</div>
+				
+			</div>
+			<div class="hidden">
+				{{form_widget(leadForm.evaluation)}}
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				
+				{{form_widget(leadForm.submit, {'attr':{'class':'btn btn-info','label':'hello'}})}}
+				{{form_end(leadForm)}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Confirmation!</h4>
+			</div>
+			
+			<div class="modal-body">
+				Changing lead Interest/Qualification can not be changed once set. Are you sure you want to proceed?
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white to-disable" data-dismiss="modal" data-type="" id="dismiss-button">Close</button>
+				<button type="button" class="btn btn-info to-disable" data-type="" id="proceed-button">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+$( "#leadEditForm" ).on( "submit", function( event ) {
+  	event.preventDefault();
+  	console.log($(this).serialize() );
+  	var post_data = $(this).serialize();
+	var post_url = $(this).attr('action');
+	//var post_data = form.serialize();
+	$.ajax({
+	    type: 'PUT',
+	    url: post_url, 
+	    data: post_data,
+	    success: function(msg) {
+	    	toastr.success('Lead has been successfully updated!');
+			$('#modal-7').modal('hide');
+	    }
+	});
+});
+$(document).ready(function() {
+    $('.modalability').on('click', function(){
+    	var properties = $(this).attr('properties').split('{}');
+    	
+		if(!properties[0])
+			properties.shift()
+
+    	$("#modalUL").empty();
+    	if(properties.length == 0){
+    		$("#modalUL").append('<li>No properties have been selected!</li>');
+    	} 
+    	else {
+	    	for (var i = properties.length - 1; i >= 0; i--) {
+	    		$("#modalUL").append('<li>'+properties[i]+'</li>');
+	    	};
+    	}
+    	
+    });
+    $("#dismiss-button").click(function(){
+    	var type = $(this).attr('data-type')
+    	var m = parseInt($(this).attr('data-value'))
+    	switch(type) {
+    		case 'potential':
+    			if(m){
+    				$("#potentialLead").removeAttr('checked')
+    			}
+    			else{
+    				$("#potentialLead").prop('checked',true)
+    			}
+    			break;
+    		case 'interest':
+    			if(m){
+    				$("#interestLead").removeAttr('checked')
+    			}
+    			else{
+    				$("#interestLead").prop('checked', true)
+    			}
+    			break;
+    	}
+    })
+    $("#proceed-button").click(function(){
+    	$(".to-disable").prop('disabled', true)
+    	var type = $(this).attr('data-type')
+    	var leadId = {{leadId}}
+		var m = parseInt($(this).attr('data-value'))
+		var url;
+
+		switch(type) {
+			case 'potential':
+				url = Routing.generate('lead_potential', {id: leadId, potential: m});
+				if(m)
+					$(".reason").addClass('hidden')
+				else {
+					$(".reason").removeClass('hidden')
+					var role = "{{app.user.role}}"
+					if (role != "ROLE_MARKETING" && role != "ROLE_ADMIN")
+						$("#potentialLead").prop('disabled', true)
+					$("#help-qualified").removeClass('hidden')
+				}
+				break;
+			case 'interest':
+				url = Routing.generate('lead_interest', {id: leadId, interest: m});
+				if(m)
+					$(".reason-interest").addClass('hidden')
+				else {
+					$(".reason-interest").removeClass('hidden')
+					var role = "{{app.user.role}}"
+					if (role != "ROLE_MARKETING" && role != "ROLE_ADMIN")
+					$("#interestLead").prop('disabled', true)
+					$("#help-interested").removeClass('hidden')
+				}
+				break;
+		}
+
+
+		
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: function(response){
+				if (m){
+					$("#modal-1").modal("toggle")
+					toastr.success('Updated successfully')
+				}
+				else{
+					$("#modal-1").modal("toggle")
+					toastr.success('Updated successfully')
+				}
+				$(".to-disable").prop('disabled', false)
+			},
+			error: function() {
+				toastr.error('<i class=fa-info></i>An error has occured, please try again!')
+			}
+		});
+    })
+
+	$("#potentialLead").change(function(){
+		jQuery('#modal-1').modal('show', {backdrop: 'fade'});
+		if($(this).is(":checked")) {
+			$("#proceed-button").attr('data-value', 1)
+			$("#dismiss-button").attr('data-value', 1)
+		} else {
+			$("#proceed-button").attr('data-value', 0)
+			$("#dismiss-button").attr('data-value', 0)
+		}
+		$("#proceed-button").attr('data-type', 'potential')
+		$("#dismiss-button").attr('data-type', 'potential')
+	});
+
+	$("#interestLead").change(function(){
+		jQuery('#modal-1').modal('show', {backdrop: 'fade'})
+	    if($(this).is(":checked")) {
+			$("#proceed-button").attr('data-value', 1)
+			$("#dismiss-button").attr('data-value', 1)
+		} else {
+			$("#proceed-button").attr('data-value', 0)
+			$("#dismiss-button").attr('data-value', 0)
+		}
+		$("#proceed-button").attr('data-type', 'interest')
+		$("#dismiss-button").attr('data-type', 'interest')
+
+	});
+	$('#reason').change(function(){
+		var leadId = {{leadId}};
+		var m;
+		var value = $( "#reason option:selected" ).text();
+		if ( value == "Select Reason")
+		{
+			value = "undefiend";
+		}
+		
+		if($($("#potentialLead")).is(":checked")){
+			var url = Routing.generate('lead_potential', {id: leadId, potential: 1, reason:value});
+			m = true;
+			$(".reason").toggle("hidden");
+		}
+		else {
+			//Uncheck
+			var url = Routing.generate('lead_potential', {id: leadId, potential: 0, reason: value});
+			m = false;
+
+			$(".reason").removeClass("hidden");
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: function(response){
+					toastr.success('Lead updated successfully!');
+			},
+			error: function() {
+				toastr.error('<i class=fa-info></i>An error has occured while setting lead\'s potential, please try again!')
+			}
+		});
+		
+	});
+	$('#interest').change(function(){
+
+		var leadId = {{leadId}};
+		var m;
+		var value = $( "#interest option:selected" ).text();
+		var url;
+		if ( value == "Select interest")
+		{
+			value = "undefiend";
+		}
+		
+		if($($("#interestLead")).is(":checked")){
+			url = Routing.generate('lead_interest', {id: leadId, interest: 1, reason:value});
+			m = true;
+			$(".interest").toggle("hidden");
+		}
+		else {
+			//Uncheck
+			url = Routing.generate('lead_interest', {id: leadId, interest: 0, reason: value});
+			m = false;
+
+			$(".interest").removeClass("hidden");
+		}
+		
+		$.ajax({
+			type: 'GET',
+			url: url,
+			success: function(response){
+				toastr.success('Lead updated successfully!');
+			},
+			error: function() {
+				toastr.error('<i class=fa-info></i>An error has occured while setting lead\'s potential, please try again!')
+			}
+		});
+		
+	});
+
+});
+
+</script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+<!-- Imported scripts on this page -->
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+<script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+<script src="{{asset('assets/js/handlebars.min.js')}}"></script>
+<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('assets/js/jquery-validate/jquery.validate.min.js')}}"></script>
+<link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+
+
+{% endblock %}

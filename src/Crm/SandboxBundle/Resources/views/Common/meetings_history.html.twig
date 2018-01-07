@@ -1,0 +1,80 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Meetings total</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#meetings").dataTable({
+						"aaSorting": [],
+						// "columns":[
+						// 	null,
+						// 	{"width":"10%"},
+						// 	null,
+						// 	{"width":"12%"},
+						// 	null
+						// ]
+					});
+				});
+				</script>
+
+				<table class="table table-bordered table-striped" id="meetings">
+					<thead>
+						<tr>
+							<th>Client</th>
+							<th>Interests</th>
+							<th>Objective</th>
+							<th>Outcome</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for result in meetings %}
+							<tr>
+								<td><a href="{{path('sales_representative_contact_history', {contact:result.lead.contact.id})}}">{{result.lead.contact.name}}</a></td>
+								<td>{{result.interestedIn}}</td>
+								<td>{{result.objective}}</td> 
+								<td>{{result.outcome}}</td>
+							
+								<td>{{result.date|date('Y-m-d H:i')}}</td>
+
+							</tr>
+
+						{% endfor %}	
+						
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+{% endblock %}

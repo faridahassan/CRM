@@ -1,0 +1,8 @@
+services:
+    crm.notificationBundle.notificationManager:
+        class: Crm\NotificationBundle\BusinessManager\NotificationManager
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"
+#    crm_notification.example:
+#        class: Crm\NotificationBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

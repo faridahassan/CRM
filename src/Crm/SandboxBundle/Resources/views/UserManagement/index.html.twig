@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Users</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#users").dataTable({
+						responsive : true
+					});
+				});
+				</script>
+				{% for flashMessage in app.session.flashbag.get('notice') %}
+				<div class="alert alert-success">
+					{{flashMessage}}
+				</div>
+
+				{% endfor %}	
+				<table class="table table-bordered table-striped nowrap" width="100%" id="users">
+					<thead>
+						<tr>
+							<th>Edit</th>
+							<th>User Name</th>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Role</th>
+							<th>Actions</th>
+						</tr>
+					</thead>					
+					<tbody>
+						{% for user in users %}
+						<tr>
+							<td><a href="{{path('crm_sandbox_user_management_edit_user',{'id':user.id})}}" class="btn btn-info btn-sm">Edit</a></td>
+							<td>{{user.username}}</td>
+							<td>{{user.name}}</td>
+							<td>{{user.email}}</td>
+							<td>
+								{% if user.roles[0] == 'ROLE_ADMIN' %}
+									Admin
+								{% elseif user.roles[0] == 'ROLE_CALL_CENTER' %}
+									Call Center
+								{% elseif user.roles[0] == 'ROLE_SALES_REPRESENTATIVE' %}
+									Sales
+								{% elseif user.roles[0] == 'ROLE_MARKETING' %}
+									Marketing
+								{% elseif user.roles[0] == 'ROLE_SALES_MANAGER' %}
+									Team Lead
+								{% else %}
+									Unknown
+								{% endif %}
+
+							</td>
+							<td class="text-center">
+								<a href="{{path('crm_sandbox_user_management_reset_password',{'id':user.id})}}" class="btn btn-info btn-sm">Reset Password</a>
+								{% if user.enabled %}
+								<a href="{{path('crm_sandbox_user_management_toggle_enable_state',{'id':user.id})}}" class="btn btn-danger btn-sm">Disable</a>
+								{% else %}
+								<a href="{{path('crm_sandbox_user_management_toggle_enable_state',{'id':user.id})}}" class="btn btn-success btn-sm">Enable</a>
+								{% endif %}
+								{% set isManager = false %}
+								{% for role in user.roles %}
+									{% if role == 'ROLE_SALES_MANAGER' %}
+										{% set isManager = true %}
+									{% endif %}
+								{% endfor %}
+								{% if isManager %}
+								<a href="javascript:;" class="btn btn-primary btn-single btn-sm announce" myTarget="{{user.target}}" myName="{{user.name}}" myId="{{user.id}}">Target</a>
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modal-6">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="agentNameModal"></h4>
+				<h4 class="modal-title" id="agentTargetModal"></h4>
+			</div>
+			
+			<div class="modal-body">
+			
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							
+							<input type="text" class="form-control" id="field-1" placeholder="Target..">
+						</div>	
+						
+					</div>
+					
+				</div>
+				
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				<button onClick="assignTarget()" type="button" class="btn btn-info">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script type="text/javascript">
+	$(document).ready(function(){
+	   $(".announce").click(function(){ 
+			window.userName = $(this).attr("myName");
+			window.userId = $(this).attr("myId");
+			$("#agentNameModal").text("Set target for: "+$(this).attr('myName'));
+			$("#agentTargetModal").text("Current target: "+$(this).attr('myTarget'));
+			$("#modal-6").modal("show");
+	   });
+	});
+
+	function assignTarget(){
+		var target = $("#field-1").val();
+		var url = Routing.generate('crm_sandbox_user_management_assign_target', { user : window.userId, target : target});
+		$.ajax({
+			type:"GET",
+			url : url,
+			success : function(response) {
+				$("#modal-6").modal("hide");
+			},
+			error: function() {
+				alert("An error has occured, please re-evaluate the lead. Your evaluation was: " + toSend);
+			}
+		});
+	}
+	
+</script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+{% endblock %}

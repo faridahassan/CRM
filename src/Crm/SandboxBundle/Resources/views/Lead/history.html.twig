@@ -1,0 +1,105 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+	<link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+	<script type="text/javascript">
+		var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+	</script>
+{% endblock %}
+
+{% block page_content -%}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Change History</h3>
+
+			<div class="panel-options">
+				<a href="#" data-toggle="panel">
+					<span class="collapse-icon">&ndash;</span>
+					<span class="expand-icon">+</span>
+				</a>
+				<a href="#" data-toggle="remove">
+					&times;
+				</a>
+			</div>
+		</div>
+		<div class="panel-body">
+							
+							<div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
+							
+								<table cellspacing="0" class="table table-small-font table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>Field</th>
+											<th>Initial Value</th>
+											{% for revision in revisions %}
+												<th>{{revision.username}} - {{revision.timestamp|date('d/m/y')}} </th>	
+											{% endfor %}
+											
+
+											{# <th data-priority="1">Last Trade</th>
+											<th data-priority="3">Trade Time</th>
+											<th data-priority="1">Change</th>
+											<th data-priority="3">Prev Close</th>
+											<th data-priority="3">Open</th>
+											<th data-priority="6">Bid</th> #}
+										</tr>
+									</thead>
+									<tbody>
+										{% for key, value in results if key != 'updateDate' %}
+										{% set done_with_key = false %}
+										<tr>
+											<th><span class="co-name">
+												{% if key == "isLead" %}
+													Qualified
+												{% elseif key == "isLeadReason" %}
+													Qualified Reason
+												{% elseif key == "isInterested" %}
+													Interested
+												{% elseif key == "isInterestedReason" %}
+													Interested Reason
+												{% else %}
+													{{key}}
+												{% endif %}
+
+											</span></th>
+											{% for x in value %}
+											{% if x.timestamp is defined %}
+											   <td> {{ x|date('d/m/Y') }} </td>
+											{% else %}
+											   <td {% if loop.first %} style="background: #{{ (loop.parent.loop.index is odd) ? 'EAEAEA' : 'F3F1F1' }}" {% endif %}> {{ ((x == '1') ? 'Yes' : x) | default('-')}} </td>
+											{% endif %}
+											{% endfor %}
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							
+							</div>
+							
+							<script type="text/javascript">
+							// This JavaScript Will Replace Checkboxes in dropdown toggles
+							jQuery(document).ready(function($)
+							{
+								setTimeout(function()
+								{
+									$(".checkbox-row input").addClass('cbr');
+									cbr_replace();
+								}, 0);
+							});
+							</script>
+								
+							
+						</div>
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	{{parent()}}
+
+	<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+	<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+
+{% endblock %}

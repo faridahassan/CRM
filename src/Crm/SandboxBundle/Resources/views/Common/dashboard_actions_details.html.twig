@@ -1,0 +1,201 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
+
+{% block page_content %}
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{% if action == 1 %}
+						<h3 class="panel-title">Calls List of: {{name}} </h3>
+					{% else %}
+						<h3 class="panel-title">Meetings List of: {{name}} </h3>
+					{% endif %}
+					<div class="panel-options">
+						<a href="#" data-toggle="panel">
+							<span class="collapse-icon">&ndash;</span>
+							<span class="expand-icon">+</span>
+						</a>
+						<a href="#" data-toggle="remove">
+							&times;
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+
+					<script type="text/javascript">
+					jQuery(document).ready(function($)
+					{
+						$("#databases").dataTable({
+							"columns":[
+								{"width":"15%"},
+								{"width":"12%"},
+								null,
+								{"width":"10%"},
+								null,
+								null
+							]
+						});
+					});
+					</script>
+
+					<table class="table table-bordered table-striped" id="databases">
+						<thead>
+							<tr>
+								<th>Contact</th>
+								{% if action == 1 %}
+									<th>Orien</th>
+								{% else %}
+									<th>Property</th>
+								{% endif %}
+								<th>Interested in</th>
+								<th>Obj</th>
+								<th>Outcome</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+
+						
+						<tbody>
+							{% if action == 1 %}
+							{% for result in results %}
+								{# Draw according to action #}
+								{% if result.isCall %}
+							
+							<tr>
+								{# But first check if exists #}
+								<td>
+									{% if is_granted('ROLE_ADMIN') %}
+										<a href="{{path('sales_dashboard_admin_contact_history', {contact: result.lead.contact.id})}}">{{result.lead.contact.name}}</a>
+									{% else %}
+										<a href="{{path('sales_representative_contact_history', {contact: result.lead.contact.id})}}">{{result.lead.contact.name}}</a>
+									{% endif %}
+
+								</td>
+								{% if result.orientation == "outbound" %}
+									<td>OUT</td>
+									{% else %}
+									<td>IN</td>
+								{% endif %}
+								<td>{{result.interestedIn}}</td>
+								{% if result.objective == "Follow Up" %}
+									<td>FU</td>
+								{% elseif result.objective == "Feedback" %}
+									<td>FB</td>
+								{% elseif result.objective == "Meeting" %}
+									<td>M</td>
+								{% endif %}
+								<td>{{result.outcome}}</td>
+								<td>{{result.date|date('Y-m-d H:i:s')}}</td>
+
+							</tr>
+
+								{% endif %}
+							{% endfor %}
+							{% elseif action == 2 %}
+								{% for result in results %}
+									{# Draw according to action #}
+									{% if result.isCall %}
+										{% else %}
+										
+
+											<tr>
+											{# But first check if exists #}
+											<td><a href="{{path('sales_dashboard_admin_contact_history', {contact: result.lead.contact.id})}}">{{result.lead.contact.name}}</td></a>
+											<td><a href="javascript:;" properties="{{properties[result.id]|join('{}')}}" onClick="$('#modal-6').modal('show', {backdrop: 'static'});" class="btn btn-primary btn-single btn-sm modalability">View</a></td>
+											<td>{{result.interestedIn}}</td>
+											{% if result.objective == "Follow Up" %}
+												<td>FU</td>
+											{% elseif result.objective == "Feedback" %}
+												<td>FB</td>
+											{% elseif result.objective == "Meeting" %}
+												<td>M</td>
+											{% endif %}
+											<td>{{result.outcome}}</td>
+											<td>{{result.date|date('Y-m-d H:i:s')}}</td>
+
+										</tr>
+
+
+									{% endif %}
+								{% endfor %}	
+
+							{% else %}
+
+							{% endif %}
+							
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+<div class="modal fade" id="modal-6">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Properties</h4>
+			</div>
+			
+			<div class="modal-body">
+				
+				<div class="row">
+					<div class="col-md-6">
+						
+						<div class="form-group">
+							<label for="field-1" class="control-label">Properties</label>
+							<ul id="modalUL">
+							</ul>
+						</div>	
+						
+					</div>
+					
+				</div>
+			
+			
+				
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+$(document).ready(function() {
+    $('.modalability').on('click', function(){
+    	var properties = $(this).attr('properties').split('{}');
+    	properties.shift();
+    	$("#modalUL").empty();
+    	if(properties.length == 0){
+    		$("#modalUL").append('<li>No properties have been selected!</li>');
+    	} 
+    	else {
+	    	for (var i = properties.length - 1; i >= 0; i--) {
+	    		$("#modalUL").append('<li>'+properties[i]+'</li>');
+	    	};
+    	}
+    	
+    });
+});
+</script>
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+	
+
+
+{% endblock %}

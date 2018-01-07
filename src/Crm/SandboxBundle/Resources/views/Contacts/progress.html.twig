@@ -1,0 +1,132 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+	{{parent()}}
+
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Not Saved!</h3>
+				<div class="panel-options">
+						<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#unsaved").dataTable({
+						// "columns":[
+						// 	{"width":"12%"},
+						// 	null,
+						// 	{"width":"10%"},
+						// 	null,
+						// 	null
+						// ]
+					});
+				});
+				</script>
+				<table class="table table-bordered table-striped" id="unsaved">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Address</th>
+							<th>Mobile</th>
+							<th>Mobile 2</th>
+							<th>E-mail</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for result in unsavedContacts %}
+						<tr>
+							<td>{{result['name']}}</td>
+							<td>{{result['address']}}</td>
+							<td>{{result['mobile1']}}</td>
+							<td>{{result['mobile2']}}</td>
+							<td>{{result['email']}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Saved</h3>
+				<div class="panel-options">
+						<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#saved").dataTable({
+						// "columns":[
+						// 	{"width":"12%"},
+						// 	null,
+						// 	{"width":"10%"},
+						// 	null,
+						// 	null
+						// ]
+					});
+				});
+				</script>
+				<table class="table table-bordered table-striped" id="saved">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Address</th>
+							<th>Mobile</th>
+							<th>Mobile 2</th>
+							<th>E-mail</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for result in savedContacts %}
+						<tr>
+							<td>{{result.name}}</td>
+							<td>{{result.address}}</td>
+							<td>{{result.mobile}}</td>
+							<td>{{result.mobile2}}</td>
+							<td>{{result.email}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{parent()}}
+
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+
+{% endblock %}

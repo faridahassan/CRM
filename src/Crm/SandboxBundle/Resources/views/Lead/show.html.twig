@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block page_content -%}
+    <h1>Lead</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Info</th>
+                <td>{{ entity.info }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entity.status }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ entity.description }}</td>
+            </tr>
+            <tr>
+                <th>Opportunity</th>
+                <td>{{ entity.opportunity }}</td>
+            </tr>
+            <tr>
+                <th>Budget</th>
+                <td>{{ entity.budget }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('lead') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('lead_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

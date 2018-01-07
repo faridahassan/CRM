@@ -1,0 +1,400 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_data %}
+<script>
+    var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+</script>
+{% endblock %}
+{% block page_content %}
+{% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false, 'include_bootstrap': false} %}    
+<div class="row">
+
+    <div class="col-md-12">
+
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Well done!</strong> {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        {{form_start(form, {attr:{class:'form-horizontal', role:'form'}})}}
+        <div id="brokerColor" class="panel panel-color panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">General info</h3>
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                    <span class="collapse-icon">&ndash;</span>
+                    <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                    &times;
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-4">
+                        <div class="date-and-time">
+                            {{form_widget(form.name, {'attr' :{'class':'form-control'}})}}
+                        </div>
+                    </div>
+                    <label class="col-sm-2 control-label">Slogan</label>
+                    <div class="col-sm-4">
+                        <div class="date-and-time">
+                            {{form_widget(form.slogan, {'attr' :{'class':'form-control'}})}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                	<label class="col-sm-2 control-label">Developer</label>
+                    <div class="col-sm-4">
+                        <div class="date-and-time">
+                            {{form_widget(form.developer, {'attr' :{'class':'form-control'}})}}
+                        </div>
+                        <script type="text/javascript">
+
+                            jQuery(document).ready(function($)
+                            {
+                                $("#{{form.developer.vars.id}}").select2({
+                                    placeholder: 'Select a developer',
+                                    allowClear: true
+                                }).on('select2-open', function()
+                                {
+                                    // Adding Custom Scrollbar
+                                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                });
+                                
+                            });
+                        </script>
+                    </div>
+                    <label class="col-sm-2 control-label">Properties</label>
+
+                    <div class="col-sm-4">
+
+                        <div class="date-and-time">
+                            <script type="text/javascript">
+                            jQuery(document).ready(function($)
+                                {
+                                    $("#{{form.properties.vars.id}}").select2({
+                                        placeholder: 'Choose the properties',
+                                        allowClear: true
+                                    }).on('select2-open', function()
+                                    {
+                                        // Adding Custom Scrollbar
+                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                    });
+                                    
+                                });
+                            </script>
+                            {{form_widget(form.properties, {'attr' :{'class':'form-control'}})}}
+                        </div>
+                    </div>
+
+                    
+                    
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Land Area</label>
+                    <div class="col-sm-4">
+                        <div class="date-and-time">
+                            {{form_widget(form.landArea, {'attr' :{'class':'form-control'}})}}
+                        </div>
+                    </div>
+                    <label class="col-sm-2 control-label">Number of units</label>
+                    <div class="col-sm-4">
+                        {{form_widget(form.numberOfUnits, { 'attr':{ 'class':'iswitch iswitch-info'}})}}
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Unit Types</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.unitTypes, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                    <label class="col-sm-2 control-label">Average Price</label>
+                    <div class="col-sm-4">
+                        {{form_widget(form.averagePrice, {attr:{class:'form-control'}})}}
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Project Built Density</label>
+                    <div class="col-sm-4">
+                        {{form_widget(form.projectBuiltDensity, {attr:{class:'form-control'}})}}
+                    </div>
+                    <label class="col-sm-2 control-label">Maximum Height</label>
+                    <div class="col-sm-4">
+                        {{form_widget(form.maxHeight, {attr:{class:'form-control'}})}}
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Description</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.description, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                    <label class="col-sm-2 control-label">Amenities</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.amenities, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">finishing</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.finishing, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Location Info</h3>
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                    <span class="collapse-icon">&ndash;</span>
+                    <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                    &times;
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                {# 
+                <div class="alert alert-error">
+                    {{ form_errors(form) }}
+                </div>
+                #}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Address</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.address, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                    <label class="col-sm-2 control-label">GPS Coordinates</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.gpsCoordinates, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Landmarks</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.landMarks, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                    <label class="col-sm-2 control-label">Location</label>
+                    <div class="col-sm-4">
+                        <div class="date-and-time">
+                            {{form_widget(form.location, {'attr' :{'class':'form-control'}})}}
+
+                            <script type="text/javascript">
+
+                                jQuery(document).ready(function($)
+                                {
+                                    $("#{{form.location.vars.id}}").select2({
+                                        placeholder: 'Select a location',
+                                        allowClear: true
+                                    }).on('select2-open', function()
+                                    {
+                                        // Adding Custom Scrollbar
+                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                                    });
+                                    
+                                });
+                            </script>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Phasing &amp; Delivery</h3>
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                    <span class="collapse-icon">&ndash;</span>
+                    <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                    &times;
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Number of phases</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.numberOfPhases, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                    <label class="col-sm-2 control-label">Current Phase</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.currentPhase, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Next Delivery By</label>
+                    <div class="col-sm-4">
+                        <div class="date-and-time">
+                            {{form_widget(form.nextDeliveryBy, {attr:{class:'form-control datepicker', type:'text', 'data-start-view':'2'}})}}
+                        </div>
+                    </div>
+                    <label class="col-sm-2 control-label">Payment Plans</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.paymentPlans, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Master Plan</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.masterPlan, {attr:{class:'form-control'}})}}
+                        </p>
+                        {# {{form_errors(form.gardenArea)}}      #}
+                    </div>
+                    <label class="col-sm-2 control-label" for="field-2">Prime Available</label>
+                    <div class="col-sm-4">
+                        <p>
+                            {{form_widget(form.primeAvailable, {attr:{class:'iswitch iswitch-info'}})}}
+                        </p>
+                        {# {{form_errors(form.gardenArea)}}      #}
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="field-2">Gallery</label>
+                    <div class="col-sm-10">
+                        <p>
+                            {{form_widget(form.gallery, {attr:{class:'form-control'}})}}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group-separator"></div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        {{form_widget(form.submit, {'label' : 'Edit Project','attr':{'class':'btn btn-info pull-right'}})}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{form_end(form)}}
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $('#crm_brookerinventorybundle_property_deliveryDate').datepicker( {
+            format: "mm-yyyy",
+            startView: "months",
+            minViewMode: "months"
+        });
+        $('.inputNumberss').keyup(function(event){
+              
+              var $this = $(this);
+              var num = $this.val().replace(/,/gi, "").split("").reverse().join("");
+              
+              var num2 = RemoveRougeChar(num.replace(/(.{3})/g,"$1,").split("").reverse().join(""));
+              
+              console.log(num2);
+              
+              
+              // the following line has been simplified. Revision history contains original.
+              $this.val(num2);
+          });
+        $('.inputNumberss').keydown(function(event){
+            // skip for arrow keys
+              if(event.which >= 37 && event.which <= 40){
+                  event.preventDefault();
+              }
+        });
+        $("#crm_brookerinventorybundle_property_broker").on('input', function() {
+            var broker = $(this).val();
+            if(broker.length > 0)
+                $("#brokerColor").attr('class',  'panel panel-color panel-warning');
+            else
+                $("#brokerColor").attr('class',  'panel panel-color panel-success');
+    
+        });
+    });
+    function RemoveRougeChar(convertString){
+        
+        
+        if(convertString.substring(0,1) == ","){
+            
+            return convertString.substring(1, convertString.length)            
+            
+        }
+        return convertString;
+        
+    }
+</script>
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<script src="{{asset('assets/js/colorpicker/bootstrap-colorpicker.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+<script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+<<<<<<< HEAD
+<script>
+    var unsaved = false;
+    
+    $(":input").change(function(){ //trigers change in all input fields including text type
+        unsaved = true;
+    });
+    
+    function unloadPage(){ 
+        if(unsaved){
+            return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+        }
+    }
+    
+    window.onbeforeunload = unloadPage;
+</script>
+=======
+>>>>>>> dev-broker
+{% endblock %}

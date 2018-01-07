@@ -1,0 +1,280 @@
+{# src/Crm/WebsiteBundle/Resources/views/Page/contact.html.twig #}
+{% extends 'WebsiteBundle::layout.html.twig' %}
+
+{% block body %}
+
+<div class="center">
+
+          <div class="container">
+            <div class="row">
+              <!-- BEGIN PROPERTY DETAILS-->
+              <div class="property">
+                <h1 class="property__title">{{property.address}}<span class="property__city">{{property.location}}</span></h1>
+                <div class="property__price"><strong>{{property.askingPrice|number_format}} EGP</strong></div>
+                {# <div class="social social--properties"><span class="social__title">Share this:</span><a href="#" class="social__item"><i class="fa fa-facebook"></i></a><a href="#" class="social__item"><i class="fa fa-twitter"></i></a><a href="#" class="social__item"><i class="fa fa-google-plus"></i></a></div> #}
+                <div class="clearfix"></div>
+                <div class="property__slider">
+                  <div class="property__ribon">{{property.sellingType}}</div>
+                                <div id="properties-banner" class="slider slider--small">
+                                  <div class="slider__block js-slick-slider">
+                                  {% for image in property.gallery %}
+                                    <div class="slider__item">
+                                      <div class="slider__img"><img   src="{{asset('/images/properties/' ~ property.folder ~ '/gallery/' ~ image)}}" alt=""></div>
+                                    </div>
+                                  {% endfor %}
+                                    
+                                   
+                                
+                                  </div>
+                                  <div class="slider__controls">
+                                    <button type="button" class="slider__control slider__control--prev js-slick-prev">
+                                      <svg class="slider__control-icon">
+                                        <use xlink:href="#icon-arrow-left"></use>
+                                      </svg>
+                                    </button><span class="slider__current js-slick-current">1 /</span><span class="slider__total js-slick-total">9</span>
+                                    <button type="button" class="slider__control slider__control--next js-slick-next">
+                                      <svg class="slider__control-icon">
+                                        <use xlink:href="#icon-arrow-right"></use>
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </div>
+                </div>
+                <div class="property__info">
+                  <div class="property__id"><span>Property ID:</span><small> {{property.id}}</small></div>
+                  <div class="property__type"><span>Property Type:</span><small>{{property.propertyTypeDynamic.name | default('')}}</strong></div>
+                </div>
+                <div class="property__plan">
+                  {% if(property.landArea) %}
+                  <dl class="property__plan-item">
+                    <dt class="property__plan-icon">
+                      <svg>
+                        <use xlink:href="#icon-area"></use>
+                      </svg>
+                    </dt>
+                    <dd class="property__plan-title">Area</dd>
+                    <dd class="property__plan-value">{{property.landArea}}</dd>
+                  </dl>
+                 {% endif %}
+                 {% if property.bedrooms %}
+                  <dl class="property__plan-item">
+                    <dt class="property__plan-icon property__plan-icon--window">
+                      <svg>
+                        <use xlink:href="#icon-window"></use>
+                      </svg>
+                    </dt>
+                    <dd class="property__plan-title">Bedrooms</dd>
+                    <dd class="property__plan-value">{{property.bedrooms}}</dd>
+                  </dl>
+                {% endif %}
+                {% if property.bathrooms %}
+                  <dl class="property__plan-item">
+                    <dt class="property__plan-icon property__plan-icon--bathrooms">
+                      <svg>
+                        <use xlink:href="#icon-bathrooms"></use>
+                      </svg>
+                    </dt>
+                    <dd class="property__plan-title">Bathrooms</dd>
+                    <dd class="property__plan-value">{{property.bathrooms}}</dd>
+                  </dl>
+                {% endif %}
+                  {# <dl class="property__plan-item">
+                    <dt class="property__plan-icon property__plan-icon--garage">
+                      <svg>
+                        <use xlink:href="#icon-garage"></use>
+                      </svg>
+                    </dt>
+                    <dd class="property__plan-title">Garages</dd>
+                    <dd class="property__plan-value">0</dd>
+                  </dl> #}
+                </div>
+                {# <div class="property__params">
+                  <h4 class="property__subtitle">The space</h4>
+                  <ul class="property__params-list">
+                    <li>Year Built:<strong>1971</strong></li>
+                    <li>Number of Parking Spaces:<strong>24</strong></li>
+                    <li>Garage Size In Square Feet:<strong>50</strong></li>
+                    <li>Basement:<strong>Full</strong></li>
+                    <li>External<strong>Construction: Terace</strong></li>
+                    <li>Roofing:<strong>New</strong></li>
+                    <li>Exterior Material:<strong>Brick</strong></li>
+                    <li>Structure Type:<strong>Mansion</strong></li>
+                    <li>Doors &amp; windows:<strong>Double Pane Windows, Skylights</strong></li>
+                    <li>Fireplace description:<strong> Brick</strong></li>
+                    <li>Fireplace fuel:<strong>Uses Both Gas &amp; Wood</strong></li>
+                    <li>Fireplace location:<strong>Living Room</strong></li>
+                    <li>Floors:<strong>Carpet - Partial, Ceramic Tile</strong></li>
+                    <li>Plumbing:<strong>Full Copper Plumbing/</strong></li>
+                    <li>Garage Size In Square Feet:<strong>500</strong></li>
+                    <li>Basement:<strong>Full</strong></li>
+                    <li>Available From:<strong>2013-05-29</strong></li>
+                    <li>MLS ID #:<strong>0</strong></li>
+                  </ul>
+                </div> #}
+                {% if (property.features|length) %}
+                <div class="property__params">
+                  <h4 class="property__subtitle">Features</h4>
+                  <ul class="property__params-list property__params-list--options">
+                    {% for feature in property.features %}
+                      <li>{{feature.name}}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+                <div class="property__description js-unhide-block">
+                  <h4 class="property__subtitle">Description</h4>
+                  <div class="property__description-wrap">
+                    <p>
+                    {% if property.project %}
+                    {{(property.project.amenities|nl2br) }}
+                    {% endif %}
+                    </p>
+                  </div>
+                  {# <button type="button" class="property__btn-more js-unhide">More information ...</button> #}
+                </div>
+                {# <div class="property__files js-unhide-block">
+                  <h4 class="property__subtitle">Property attachment:</h4><a href="#" class="property__files-item">
+                    <svg class="property__files-icon">
+                      <use xlink:href="#icon-doc"></use>
+                    </svg>Estate plan</a><a href="#" class="property__files-item">
+                    <svg class="property__files-icon">
+                      <use xlink:href="#icon-doc"></use>
+                    </svg>Rules</a><a href="#" class="property__files-item">
+                    <svg class="property__files-icon">
+                      <use xlink:href="#icon-doc"></use>
+                    </svg>Demo</a>
+                </div>
+                <button type="button" class="property__files-show js-unhide">Show attachments</button>
+                <div class="property__map map map--properties">
+                  <div class="map__buttons">
+                    <button type="button" class="map__change-map js-map-btn active">Property Map</button>
+                    <button type="button" class="map__change-panorama js-panorama-btn">Street view</button>
+                  </div>
+                  <div class="map__wrap">
+                    <div data-type="map" class="map__view js-map-canvas"></div>
+                    <div data-type="panorama" class="map__view map__view--panorama js-map-canvas"></div>
+                  </div>
+                </div> #}
+                {# <div class="property__contact js-unhide-block">
+                  <h4 class="property__subtitle">Contact the Agent</h4>
+                  <div class="property__contact-agent worker--properties">
+                    <div data-animate-end="animate-end" class="worker__item vcard">
+                      <div class="worker__photo"><a href="agent_listing.html" class="item-photo item-photo--static"><img src="{{asset('website_assets/media-demo/workers/worker-1.jpg')}}" alt="Christopher Pakulla" class="photo">
+                          <figure class="item-photo__hover"><span class="item-photo__more">View Details</span></figure></a></div>
+                      <div class="worker__intro">
+                        <h3 class="worker__name fn">{{property.contactName}}</h3>
+                        <div class="worker__post">Realtor, West USA Realty</div>
+                        <button type="button" class="worker__show js-unhide">Contact agent</button>
+                        <div class="worker__listings"><i class="worker__favorites worker__favorites--highlight"></i> My Listings -<a href="agent_listing.html">12 property</a></div>
+                        <!-- end of block .worker__listings-->
+                        <div class="worker__intro-row">
+                          <div class="worker__intro-col">
+                            <div class="worker__contacts">
+                              <div class="tel"><span class="type">Tel.</span><a href="tel:+44(0)2035102390" class="uri value">{{property.contactNumber}}</a></div>
+                              <div class="tel"><span class="type">Mob.</span><a href="tel:+44(0)30345207210" class="uri value">+44 (0) 303 4520 7210</a></div>
+                              <div class="email"><span class="type">Email</span><a href="mailto:rs@realtyspace.com" class="uri value">rs@realtyspace.com</a></div>
+                              <div class="skype"><span class="type">Skype</span><a href="skype:Walkenboy?call" class="uri value">Walkenboy</a></div>
+                            </div>
+                            <!-- end of block .worker__contacts-->
+                          </div>
+                          <div class="worker__intro-col">
+                            <div class="social social--worker"><a href="#" class="social__item"><i class="fa fa-facebook"></i></a><a href="#" class="social__item"><i class="fa fa-linkedin"></i></a><a href="#" class="social__item"><i class="fa fa-twitter"></i></a><a href="#" class="social__item"><i class="fa fa-google-plus"></i></a></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="worker__descr">
+                        <p>I&apos;m an entrepreneur who loves to travel and splits time between New York and Los Angeles. Believer in the golden rule: Do unto others as you would have them do unto you. Favorite destinations include Cabo San Lucas, Costa Rica, Turks &amp; Caicos...sunny beaches are ideal vacation spots</p>
+                        <p>Our team of agents are ready to help you reach your real estate goals by making your needs our number one priority. We recognize you have a choice when it comes to working with a real estate professional. We look forward to earning your trust and helping you discover the smarter way to buy or sell a home. Our combined real estate experience and unparalled knowledge of the region are at your service.</p>
+                        <p>We recognize you have a choice when it comes to working with a real estate professional. We look forward to earning your trust and helping you discover the smarter way to buy or sell a home.</p>
+                      </div>
+                      <!-- end of block .worker__descr-->
+                      <div class="clearfix"></div>
+                    </div>
+                    <!-- end of block .worker__item-->
+                  </div>
+                  <div class="property__contact-form">
+                    <div class="form form--properties">
+                      <form action="#" method="POST" class="form__wrap js-contact-form">
+                        <div class="form__row form-group">
+                          <label for="in-form-name" class="form__label control-label">Your Name</label>
+                          <input id="in-form-name" type="text" name="name" required class="form__in form__in--text form-control">
+                        </div>
+                        <div class="form__row form__row--tel form-group">
+                          <label for="in-form-phone" class="form__label control-label">Telephone</label>
+                          <input id="in-form-phone" type="text" name="phone" class="form__in form__in--text form-control">
+                        </div>
+                        <div class="form__row form__row--email form-group">
+                          <label for="in-form-email" class="form__label control-label">E-mail</label>
+                          <input id="in-form-email" type="email" name="email" required data-parsley-trigger="change" class="form__in form__in--text form-control">
+                        </div>
+                        <div class="form__row form-group">
+                          <label for="in-form-message" class="form__label control-label">Message</label>
+                          <textarea id="in-form-message" name="message" required data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-validation-threshold="10" data-parsley-minlength-message="You need to enter at least a 20 caracters long comment.." class="form__in form__in--textarea form-control"></textarea>
+                        </div>
+                        <div class="form__row">
+                          <button type="submit" class="form__submit">Submit</button>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- end of block form-->
+                  </div>
+                  <div class="clearfix"></div>
+                </div> #}
+
+              </div>
+          
+              <!-- end of block .property-->
+              <!-- END PROPERTY DETAILS-->
+              <!-- BEGIN SIDEBAR-->
+              
+              <div class=" commen properties properties--similar js-unhide-block">
+                <div class="container">
+                  <button type="button" class="widget__show js-unhide">Show Similar properties</button>
+                  <header class="properties__header">
+                    <h1 class="properties__title">Similar properties</h1>
+                  </header>
+                    {% for popular in simillar %}
+                        <div class="properties__item" style="opacity:1 !important;">
+                          <div class="properties__thumb"><a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="item-photo"><img src="{% if popular.gallery|length > 0 %}{{asset('/images/properties/' ~ popular.folder ~ '/gallery/' ~ popular.gallery[0])}}{% endif %}" alt="">
+                            <figure class="item-photo__hover item-photo__hover--params"><span class="properties__param-type">{{popular.propertyTypeDynamic.name | default('')}}</span>
+
+                              <span class="properties__param-type">in {{popular.location.name | default('')}}</span>
+                              <span class="properties__param-type">, {{popular.project.name | default('')}}</span>
+                              <span class="properties__param"><span class="properties__param-column"><span class="properties__param-label">Land Area:</span><span class="properties__param-value">{{popular.landArea | default('')}} <span class="sqmfont">sqm</span></span></span><span class="properties__param-column"><span class="properties__param-label">Beds:</span><span class="properties__param-value">{{popular.bedrooms | default('')}}</span></span><span class="properties__param-column"><span class="properties__param-label">Baths:</span><span class="properties__param-value">{{popular.bathrooms | default('')}}</span></span></span></figure></a><span class="properties__ribon">{{popular.propertyTypeDynamic.name | default('')}}</span>
+                            </div>
+                            <!-- end of block .properties__thumb-->
+
+                            <div class="properties__info"><a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__address"><span class="properties__address-street">{{popular.address}}</span><span class="properties__address-city">{{popular.location.name|default('')}}</span></a>
+                             {% if popular.sellingType == "Sale" %}
+                              <span class="properties__price">
+                               <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                               <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                             </span>
+                           {% endif %}
+                           {% if popular.sellingType == "Rent" %}
+                            <span class="properties__price">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span>{{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                            </span>
+                          {% endif %}
+                          {% if popular.sellingType == "Both" %}
+                            <span class="properties__price" style="display:block">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                            </span>
+                            <span class="properties__price" >
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span> {{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                            </span>
+
+                          {% endif %}
+                          <!-- end of block .properties__param-->
+                        </div>
+                        <!-- end of block .properties__info-->
+                      </div>
+                    {%endfor%}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+{%endblock%}

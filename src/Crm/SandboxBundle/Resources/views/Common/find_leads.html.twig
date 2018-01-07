@@ -1,0 +1,107 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+<script type="text/javascript">
+var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+</script>
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+	<div class="col-md-12">
+
+		{% for flashMessage in app.session.flashbag.get('notice') %}
+		    
+		    <div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<strong>Well done!</strong> {{ flashMessage }}
+			</div>
+		{% endfor %}
+		{% for flashMessage in app.session.flashbag.get('error') %}
+		    
+		    <div class="alert alert-danger">
+				<button type="button" class="close" data-dismiss="alert">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<strong>Bummer!</strong> {{ flashMessage }}
+			</div>
+		{% endfor %}
+	</div>
+</div>
+
+<section class="search-env">
+				
+				<div class="row">
+					<div class="col-md-12">
+						
+						<form method="get" action="" enctype="application/x-www-form-urlencoded">
+							<input type="text" id="search" class="form-control input-lg" placeholder="Search by name or mobile" name="s">
+							
+							<button type="submit" class="btn-unstyled">
+								<i class="linecons-search"></i>
+							</button>
+						</form>
+						
+					</div>
+				</div>
+				
+			</section>
+
+<div id="result">
+	
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery-validate/jquery.validate.min.js')}}"></script>
+
+<script type="text/javascript">
+	
+	//setup before functions
+	var typingTimer;                //timer identifier
+	var doneTypingInterval = 1400;  //time in ms, 5 second for example
+	var $input = $('#search');
+
+	//on keyup, start the countdown
+	$input.on('keyup', function () {
+	  // clearTimeout(typingTimer);
+	  typingTimer = setTimeout(doneTyping, doneTypingInterval);
+	});
+
+	//on keydown, clear the countdown 
+	$input.on('keydown', function () {
+	  clearTimeout(typingTimer);
+	});
+
+	//user is "finished typing," do something
+	function doneTyping () {
+	  slug = $('#search').val()
+		
+		$('#result').html("Loading..")
+		var url = Routing.generate('lead_by_any', { slug : slug});
+		$.ajax({
+			type:"GET",
+			url : url,
+			success : function(response) {
+				$('#result').html(response)
+			},
+			error: function() {
+				console.log("error in find_leads");
+			}
+		});
+	}
+</script>
+{% endblock %}

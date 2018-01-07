@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+{% block style %}
+{{parent()}}
+{% endblock %}
+{% block page_data %}
+
+{% endblock %}
+{% block page_content %}
+
+
+<div class="row">
+	<div class="col-sm-12">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Calls Orientation Ratio</h3>
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">	
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					if( ! $.isFunction($.fn.dxChart))
+						return;
+
+					var dataSource = [
+					{ state: "", inbound: {{ratio.inbound}}, outbound: {{ratio.outbound}}, total: {{ratio.inbound}}+{{ratio.outbound}} },
+
+
+					];
+
+					$("#bar-2").dxChart({
+						equalBarWidth: false,
+						dataSource: dataSource,
+						commonSeriesSettings: {
+							argumentField: "state",
+							type: "bar"
+						},
+						series: [
+						{ valueField: "inbound", name: "Inbound", color: "#0e62c7" },
+						{ valueField: "outbound", name: "Outbound", color: "#2c2e2f" },
+						{ valueField: "total", name: "Total", color: "#ff2323" },
+
+						],
+						legend: {
+							verticalAlignment: "bottom",
+							horizontalAlignment: "center"
+						},
+						title: "Inbound vs Outbound"
+					});
+				});
+				</script>
+				<div id="bar-2" style="height: 400px; width: 100%;"></div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/devexpress-web-14.1/js/globalize.min.js')}}"></script>
+<script src="{{asset('assets/js/devexpress-web-14.1/js/dx.chartjs.js')}}"></script>
+{% endblock %}

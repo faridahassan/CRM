@@ -1,0 +1,63 @@
+lead:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Lead:index" }
+
+lead_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:Lead:show" }
+
+lead_new:
+    path:     /new
+    defaults: { _controller: "CrmSandboxBundle:Lead:new" }
+
+lead_create:
+    path:     /create
+    defaults: { _controller: "CrmSandboxBundle:Lead:create" }
+    methods:  POST
+
+lead_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Lead:edit" }
+
+lead_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Lead:update" }
+    methods:  [POST, PUT]
+
+lead_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Lead:delete" }
+    methods:  [POST, DELETE]
+
+lead_assignment:
+    path:    /assignment/{id}/{slug}
+    defaults: { _controller: "CrmSandboxBundle:Lead:updateAssignment" }
+    options:
+        expose: true
+
+lead_potential:
+    path:    /potential/{id}/{potential}/potential/{reason}
+    defaults: { _controller: "CrmSandboxBundle:Lead:updatePotential", reason: null }
+    options:
+        expose: true
+
+lead_interest:
+    path:    /interest/{id}/{interest}/{reason}
+    defaults: { _controller: "CrmSandboxBundle:Lead:updateInterest", reason: null }
+    options:
+        expose: true
+
+find_lead:
+    path:    /mob/{mobile}
+    defaults: { _controller: "CrmSandboxBundle:Lead:getLead" }
+    options:
+        expose: true
+lead_by_any:
+    path:    /any/{slug}
+    defaults: { _controller: "CrmSandboxBundle:Lead:leadByAny" }
+    options:
+        expose: true
+
+lead_history:
+    path:     /history/{leadId}
+    defaults: { _controller: "CrmSandboxBundle:Lead:history" }

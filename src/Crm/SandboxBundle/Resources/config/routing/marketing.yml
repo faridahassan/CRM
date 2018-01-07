@@ -1,0 +1,49 @@
+marketing_campaign_manage:
+    path: /campaign
+    defaults: { _controller: "CrmSandboxBundle:Marketing\Campaign:manageCampaign" }
+
+marketing_campaign_channels_report:
+    path: /channel_report
+    defaults: { _controller: "CrmSandboxBundle:Marketing\Campaign:reportChannels" }
+
+marketing_campaign_subchannels_report:
+    path: /subchannel_report/{channel}
+    defaults: { _controller: "CrmSandboxBundle:Marketing\Campaign:reportSubChannels" }
+
+marketing_case_by_origin:
+    path: /casebyorigin
+    defaults: { _controller: "CrmSandboxBundle:Marketing\CaseByOrigin:index" }
+marketing_case_by_origin_widget:
+    path: /casebyorigin_widget
+    defaults: { _controller: "CrmSandboxBundle:Marketing\CaseByOrigin:caseByOriginWidget" }
+    options:
+        expose: true
+
+marketing_dashboard:
+    path: /dashboard
+    defaults: { _controller: "CrmSandboxBundle:Marketing\Dashboard:index" }
+
+marketing_archived_leads:
+    path: /archived
+    defaults: { _controller: "CrmSandboxBundle:Marketing\ArchivedLeads:index" }
+
+
+marketing_leads_by_channel:
+    path: /leads_by_channel/{channel}
+    defaults: { _controller: "CrmSandboxBundle:Marketing\Campaign:leadsByChannel" }
+
+marketing_dashboard_update_chart:
+  pattern:  /dashboard/filter/chart
+  defaults: { _controller: "CrmSandboxBundle:Marketing\Dashboard:updateChart" }
+  options:
+        expose: true
+marketing_dashboard_update_channel:
+  pattern:  /dashboard/filter/channel
+  defaults: { _controller: "CrmSandboxBundle:Marketing\Dashboard:updateChannelBreakdown" }
+  options:
+        expose: true
+marketing_dashboard_update_campaign:
+  pattern:  /dashboard/filter/campaign
+  defaults: { _controller: "CrmSandboxBundle:Marketing\Dashboard:updateLeadsByChannel" }
+  options:
+        expose: true

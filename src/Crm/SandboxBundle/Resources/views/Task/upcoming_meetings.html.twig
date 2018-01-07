@@ -1,0 +1,20 @@
+<div class="col-md-8 col-md-offset-2">
+{% for notification in notifications %}
+	<div class="row" style="margin-top:10px;">
+		<div class="col-md-3">
+			<b><a href="{{path('sales_representative_contact_history', {contact:notification.lead.contact.id})}}">{{notification.lead.contact.name}}</a></b>
+		</div>
+		<div class="col-md-3">
+			{{notification.date | date('H:i')}}
+		</div>
+		<div class="col-md-3">
+			{{notification.comment}}	
+		</div>
+		<div class="col-md-3">
+			{% if notification.postponed %}
+				<label class="label label-danger">Rescheduled</label>
+			{% endif %}
+		</div>
+    </div>
+{% endfor %}
+</div>

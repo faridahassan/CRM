@@ -1,0 +1,33 @@
+
+{% extends "FOSUserBundle::login_layout.html.twig" %}
+
+{% block fos_user_content %}
+{% if error %}
+<div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+{% endif %}
+
+<form action="{{ path("fos_user_security_check") }}" method="post" id="login" class="login-form fade-in-effect in">
+	<div class="login-header">
+		<a href="dashboard-1.html" class="logo">
+			<img src="{{asset('assets/images/logo@2x.png')}}" alt="" width="80">
+			<span>log in</span>
+		</a>
+
+		<p>Dear user, log in to access the admin area!</p>
+	</div>
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+	<div class="form-group">
+	<label class="control-label" for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
+	<input class="form-control input-dark" type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+	</div>
+	<div class="form-group">
+	<label class="control-label" for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
+	<input class="form-control input-dark" type="password" id="password" name="_password" required="required" />
+	</div>
+	
+	<div class="form-group">
+		<input type="submit" id="_submit"  class="btn btn-dark  btn-block text-left"  name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+	</div>
+</form>
+
+{% endblock fos_user_content %}

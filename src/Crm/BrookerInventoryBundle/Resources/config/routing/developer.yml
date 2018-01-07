@@ -1,0 +1,30 @@
+developer:
+    path:     /
+    defaults: { _controller: "CrmBrookerInventoryBundle:Developer:index" }
+
+developer_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmBrookerInventoryBundle:Developer:show" }
+
+developer_new:
+    path:     /new
+    defaults: { _controller: "CrmBrookerInventoryBundle:Developer:new" }
+
+developer_create:
+    path:     /create
+    defaults: { _controller: "CrmBrookerInventoryBundle:Developer:create" }
+    methods:  POST
+
+developer_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmBrookerInventoryBundle:Developer:edit" }
+
+developer_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmBrookerInventoryBundle:Developer:update" }
+    methods:  [POST, PUT]
+
+developer_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmBrookerInventoryBundle:Developer:delete" }
+    methods:  [POST, DELETE]

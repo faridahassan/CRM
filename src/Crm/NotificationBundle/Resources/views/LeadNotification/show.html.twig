@@ -1,0 +1,41 @@
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+   <i class="fa-suitcase"></i>
+   <span class="badge badge-purple">{{entities| length }}</span>
+</a>
+<ul class="dropdown-menu notifications">
+   <li class="top">
+      <p class="small">
+         <a href="{{path('crm_notification_lead_markall')}}" class="pull-right">Mark all Read</a>
+         You have <strong>{{entities| length}}</strong> new notifications.
+      </p>
+   </li>
+   <li>
+      <ul class="dropdown-menu-list list-unstyled ps-scrollbar">
+         {% for notification in entities %}
+
+
+            <li class="active notification-secondary">
+               <a href="{{path('sales_representative_contact_history', {contact:notification.lead.contact.id,notification:notification.id})}}">
+                  <i class="fa-user"></i>
+                  <span class="line">
+                     <strong>{{notification.text}}</strong>
+                  </span>
+                  <span class="line small time">
+                     {{notification.created | date('d-m-Y')}}
+                  </span>
+               </a>
+            </li>
+         {% endfor %}
+      </ul>
+   </li>
+   <li class="external">
+      {% if is_granted('ROLE_SALES_REPRESENTATIVE') %}
+         <a href="{{path('sales_representative_assigned_leads')}}">
+         {% else %}
+         <a href="{{path('sales_assign_leads')}}">
+         {% endif %}
+         <span>View all notifications</span>
+         <i class="fa-link-ext"></i>
+      </a>
+   </li>
+</ul>

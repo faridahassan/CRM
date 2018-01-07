@@ -1,0 +1,111 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<style type="text/css">
+#matterbrandingbundle_team_image_image{
+    display: none;
+}
+</style>
+{% endblock %}
+{% block page_content -%}
+{% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false, 'include_bootstrap': false} %}
+
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+<div class="alert alert-success">{{ flashMessage }}</div>
+{% endfor %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Slider Properties <br><small>drag to reorder</small></h3>
+        <div class="panel-options">
+            <a href="#" data-toggle="panel">
+                <span class="collapse-icon">–</span>
+                <span class="expand-icon">+</span>
+            </a>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div id="example-2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+            <table class="table table-bordered table-striped dataTable no-footer" id="example-2" role="grid" aria-describedby="example-2_info">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting" tabindex="0" aria-controls="example-2" rowspan="1" colspan="1" aria-label="Curriculum / Occupation: activate to sort column ascending" style="width: 266px;">Image</th>
+                        <th class="sorting" tabindex="0" aria-controls="example-2" rowspan="1" colspan="1">Location</th>
+                        <th class="sorting" tabindex="0" aria-controls="example-2" rowspan="1" colspan="1">Project</th>
+                        <th class="sorting" tabindex="0" aria-controls="example-2" rowspan="1" colspan="1">Phase</th>
+                        <th class="sorting" tabindex="0" aria-controls="example-2" rowspan="1" colspan="1">Property Type</th>
+                        <th class="sorting" tabindex="0" aria-controls="example-2" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 214px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="middle-align">
+                    {% for entity in entities %}
+                    <tr role="row" class="odd" myattr="{{entity.id}}" style="cursor: pointer">
+                        <td><img src="{% if entity.gallery is empty %}{{asset('/images/properties/' ~ entity.folder ~ '/' ~ entity.slider)}}  {%else%}{{asset('/images/properties/' ~ entity.folder ~'/gallery/'~ entity.gallery[0]) }}  {%endif%}" class="img-responsive" /> </td>
+                        <td>{{entity.location}}</td>
+                        <td>{{entity.project}}</td>
+                        <td>{{entity.phase}}</td>
+                        <td>{{entity.propertyTypeDynamic.name | default('')}}</td>
+
+                        <td class="text-center">
+                            <a href="{{url('property_edit', {id: entity.id})}}" class="btn btn-sm btn-success">
+                                Show
+                            </a>
+                            <a href="{{url('property_edit', {id: entity.id})}}" class="btn btn-info btn-sm">
+                                Edit
+                            </a>
+                            <a href="{{url('property_remove_slider', {id: entity.id})}}" class="btn btn-danger btn-sm">
+                                Remove From Slider
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+
+
+<script>
+$( document ).ready(function() {
+    // $("#sortMe tbody").sortable().disableSelection();
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    $("#example-2 tbody").sortable({
+        helper: fixHelper,
+        stop: function() {
+            var order = [];
+            $("#example-2 > tbody > tr").each(function(){
+                console.log($(this).attr('myattr'));
+                order.push($(this).attr('myattr'));
+            });
+            $.ajax({
+                type: 'POST',
+                url: '{{path('manage_property_sort_ajax')}}', 
+                data: {'order':order},
+                success: function(msg) {
+                    toastr.success('Successfully updated project order!');
+                },
+                error: function(){
+                    toastr.error('<i class=fa-info></i>An error has occured while updating project order!');
+                }
+            });
+        }
+    }).disableSelection();
+});
+</script>
+{% endblock %}

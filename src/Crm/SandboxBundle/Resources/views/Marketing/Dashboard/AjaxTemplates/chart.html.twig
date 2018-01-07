@@ -1,0 +1,99 @@
+<div id="chart">
+               <script type="text/javascript">
+                  jQuery(document).ready(function($)
+                  {
+                  	
+                  	var dataSrc = [];
+                  	{% for lead in leadsByDate %}
+                  
+                  	dataSrc.push({"day":{{lead.day}} , "leads" : {{lead.lead}}})
+                  
+                  	{% endfor %}
+                  
+                  
+                  
+                  	var dataSource = [
+                  	{ day: 1, lead: 0},
+                  	{ day: 2, lead: 0},
+                  	{ day: 3, lead: 0},
+                  	{ day: 4, lead: 0},
+                  	{ day: 5, lead: 0},
+                  	{ day: 6, lead: 0},
+                  	{ day: 7, lead: 0},
+                  	{ day: 8, lead: 0},
+                  	{ day: 9, lead: 0},
+                  	{ day: 10, lead: 0},
+                  	{ day: 11, lead: 0},
+                  	{ day: 12, lead: 0},
+                  	{ day: 13, lead: 0},
+                  	{ day: 14, lead: 0},
+                  	{ day: 15, lead: 0},
+                  	{ day: 16, lead: 0},
+                  	{ day: 17, lead: 0},
+                  	{ day: 18, lead: 0},
+                  	{ day: 19, lead: 0},
+                  	{ day: 20, lead: 0},
+                  	{ day: 21, lead: 0},
+                  	{ day: 22, lead: 0},
+                  	{ day: 23, lead: 0},
+                  	{ day: 24, lead: 0},
+                  	{ day: 25, lead: 0},
+                  	{ day: 26, lead: 0},
+                  	{ day: 27, lead: 0},
+                  	{ day: 28, lead: 0},
+                  	{ day: 29, lead: 0},
+                  	{ day: 30, lead: 0},
+                  	{ day: 31, lead: 0}
+                  	];
+                  
+                  	$.each( dataSrc, function( lead , value ) {
+                  		console.log(value);
+                                     	// console.log(value);
+                                          // console.log(value.day);
+                                          console.log(dataSource[value.day].lead = value.leads);
+                                      });
+                  
+                  	if( ! $.isFunction($.fn.dxChart))
+                  		return;
+                  
+                  	$("#range-1").dxRangeSelector({
+                  		margin: {
+                  			top: 50
+                  		},
+                  		scale: {
+                  			minorTickInterval: "day",
+                  			majorTickInterval: {
+                  				days: 7
+                  			}
+                  		},
+                  		size: {
+                  			height: 310
+                  		},
+                  		dataSource: dataSource,
+                  		chart: {
+                  			series: [
+                  			{ argumentField: "day", valueField: "lead", color: "#4fcdfc" },
+                  			],
+                  			valueAxis: {
+                  				min: 0
+                  			}
+                  		},
+                  		selectedRange: {
+                  			startValue: 0,
+                  			endValue: 31
+                  		},
+                  		selectedRangeChanged: function(e)
+                  		{
+                  			$("#range-1-selected strong").html(e.startValue + ' - ' + e.endValue);
+                  		}
+                  	});
+                  
+                  });
+                  
+               </script>
+               <div id="range-1" style="height: 310px; width: 100%;"></div>
+               <div id="range-1-selected">
+                  Selected range:
+                  <strong class="text-primary">/</strong>
+               </div>
+            </div>

@@ -1,0 +1,172 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('assets/js/datatables/dataTables.bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_content -%}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{entity.lead.contact.name}}'s Complaint</h3>
+                    <div class="panel-options">
+                        {% if entity.status != "closed" %}
+                            <span>Close this complaint? <input id="close_complaint" type="checkbox" class="iswitch iswitch-red"> </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="col-sm-4 control-label">Department</label>
+                            <div class="col-sm-8">
+                                {{entity.department}}
+                            </div>                        
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-sm-3 control-label">Status</label>
+                            <div class="col-sm-7">
+                                {% if entity.status != "closed" %}
+                                    <label class="label label-danger">{{entity.status}}</label>
+                                    {% else %}
+                                    <label class="label label-success">{{entity.status}}</label>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-sm-3 control-label">Brief/Title</label>
+                            <div class="col-sm-9">
+                                {{entity.brief}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {% if entity.status == "closed" %}
+                           <div class="col-md-4">
+                            <label class="col-sm-4 control-label">Closed By</label>
+                            <div class="col-sm-8">
+                                {{entity.userClosing.name}}
+                            </div>                        
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-sm-3 control-label">Closing Date</label>
+                            <div class="col-sm-7">
+                                {{entity.closedDate | date('d-M-Y')}}
+                                
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<section class="profile-env">
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- User timeline stories -->
+            <section class="user-timeline-stories">
+                <!-- Timeline Story Type: Status -->
+                <article class="timeline-story">
+                    <i class="fa-paper-plane-empty block-icon"></i>
+                    <!-- User info -->
+                    <header>
+                        <div class="user-details">
+                            <a href="#">{{entity.userCreating.name}}</a> created this complaint on  <a href="#">{{entity.date | date('d-M-Y')}}</a>.
+                        </div>
+                    </header>
+                    <div class="story-content">
+                        <!-- Story Content Wrapped inside Paragraph -->
+                        <p>{{entity.brief | nl2br}}</p>
+                        <!-- Story Options Links -->
+                        <!-- Story Comments -->
+                        <ul class="list-unstyled story-comments">
+                            {% for complaintlog in entity.log %}
+                                <li>
+                                    <div class="story-comment">
+                                        <div class="story-comment-content">
+                                            <a href="#" class="story-comment-user-name">
+                                                {{complaintlog.user.name}}
+                                                <time>{{complaintlog.date | date('d-M-Y')}}</time>
+                                            </a>
+                                            <p>{{complaintlog.comment | nl2br}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% if entity.status !="closed" %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{form_start(form,{'attr':{'class':'story-comment-form'}})}}
+                                    {{form_widget(form.comment,{'attr':{'class':'form-control autogrow'}})}}
+
+                                    {{form_widget(form.submit,{'attr':{'class':'btn btn-success pull-right'}})}}
+                                    {{form_end(form)}}        
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </article>
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script src="{{asset('assets/js/devexpress-web-14.1/js/globalize.min.js')}}"></script>
+    <script src="{{asset('assets/js/devexpress-web-14.1/js/dx.chartjs.js')}}"></script>
+    <script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+    <script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+    <script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+    <script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+    <script>
+      function find()
+      {
+         mobile = $('#mobile').val();
+         var url = Routing.generate('find_lead', { mobile : mobile});
+         $('#result').html("loading..");
+         $.ajax({
+           type:"GET",url : url,
+           success : function(response) {
+            $('#result').html(response);
+            toastr.success('Success!');
+        },
+        error: function() {
+          toastr.error('failure, please try agian later!');
+      }
+  });
+     }
+
+     $("#close_complaint").change(function(){
+      if($(this).is(':checked')) {
+          id = {{entity.id}}
+          var url = Routing.generate('complaint_close', { id : id});
+          $('#result').html("loading..");
+          $.ajax({
+           type:"GET",url : url,
+           success : function(response) {
+            toastr.success('Success!')
+            location.reload()
+        },
+        error: function() {
+          toastr.error('failure, please try agian later!');
+      }
+  });
+      }
+  })
+ </script>
+ <!-- Imported scripts on this page -->
+{% endblock %}

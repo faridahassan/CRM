@@ -1,0 +1,89 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
+
+{% block page_content %}
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">New leads list</h3>
+
+							<div class="panel-options">
+								<a href="#" data-toggle="panel">
+									<span class="collapse-icon">&ndash;</span>
+									<span class="expand-icon">+</span>
+								</a>
+								<a href="#" data-toggle="remove">
+									&times;
+								</a>
+							</div>
+						</div>
+						<div class="panel-body">
+
+							<script type="text/javascript">
+							jQuery(document).ready(function($)
+							{
+								$("#databases").dataTable({});
+							});
+							</script>
+
+							<table class="table table-bordered table-striped" id="databases">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Status</th>
+										<th>Budget</th>
+										<th>Assigned To</th>
+										<th>Evaluation</th>
+									</tr>
+								</thead>
+
+								
+								<tbody>
+									{% for lead in leads %}
+									<tr>
+										{% if lead.contact.name is defined %}
+											 {% if is_granted('ROLE_ADMIN') %}
+											<td><a href="{{path('sales_dashboard_admin_contact_history', {contact: lead.contact.id})}}">{{lead.contact.name}}</a></td>
+											{% else %}
+											<td><a href="{{path('sales_representative_contact_history', {contact: lead.contact.id})}}">{{lead.contact.name}}</a></td>
+											{% endif %}
+										{% else %}
+											<td></td>
+										{% endif %}
+										<td>{{lead.status}}</td>
+										<td>{{lead.budget}}</td>
+										{% if lead.assignedSalesRep.name is defined %}
+											<td>{{lead.assignedSalesRep.name}}</td>
+										{% else %}
+											<td></td>
+										{% endif %}
+										<td>{{lead.evaluation}}</td>
+									</tr>
+
+									{% endfor %}
+									
+								</tbody>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+	
+
+
+{% endblock %}

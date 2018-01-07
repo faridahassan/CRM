@@ -1,0 +1,23 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+
+{% block fos_user_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Profile
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-12">
+							{% include "FOSUserBundle:Profile:show_content.html.twig" %}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock fos_user_content %}

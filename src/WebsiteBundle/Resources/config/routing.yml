@@ -1,0 +1,59 @@
+WebsiteBundle_homepage:
+    pattern:  /
+    defaults: { _controller: WebsiteBundle:Page:index }
+
+WebsiteBundle_properties:
+    pattern:  /properties
+    defaults: { _controller: WebsiteBundle:Page:properties }
+
+WebsiteBundle_projects:
+    pattern:  /projects
+    defaults: { _controller: WebsiteBundle:Page:projects }
+    requirements:
+        _method:  GET
+
+WebsiteBundle_project:
+    pattern:  /project/{project}
+    defaults: { _controller: WebsiteBundle:Page:project } 
+
+WebsiteBundle_contact:
+    pattern:  /contactus
+    defaults: { _controller: WebsiteBundle:Page:contact }
+
+WebsiteBundle_proprety_details:
+    pattern:  /property_details/{property}
+    defaults: { _controller: WebsiteBundle:Page:property_details }
+    requirements:
+        _method:  GET
+
+manage_property:
+    path:     /admin/manageProperty
+    defaults: { _controller: WebsiteBundle:Property:manageProperty }
+
+manage_property_sort_ajax:
+    path:     /admin/update_sort_ajax
+    defaults: { _controller: WebsiteBundle:Property:updateOrder }
+    methods: POST
+    options:
+        expose: true
+
+# website_homepage:
+#     path:     /website
+#     defaults: { _controller: WebsiteBundle:Default:index }
+
+# website_about:
+#     path:     /website/about
+#     defaults: { _controller: WebsiteBundle:Default:about }
+# website_contact:
+#     path:     /website/contact
+#     defaults: { _controller: WebsiteBundle:Default:contact }
+# website_properties:
+#     path:     /website/properties/{location}
+#     defaults: { _controller: WebsiteBundle:Default:properties, location: null }
+# website_property:
+#     path:     /website/property/{id}/show
+#     defaults: { _controller: WebsiteBundle:Default:property }
+# website_property_sell:
+#     path:     /website/sell-property
+#     defaults: { _controller: WebsiteBundle:Default:sellProperty }
+

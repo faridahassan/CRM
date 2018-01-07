@@ -1,0 +1,79 @@
+{% extends '::base.html.twig' %}
+
+{% block page_content %}
+    <h1>Property list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Location</th>
+                <th>Name</th>
+                <th>Phase</th>
+                <th>Sellingtype</th>
+                <th>Landarea</th>
+                <th>Propertytype</th>
+                <th>Type</th>
+                <th>Unitnumber</th>
+                <th>Buildingnumber</th>
+                <th>Builduparea</th>
+                <th>Floors</th>
+                <th>Bedrooms</th>
+                <th>Notes</th>
+                <th>Price</th>
+                <th>Downpayment</th>
+                <th>Remaining</th>
+                <th>Maintenancefee</th>
+                <th>Transferfee</th>
+                <th>Deliverydate</th>
+                <th>Commission</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('property_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.location }}</td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.phase }}</td>
+                <td>{{ entity.sellingType }}</td>
+                <td>{{ entity.landArea }}</td>
+                <td>{{ entity.propertyType }}</td>
+                <td>{{ entity.type }}</td>
+                <td>{{ entity.unitNumber }}</td>
+                <td>{{ entity.buildingNumber }}</td>
+                <td>{{ entity.buildupArea }}</td>
+                <td>{{ entity.floors }}</td>
+                <td>{{ entity.bedrooms }}</td>
+                <td>{{ entity.notes }}</td>
+                <td>{{ entity.price }}</td>
+                <td>{{ entity.downPayment }}</td>
+                <td>{{ entity.remaining }}</td>
+                <td>{{ entity.maintenanceFee }}</td>
+                <td>{{ entity.transferFee }}</td>
+                <td>{% if entity.deliveryDate %}{{ entity.deliveryDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.commission }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('property_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('property_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('property_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

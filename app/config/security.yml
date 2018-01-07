@@ -1,0 +1,87 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_ADMIN
+        ROLE_MARKETING: ROLE_MARKETING
+        ROLE_SALES_MANAGER: ROLE_SALES_MANAGER
+        ROLE_SALES_REPRESENTATIVE: ROLE_SALES_REPRESENTATIVE
+        ROLE_CALL_CENTER: ROLE_CALL_CENTER
+
+
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+        in_memory:
+            memory: ~
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+                use_referer:         false
+                success_handler:     login_success_handler
+            oauth:
+                resource_owners:
+                    google:             "/login/check-google"
+                login_path:        /login
+                failure_path:      /login
+
+
+                oauth_user_provider:
+                    #this is my custom user provider, created from FOSUBUserProvider - will manage the
+                    #automatic user registration on your site, with data from the provider (facebook. google, etc.)
+                    service: my_user_provider
+            anonymous:    true
+            logout:
+                path: fos_user_security_logout
+                target: /login
+
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/marketing, role: [ROLE_ADMIN, ROLE_MARKETING ] }
+        - { path: ^/properties, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/property_details, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/contactus, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/project, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        - { path: ^/sales/dashboard/contact_history, role: [ROLE_ADMIN, ROLE_CALL_CENTER, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER, ROLE_MARKETING] }
+        - { path: ^/salesrepresentative/dashboardsalesrep/contact_history, role: [ROLE_ADMIN, ROLE_CALL_CENTER, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER, ROLE_MARKETING] }
+        - { path: ^/salesrepresentative/select_lead_inbound_call, role: [ROLE_ADMIN, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER, ROLE_MARKETING] }
+        - { path: ^/salesrepresentative/deals/new, role: [ROLE_ADMIN, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER] }
+        - { path: ^/salesrepresentative, role: [ROLE_ADMIN,ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER,ROLE_CALL_CENTER,ROLE_MARKETING] }
+        - { path: ^/sales/leads/new, role: [ROLE_ADMIN,ROLE_SALES_MANAGER,ROLE_SALES_REPRESENTATIVE,ROLE_MARKETING] }
+
+
+        - { path: ^/sales/dashboard, role: [ROLE_SALES_REPRESENTATIVE, ROLE_ADMIN, ROLE_SALES_MANAGER] }
+        - { path: ^/sales/dashboard/leads/all, role: [ROLE_SALES_REPRESENTATIVE, ROLE_ADMIN] }
+        - { path: ^/sales/dashboard/leads/specific, role: [ROLE_SALES_REPRESENTATIVE, ROLE_ADMIN] }
+        - { path: ^/sales/deals/show, role: [ROLE_ADMIN, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER] }
+        - { path: ^/sales/assign_leads, role: [ROLE_ADMIN,ROLE_SALES_MANAGER,ROLE_CALL_CENTER] }
+        - { path: ^/sales/assign_lead_to_sales_rep, role: [ROLE_ADMIN,ROLE_SALES_MANAGER,ROLE_CALL_CENTER] }
+        - { path: ^/sales/deals/close, role: [ROLE_ADMIN, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER] }
+        - { path: ^/sales, role: [ROLE_ADMIN,ROLE_SALES_MANAGER,ROLE_SALES_REPRESENTATIVE] }
+        
+
+        - { path: ^/team, role: [ROLE_ADMIN,ROLE_SALES_MANAGER] }
+
+        - { path: ^/inventory/manage, role: [ROLE_ADMIN, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER, ROLE_MARKETING] }
+        - { path: ^/inventory, role: [ROLE_ADMIN, ROLE_CALL_CENTER, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER, ROLE_MARKETING] }
+        - { path: ^/callcenter, role: [ROLE_ADMIN, ROLE_CALL_CENTER, ROLE_SALES_REPRESENTATIVE,ROLE_SALES_MANAGER, ROLE_MARKETING] }
+        - { path: ^/usermanagement/assigntarget, role: [ROLE_ADMIN, ROLE_SALES_MANAGER ] }
+        - { path: ^/usermanagement, role: ROLE_ADMIN }
+        - { path: ^/, role: IS_AUTHENTICATED_FULLY }

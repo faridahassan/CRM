@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+
+{% endblock %}
+{% block page_content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Manage Projects</h3>
+
+                <div class="panel-options">
+                    <a href="{{path('project_new')}}">
+                        <button class="btn btn-success">
+                            <span class="title">Add</span>
+                        </button>
+                    </a>
+                    <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                        &times;
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                    $("#teams").dataTable({});
+                    $(window).bind('resize', function () {
+                        oTable.fnAdjustColumnSizing();
+                    } );
+                });
+                </script>
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    {{flashMessage}}
+                </div>
+
+                {% endfor %}    
+                <table class="table table-bordered table-striped nowrap" id="teams">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Slogan</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                        {% for entity in projects %}
+                        <tr>
+                            <td>{{entity.name}}</td>
+                            <td>{{entity.slogan}}</td>
+                            <td class="text-center">
+                               <a href="{{path('project_show', {id: entity.id})}}" class="btn btn-success btn-sm">Show</a>
+                               <a href="{{path('project_edit', {id: entity.id})}}" class="btn btn-info btn-sm">Edit</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+<script src="{{asset('assets/js/xenon-toggles.js')}}"></script>
+
+{% endblock %}

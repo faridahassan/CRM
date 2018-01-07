@@ -1,0 +1,124 @@
+sales_assign_leads:
+    path: /leads/assign
+    defaults: { _controller: "CrmSandboxBundle:Sales/AssignLeads:index" }
+    options:
+        expose: true
+sales_manage_leads:
+    path: /manage_leads
+    defaults: { _controller: "CrmSandboxBundle:Sales/AssignLeads:manageAssingedLeads" }
+
+sales_assign_lead_sales_rep:
+    path: /assign_lead_to_sales_rep/{lead}/{salesRep}/{wasArchived}
+    defaults: { _controller: "CrmSandboxBundle:Sales/AssignLeads:assignSalesRepToLead", wasArchived: false }
+    options:
+        expose: true
+
+sales_shuffle_lead:
+    path: /shuffle_lead/{includeMe}
+    defaults: { _controller: "CrmSandboxBundle:Sales/AssignLeads:shuffleLeads" }
+    options:
+        expose: true
+
+sales_call_orientation:
+    path: /call_orientation
+    defaults: {_controller: "CrmSandboxBundle:Common/CallsOrientation:totalCallsOrientation"}
+
+sales_deals:
+    path: /deals
+    defaults: { _controller: "CrmSandboxBundle:Sales/Deals:index" }
+sales_show_deal:
+    path: /deals/show/{deal}
+    defaults: { _controller: "CrmSandboxBundle:Sales/Deals:show" }
+sales_approve_deal:
+    path: /deals/approve/{deal}
+    defaults: { _controller: "CrmSandboxBundle:Sales/Deals:approve" }
+sales_disapprove_deal:
+    path: /deals/disapprove/{deal}
+    defaults: { _controller: "CrmSandboxBundle:Sales/Deals:disapprove" }
+sales_close_deal:
+    path: /deals/close/{deal}
+    defaults: { _controller: "CrmSandboxBundle:Sales/Deals:close" }
+
+sales_dashboard_all_leads:
+    path: /dashboard/leads/all/{agent}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:allLeads" }
+
+sales_dashboard_specific_leads:
+    path: /dashboard/leads/specific/{type}/{agent}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:specificLeads" }
+
+sales_dashboard_trash_lead:
+    path: /dashboard/trash/lead/{lead}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:trashLead" }
+
+sales_dashboard_upcoming_properties:
+    path: /dashboard/upcoming_properties
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboardUpcomingProperties" }
+
+# Type 0:sales rep, 1:team. id: sales rep or team id
+sales_dashboard:
+    path: /dashboard_/{type}/{id}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboard", type: null, id: null }
+    options:
+        expose: true
+
+sales_calls_history:
+    path: /dashboard/calls_history/{type}/{id}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:callsHistory" }
+
+sales_meetings_history:
+    path: /dashboard/meeting_history/{type}/{id}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:meetingsHistory" }
+
+sales_leads_history:
+    path: /dashboard/leads_history/{type}/{id}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:leadsHistory" }
+
+sales_sm:
+    path: /sm_applications
+    defaults: { _controller: "CrmSandboxBundle:Sales/SMApplications:index" }
+
+# This is used to show details of meetings, calls.
+sales_dashboard_admin:
+    path:  /dashboard/admin/{agent}/{action}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboardAdmin" }
+
+sales_dashboard_admin_contact_history:
+    path:  /dashboard/contact_history/{contact}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:contactHistory" }
+
+sales_dashboard_ajax_call_source:
+    path: /dashboard/ajax/call_source
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:callSource" }
+    options:
+        expose: true
+
+sales_dashboard_leads:
+    path: /dashboard/leads/{agent}
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:dashboardLeads" }
+
+sales_dashboard_ajax_widgets:
+    path: /dashboard/ajax/widgets
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:widgetsAjax" }
+    options:
+        expose: true
+
+sales_dashboard_ajax_team_completion:
+    path: /dashboard/ajax/team_completion
+    defaults: { _controller: "CrmSandboxBundle:Common/Dashboard:teamCompletionAjax" }
+    options:
+        expose: true
+
+sales_representative_log_outbound_call:
+    path: /logaction/{id}/{orientation}
+    defaults: { _controller: "CrmSandboxBundle:Common/LogCall:outbound" }
+
+sales_representative_log_inbound_call:
+    path: /leads/new
+    defaults: { _controller: "CrmSandboxBundle:Common/LogCall:selectLead" }
+    options:
+        expose: true
+
+sales_representative_create_lead:
+    path: /create_lead
+    defaults: { _controller: "CrmSandboxBundle:Common/LogCall:createLead" }

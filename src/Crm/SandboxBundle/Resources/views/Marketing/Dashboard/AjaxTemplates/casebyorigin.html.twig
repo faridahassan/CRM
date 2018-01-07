@@ -1,0 +1,41 @@
+			<div class="panel-body" id="channels">	
+				<script type="text/javascript">
+				var dataSrc = [];
+				{% for channel in channelsBreakdown %}
+
+				dataSrc.push({"channel":"{{ channel.channelName }}" , "leads" : {{ channel.leadCount }}})
+
+				{% endfor %}
+				jQuery(document).ready(function($)
+				{
+					if( ! $.isFunction($.fn.dxChart))
+						return;
+
+					$("#bar-1").dxChart({
+						dataSource:dataSrc,
+
+   		commonSeriesSettings: {
+   			argumentField: "state",
+   			type: "bar",
+            label: {
+                visible: true,
+                connector: {
+                    visible: true
+                }
+            }
+   		},
+						series: {
+							argumentField: "channel",
+							valueField: "leads",
+							name: "Leads",
+							type: "bar",
+							color: '#68b828'
+						}
+					});
+
+				});
+
+				</script>
+				<div id="bar-1" style="height: 440px; width: 100%;"></div>
+				
+			</div>

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="description" content="Equation Solutions Real State CRM" />
+   <meta name="author" content="" />
+   <title>Equation Solutions - CRM</title>
+   {% block stylesheets %}
+   <link rel="stylesheet" href="{{asset('assets/css/fonts/googleapi.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/fonts/linecons/css/linecons.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/fonts/fontawesome/css/font-awesome.min.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/bootstrap.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/xenon-core.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/xenon-forms.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/xenon-components.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/xenon-skins.css')}}">
+   <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
+   <style type="text/css">
+      table.dataTable th,
+      table.dataTable td {
+              white-space: nowrap;
+      }
+   </style>
+   {% endblock %}
+
+   <script src="{{asset('assets/js/jquery-1.11.1.min.js')}}"></script>
+
+   </head>
+   {% block body %}
+   <body class="page-body">
+      <div class="page-loading-overlay">
+<div class="loader-2"></div>
+</div>
+      <div class="settings-pane">
+         <a href="#" data-toggle="settings-pane" data-animate="true">
+            &times;
+         </a>
+         <div class="settings-pane-inner">
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="user-info">
+                     <div class="user-image">
+                        <a href="extra-profile.html">
+                           <img src="{{asset('assets/images/user-2.png')}}" class="img-responsive img-circle" />
+                        </a>
+                     </div>
+                     <div class="user-details">
+                        <h3>
+                           <a href="extra-profile.html">
+                              {% if app.user %}
+                                 {{app.user.name}}
+                              {% endif %}
+                           </a>
+                           <!-- Available statuses: is-online, is-idle, is-busy and is-offline -->
+                           <span class="user-status is-online"></span>
+                        </h3>
+                        <p class="user-title">
+                           {% if is_granted("ROLE_ADMIN") %}
+                           Admin
+                           {% endif %}
+                           {% if is_granted("ROLE_CALL_CENTER") %}
+                           Call Center
+                           {% endif %}
+                           {% if is_granted("ROLE_SALES_REPRESENTATIVE") %}
+                           Agent
+                           {% endif %}
+                           {% if is_granted("ROLE_MARKETING") %}
+                           Marketing
+                           {% endif %}
+                        </p>
+                        <div class="user-links">
+                          <a href="{{path('fos_user_change_password')}}" class="btn btn-success">Change Password</a>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+              <div class="col-md-8 link-blocks-env">
+               <div class="links-block left-sep">
+                  <h4>
+                     <span>Notifications</span>
+                  </h4>
+                  <ul class="list-unstyled">
+                     <li>
+                        <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk1" />
+                        <label for="sp-chk1">Messages</label>
+                     </li>
+                     <li>
+                        <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk2" />
+                        <label for="sp-chk2">Events</label>
+                     </li>
+                     <li>
+                        <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk3" />
+                        <label for="sp-chk3">Updates</label>
+                     </li>
+                     <li>
+                        <input type="checkbox" class="cbr cbr-primary" checked="checked" id="sp-chk4" />
+                        <label for="sp-chk4">Server Uptime</label>
+                     </li>
+                  </ul>
+               </div>
+               <div class="links-block left-sep">
+                  <h4>
+                     <a href="#">
+                        <span>Help Desk</span>
+                     </a>
+                  </h4>
+                  <ul class="list-unstyled">
+                     <li>
+                        <a href="#">
+                           <i class="fa-angle-right"></i>
+                           Support Center
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#">
+                           <i class="fa-angle-right"></i>
+                           Submit a Ticket
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#">
+                           <i class="fa-angle-right"></i>
+                           Domains Protocol
+                        </a>
+                     </li>
+                     <li>
+                        <a href="#">
+                           <i class="fa-angle-right"></i>
+                           Terms of Service
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+      <!-- Add "fixed" class to make the sidebar fixed always to the browser viewport. -->
+      <!-- Adding class "toggle-others" will keep only one menu item open at a time. -->
+      <!-- Adding class "collapsed" collapse sidebar root elements and show only icons. -->
+      <div class="sidebar-menu toggle-others fixed">
+         <div class="sidebar-menu-inner">
+            <header class="logo-env">
+               <!-- logo -->
+               <div class="logo">
+                  {% if is_granted('ROLE_SALES_MANAGER') %}
+                           {% if app.user.ledTeam is not null %}
+                              <a class="logo-expanded" href="{{path('sales_dashboard', {id: app.user.ledTeam.id, type: 1})}}">
+                           {% else %}
+                              <a class="logo-expanded" href="{{path('sales_dashboard', {id: app.user.id, type: 0})}}">
+                           {% endif %}
+                  {% endif %}
+                  {% if is_granted('ROLE_ADMIN') %}
+                           <a class="logo-expanded" href="{{path('sales_dashboard', {id: 0, type: 1})}}">          
+                  {% endif %}
+                  {% if is_granted('ROLE_SALES_REPRESENTATIVE') %}
+                     <a href="{{path('sales_dashboard', {id: app.user.id , type: 0})}}"><a href="{{path('sales_dashboard', {id: app.user.id , type: 0})}}">
+                  {% endif %}
+                  {% if is_granted('ROLE_MARKETING') %}
+                     <a class="logo-expanded" href="{{path('marketing_dashboard')}}">          
+                  {% endif %}
+                  {% if is_granted('ROLE_CALL_CENTER') %}
+                     <a class="logo-expanded" href="{{path('callcenter_log_inbound_call')}}">
+                  {% endif %}
+                     <img src="{{asset('assets/images/logo@2x.png')}}" width="80" alt="" />
+                  </a>
+                  {# <a href="dashboard-1.html" class="logo-collapsed">
+                     <img src="{{asset('assets/images/logo@2x.png')}}" width="80" alt="" />
+                  </a> #}
+               </div>
+               <!-- This will toggle the mobile menu and will be visible only on mobile devices -->
+               <div class="mobile-menu-toggle visible-xs">
+                  <a href="#" data-toggle="user-info-menu">
+                     <i class="fa-bell-o"></i>
+                     <span class="badge badge-success">7</span>
+                  </a>
+                  <a href="#" data-toggle="mobile-menu">
+                     <i class="fa-bars"></i>
+                  </a>
+               </div>
+               <!-- This will open the popup with user profile settings, you can use for any purpose, just be creative -->
+               <div class="settings-icon">
+                  <a href="#" data-toggle="settings-pane" data-animate="true">
+                     <i class="linecons-cog"></i>
+                  </a>
+               </div>
+            </header>
+            {% block navigation %}
+            <ul id="main-menu" class="main-menu">
+               <!-- add class "multiple-expanded" to allow multiple submenus to open -->
+               <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
+               <li {% if app.request.pathInfo starts with '/inventory' or app.request.pathInfo starts with '/project' %}class="opened active expanded has-sub"{% endif %} >
+                  <a href="dashboard-1.html">
+                     <i class="fa fa-database"></i>
+                     <span class="title">Inventory</span>
+                  </a>
+                  <ul>
+                     <li>
+                        <a href="{{path('inventory_inventory')}}">
+                           <span class="title">Inventory</span>
+                        </a>
+                     </li>
+                     {# <li>
+                        <a href="{{path('inventory_projects')}}">
+                           <span class="title">Visits Breakdown</span>
+                        </a>
+                     </li> #}
+                     <li>
+                        <a href="{{path('inventory_sold')}}">
+                           <span class="title">Sold Properties</span>
+                        </a>
+                     </li>
+                     {# Manage #}
+                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_MARKETING') or is_granted('ROLE_SALES_REPRESENTATIVE') %}
+                        <li>
+                           <a href="{{path('inventory_manage')}}">
+                              <span class="title">Configuration Tables</span>
+                              </a>
+                           </li>
+                           
+
+                        <li>
+                           <a href="{{path('property_new')}}">
+                              <span class="title">Add Property</span>
+                           </a>
+                        </li>
+
+                     {% endif %} 
+                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') or is_granted('ROLE_MARKETING') %}
+                     <li>
+                        <a href="{{path('manage_property')}}">
+                           <span class="title">Website Slider</span>
+                        </a>
+                     </li>
+
+
+                     {% endif %}
+                     </ul>
+                  </li>
+               
+
+
+               {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') %}
+               <li {% if app.request.pathInfo starts with '/sales'  or app.request.pathInfo starts with '/common'%}class="opened active expanded has-sub"{% endif %} >
+                  <a href="#">
+                     <i class="linecons-money"></i>
+                     <span class="title">Sales</span>
+                  </a>
+                  <ul>
+                     <li>
+                        {% if is_granted('ROLE_SALES_MANAGER') %}
+                           {% if app.user.ledTeam is not null %}
+                              <a href="{{path('sales_dashboard', {id: app.user.ledTeam.id, type: 1})}}">
+                                 <span class="title">Dashboard</span>
+                              </a>
+                           {% else %}
+                              <a href="{{path('sales_dashboard', {id: app.user.id, type: 0})}}">
+                                 <span class="title">Dashboard</span>
+                              </a>
+                           {% endif %}
+                        {# Admin #}
+                        {% else %}
+                           <a href="{{path('sales_dashboard', {id: 0, type: 1})}}">
+                              <span class="title">Dashboard</span>
+                           </a>
+                     {% endif %}
+                     </li>
+                     <li {% if app.request.pathInfo starts with '/sales'  or app.request.pathInfo starts with '/common'%}class="opened active expanded has-sub"{% endif %} >
+                           <a href="#">
+                              <i class="linecons-money"></i>
+                              <span class="title">Leads</span>
+                           </a>
+                        <ul>
+                           <li>
+                              <a href="{{path('sales_representative_log_inbound_call')}}">
+                                 <span class="title">Add Lead</span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="{{path('search_leads')}}">
+                                 <span class="title">Log Action</span>
+                              </a>
+                           </li>
+
+                           <li>
+                              <a href="{{path('sales_assign_leads')}}">
+                                 <span class="title">Assign Leads</span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="{{path('sales_representative_assigned_leads')}}">
+                                 <span class="title">My Leads</span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="{{path('sales_manage_leads')}}">
+                                 <span class="title">Manage Leads</span>
+                              </a>
+                           </li>
+                        </ul>
+                     </li>
+
+                     <li>
+                        <a href="{{url('sales_deals')}}">
+                           <span class="title">Deals</span>
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+               {% endif %}
+               {% if is_granted('ROLE_SALES_REPRESENTATIVE') %}
+               <li {% if app.request.pathInfo starts with '/sales'  or app.request.pathInfo starts with '/common' %}class="opened active expanded has-sub"{% endif %} >
+                  <a href="dashboard-1.html">
+                     <i class="fa fa-suitcase"></i>
+                     <span class="title">Agents</span>
+                  </a>
+                  <ul>
+                  <li>
+                     <a href="{{path('sales_dashboard', {id: app.user.id , type: 0})}}">
+                        <span class="title">Dashboard</span>
+                     </a>
+                  </li>
+                  <li {% if app.request.pathInfo starts with '/sales'  or app.request.pathInfo starts with '/common'%}class="opened active expanded has-sub"{% endif %} >
+                           <a href="#">
+                              <i class="fa fa-suitcase"></i>
+                              <span class="title">Leads</span>
+                           </a>
+                        <ul>
+
+                     <li>
+                        <a href="{{path('sales_representative_log_inbound_call')}}">
+                           <span class="title">Add Lead</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{path('search_leads')}}">
+                           <span class="title">Log Action</span>
+                        </a>
+                     </li>
+
+                     <li>
+                        <a href="{{path('sales_representative_assigned_leads')}}">
+                           <span class="title">Assigned Leads</span>
+                        </a>
+                     </li>
+                     </ul>
+                  </li>
+
+                     <li>
+                        <a href="{{url('sales_representative_deals')}}">
+                           <span class="title">Deals</span>
+                        </a>
+                     </li>
+
+                  </ul>
+               </li>
+               {% endif %}
+               {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+               <li {% if app.request.pathInfo starts with '/marketing' or app.request.pathInfo starts with '/subchannel' or app.request.pathInfo starts with '/channel' %}class="opened active expanded has-sub"{% endif %}>
+                  <a href="#">
+                     <i class="linecons-megaphone"></i>
+                     <span class="title">Marketing</span>
+                  </a>
+                  <ul>
+
+                     <li>
+                        <a href="{{path('marketing_dashboard')}}">
+                           <span class="title">Dashboard</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{path('marketing_case_by_origin')}}">
+                           <span class="title">Case By Origin</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{path('marketing_campaign_manage')}}">
+                           <span class="title">Campaign</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{path('marketing_archived_leads')}}">
+                           <span class="title">Archived Leads</span>
+                        </a>
+                     </li>
+                     {% if is_granted('ROLE_MARKETING') %}
+                     <li>
+                        <a href="{{path('sales_representative_log_inbound_call')}}">
+                           <span class="title">Add Lead</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{path('search_leads')}}">
+                           <span class="title">Log Action</span>
+                        </a>
+                     </li>
+                     {% endif %}
+                  </ul>
+               </li>
+               {% endif %}
+               {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SALES_MANAGER') %}
+               <li {% if app.request.pathInfo starts with '/team' %}class="opened active expanded has-sub"{% endif %} >
+                  <a href="#" > 
+                  <i class="fa fa-users"></i>
+                  <span class="title">Teams</span>
+                  </a>
+                  <ul>
+                       {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+                     <li>
+                        <a href="{{url('team')}}">
+                        <span class="title">All Teams</span>
+                        </a>    
+                     </li>
+                     <li>
+                        <a href="{{url('team_new')}}">
+                        <span class="title">Create Team</span>
+                        </a>    
+                     </li>
+                     {% endif %}
+                     {% if is_granted('ROLE_SALES_MANAGER') %}
+                        <li>
+                           <a href="{{url('team_assign_target')}}">
+                           <span class="title">Assign Target</span>
+                           </a>    
+                        </li>
+                      {% endif %}
+                  </ul>
+               </li>
+               {% endif %}
+               {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+               <li {% if app.request.pathInfo starts with '/usermanagement' %}class="opened active expanded has-sub"{% endif %}>
+                  <a href="#" > 
+                     <i class="fa fa-user"></i>
+                     <span class="title">Users</span>
+                  </a>
+                  <ul>
+                     <li>
+                        <a href="{{url('crm_sandbox_user_management_manage')}}">
+                           <span class="title">Manage Current Users</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{url('fos_user_registration_register')}}">
+                           <span class="title">Add New User</span>
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+            
+               {% endif %}
+               {% if is_granted('ROLE_CALL_CENTER') %}
+               <li {% if app.request.pathInfo starts with '/callcenter'  or app.request.pathInfo starts with '/common' %}class="opened active expanded has-sub"{% endif %}>
+                  <a href="dashboard-1.html">
+                     <i class="fa fa-phone"></i>
+                     <span class="title">Call Center</span>
+                  </a>
+                  <ul>
+                     <li>
+                        <a href="{{path('callcenter_log_inbound_call')}}">
+                           <span class="title">Add Lead</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{path('search_leads')}}">
+                           <span class="title">Log Call</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{url('callcenter_call_orientation')}}">
+                           <span class="title">Call Orientation Ratio</span>
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+               {% endif %}
+               <li {% if app.request.pathInfo starts with '/contacts' %}class="opened active expanded has-sub"{% endif %}>
+                  <a href="#" > 
+                     <i class="fa fa-users"></i>
+                     <span class="title">Contacts</span>
+                  </a>
+                  <ul>
+                     <li>
+                        <a href="{{url('contacts_upload')}}">
+                           <span class="title">Upload</span>
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+               <li {% if app.request.pathInfo starts with '/complaints' %}class="opened active expanded has-sub"{% endif %}>
+                  <a href="#" > 
+                     <i class="fa fa-users"></i>
+                     <span class="title">Complaints</span>
+                  </a>
+                  <ul>
+                     <li>
+                        <a href="{{url('complaint_search')}}">
+                           <span class="title">New</span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{{url('complaint')}}">
+                           <span class="title">Show</span>
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+            </ul>
+            
+            {% endblock %}
+         </div>
+      </div>
+      <div class="main-content">
+         <nav class="navbar user-info-navbar"  role="navigation"><!-- User Info, Notifications and Menu Bar -->
+            <!-- Left links for user info navbar -->
+            <ul class="user-info-menu left-links list-inline list-unstyled">
+               <li class="hidden-sm hidden-xs">
+                  <a href="#" data-toggle="sidebar">
+                     <i class="fa-bars"></i>
+                  </a>
+               </li>
+               <li class="dropdown hover-line">
+                  {% block notifcation_data %}
+                      {{ render(controller('CrmNotificationBundle:LeadNotification:show')) }}
+                  {% endblock %} 
+               </li>
+               <li class="dropdown hover-line">
+                  {% block task_data %}
+                      {{ render(controller('CrmSandboxBundle:Task:show')) }}
+                  {% endblock %} 
+               </li>
+            </ul>
+            <!-- Right links for user info navbar -->
+            <ul class="user-info-menu right-links list-inline list-unstyled">
+               <li class="dropdown user-profile">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                     <img src="{{asset('assets/images/user-4.png')}}" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
+                     <span>
+                        {% if app.user %}{{ app.user.name }}{% endif %}
+                        <i class="fa-angle-down"></i>
+                     </span>
+                  </a>
+                  <ul class="dropdown-menu user-profile-menu list-unstyled">
+                     <li>
+                        <a href="{{path('fos_user_profile_edit')}}">
+                           <i class="fa-user"></i>
+                           Profile
+                        </a>
+                     </li>
+                     <li class="last">
+                        <a href="{{path('fos_user_security_logout')}}">
+                           <i class="fa-lock"></i>
+                           Logout
+                        </a>
+                     </li>
+                  </ul>
+               </li>
+            </ul>
+         </nav>
+         {% block page_data%}{% endblock%}
+         {% block page_content %}{% endblock %}
+         <!-- Main Footer -->
+         <!-- Choose between footer styles: "footer-type-1" or "footer-type-2" -->
+         <!-- Add class "sticky" to  always stick the footer to the end of page (if page contents is small) -->
+         <!-- Or class "fixed" to  always fix the footer to the end of page -->
+         <footer class="main-footer sticky footer-type-1">
+            <div class="footer-inner">
+               <!-- Add your copyright text here -->
+               <div class="footer-text">
+                  &copy; 2016 
+                  <strong>Powered By Equation Solutions</strong> 
+               </div>
+               <!-- Go to Top Link, just add rel="go-top" to any link to add this functionality -->
+               <div class="go-up">
+                  <a href="#" rel="go-top">
+                     <i class="fa-angle-up"></i>
+                  </a>
+               </div>
+            </div>
+         </footer>
+      </div>
+   </div>
+
+   {% block javascripts %}
+
+
+   <!-- Bottom Scripts -->
+   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <link href="http://cdn.datatables.net/responsive/1.0.1/css/dataTables.responsive.css" rel="stylesheet">
+    <script src="http://cdn.datatables.net/responsive/1.0.1/js/dataTables.responsive.min.js"></script>
+   <script src="{{asset('assets/js/TweenMax.min.js')}}"></script>
+   <script src="{{asset('assets/js/jquery.mask.js')}}"></script>
+   <script src="{{asset('assets/js/resizeable.js')}}"></script>
+   <script src="{{asset('assets/js/joinable.js')}}"></script>
+   <script src="{{asset('assets/js/xenon-api.js')}}"></script>
+   <script src="{{asset('assets/js/xenon-toggles.js')}}"></script>
+   <script src="{{asset('assets/js/xenon-custom.js')}}"></script>
+   <script src="{{asset('assets/js/xenon-widgets.js')}}"></script>
+   <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
+   <script src="{{asset('assets/js/jquery-validate/jquery.validate.min.js')}}"></script>
+   
+    
+      <script type="text/javascript">
+      $(document).ready(function($) {
+         $('.number-format').mask('000,000,000,000,000', {reverse: true});
+         $('button:submit').click(function(){
+            // debugger
+                if ($(this).closest("form").valid()) {
+                     $('.number-format').unmask();
+                       setTimeout(function(){
+                            $(this).click()
+                            $('button:submit').attr("disabled", true)
+                        }, 10);
+                       // debugger
+                       // $(this).closest("form").submit()
+                   }
+                   else {
+                     console.log("nenegez")
+                   }
+               });  
+
+      })
+   </script>
+   <!-- JavaScripts initializations and stuff -->
+   {% endblock %}
+
+</body>
+{% endblock %}
+</html>

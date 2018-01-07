@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/multiselect/css/multi-select.css')}}">
+{{parent()}}
+
+{% endblock %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Manage Leads</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#Leads").dataTable({
+						responsive:true,
+						"order": [[ 3, "desc" ]]
+					});
+				});
+				</script>
+				{% for flashMessage in app.session.flashbag.get('notice') %}
+				<div class="alert alert-success">
+					{{flashMessage}}
+				</div>
+
+				{% endfor %}	
+				<table class="display responsive no-wrap table table-bordered table-striped table-hover" width="100%"id="Leads">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Mobile</th>
+							<th>Creation Date</th>
+							<th>Created By</th>
+							<th>Managed By</th>
+							<th>Agent</th>
+						</tr>
+					</thead>
+
+					
+					<tbody>
+						{% for lead in leads %}
+						<tr>
+							{% if lead.contact is not null %}
+								<td><a href="{{path('sales_dashboard_admin_contact_history', {contact: lead.contact.id})}}">{{lead.contact.name}}</a></td>
+								<td>{{lead.contact.email}}</td>
+								<td>{{(lead.contact.mobile)}}</td>
+							{% else %}
+								<td></td>
+								<td></td>
+								<td></td>
+							{% endif %}
+							 {% if lead.date is not null %}
+								<td>{{lead.date|date('Y-m-d')}}</td>
+							 {% else %}
+							 <td>N/A</td>
+							{% endif %}
+							{% if lead.user %}
+							<td>{{lead.user.name}}</td>
+							{% else %}
+							    <td></td>
+							{% endif %}
+							{% if lead.owner %}
+							<td>{{lead.owner.name}}</td>
+							{% else %}
+							    <td></td>
+							{% endif %}
+							<td class="text-center">
+								<div class="form-group">
+									
+									
+									<script type="text/javascript">
+										jQuery(document).ready(function($)
+										{
+											$("#s2example-{{lead.id}}").select2({
+												placeholder: 'Select Agent...',
+												allowClear: true
+											}).on('select2-open', function()
+											{
+												// Adding Custom Scrollbar
+												$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+											});
+											
+										});
+									</script>
+									
+									<select class="form-control" id="s2example-{{lead.id}}">
+										{% if lead.assignedSalesRep is not null %}
+											<option selected="selected">{{lead.assignedSalesRep.name}}</option>
+										{% else %}
+											<option selected="selected"></option>
+										{% endif %}
+										
+										{% for salesRep in salesReps %}
+											<option id="{{salesRep.id}}" leadId="{{lead.id}}">{{salesRep.name}}</option>
+										{% endfor %}
+
+									</select>
+
+									<script>
+										$('#s2example-{{lead.id}}').change(function() {
+											var salesRep = $('#s2example-{{lead.id}} option:selected').attr("id");
+											var leadId = $('#s2example-{{lead.id}} option:selected').attr("leadId");
+											var url = Routing.generate('sales_assign_lead_sales_rep', { lead : leadId, salesRep : salesRep});
+											$.ajax({
+												type:"GET",
+												url : url,
+												success : function(response) {
+													toastr.success('Successfuly updated assignment');
+												},
+												error: function(e) {
+													toastr.error('<i class=fa-info></i>An error has occured, please re-assign the Sales Rep.');
+												}
+											});
+										});
+									</script>	
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+
+
+
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<script src="{{asset('assets/js/colorpicker/bootstrap-colorpicker.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+<script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+<script src="{{asset('assets/js/handlebars.min.js')}}"></script>
+<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+
+
+
+{% endblock %}

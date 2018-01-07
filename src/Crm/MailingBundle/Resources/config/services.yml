@@ -1,0 +1,9 @@
+services:
+    crm.mailingBundle.mailingManager:
+        class: Crm\MailingBundle\BusinessManager\MailingManager
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"
+            mailer: "@mailer"
+            templating: "@templating"
+            notificationManager: "@crm.notificationBundle.notificationManager"
+            taskManager: "@crm.sandboxbundle.taskManager"

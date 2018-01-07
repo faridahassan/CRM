@@ -1,0 +1,46 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+    crm.authentication.handler.login_success_handler.class: Crm\UserBundle\Security\Authentication\Handler\LoginSuccessHandler
+
+services:
+   app.form.registration:
+        class: Crm\FosUserBundle\Form\Type\RegistrationFormType
+        tags:
+            - { name: form.type, alias: app_user_registration }
+   my_user_provider:
+        class: Crm\UserBundle\Security\Core\User\FOSUBUserProvider
+        arguments: [@fos_user.user_manager, {google: google_id}]
+   crm.sandboxbundle.databaseListManager:
+     class: Crm\SandboxBundle\BusinessManager\CallCenter\DatabaseListManager
+     arguments: 
+        entityManager: "@doctrine.orm.entity_manager"
+   crm.sandboxbundle.callsManager:
+     class: Crm\SandboxBundle\BusinessManager\CallCenter\CallsManager
+     arguments: 
+        entityManager: "@doctrine.orm.entity_manager"
+   crm.sandboxbundle.dealsManager:
+     class: Crm\SandboxBundle\BusinessManager\Common\DealsManager
+     arguments: 
+        entityManager: "@doctrine.orm.entity_manager" 
+   crm.sandboxbundle.leadsManager:
+     class: Crm\SandboxBundle\BusinessManager\Common\LeadsManager
+     arguments: 
+        entityManager: "@doctrine.orm.entity_manager"
+        notificationManager: "@crm.notificationBundle.notificationManager"
+   crm.sandboxbundle.taskManager:
+     class: Crm\SandboxBundle\BusinessManager\Common\TaskManager
+     arguments: 
+        entityManager: "@doctrine.orm.entity_manager"
+   login_success_handler:
+        class:      %crm.authentication.handler.login_success_handler.class%
+        arguments:  [@router, @security.context]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+   crm.auditingbundle.auditTransformer:
+      class: Crm\AuditingBundle\BusinessManager\AuditTransformer
+      arguments:
+        reader: "@simplethings_entityaudit.reader"
+   # service_name:
+   #     class: AppBundle\Directory\ClassName
+   #     arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

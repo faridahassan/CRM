@@ -1,0 +1,30 @@
+propertytype:
+    path:     /
+    defaults: { _controller: "CrmBrookerInventoryBundle:PropertyType:index" }
+
+propertytype_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmBrookerInventoryBundle:PropertyType:show" }
+
+propertytype_new:
+    path:     /new
+    defaults: { _controller: "CrmBrookerInventoryBundle:PropertyType:new" }
+
+propertytype_create:
+    path:     /create
+    defaults: { _controller: "CrmBrookerInventoryBundle:PropertyType:create" }
+    methods:  POST
+
+propertytype_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmBrookerInventoryBundle:PropertyType:edit" }
+
+propertytype_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmBrookerInventoryBundle:PropertyType:update" }
+    methods:  [POST, PUT]
+
+propertytype_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmBrookerInventoryBundle:PropertyType:delete" }
+    methods:  [POST, DELETE]

@@ -1,0 +1,199 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{{parent()}}
+
+{% endblock %}
+{% block page_content %}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Assign Leads</h3>
+
+				<div class="panel-options">
+					<a href="#" data-toggle="panel">
+						<span class="collapse-icon">&ndash;</span>
+						<span class="expand-icon">+</span>
+					</a>
+					<a href="#" data-toggle="remove">
+						&times;
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-4 col-md-offset-8 ">
+						<div class="col-md-12">
+							{% if is_granted('ROLE_SALES_MANAGER') %}
+															Include Me
+							<input id="includeMe" type="checkbox" class="iswitch iswitch-info"> 	
+							{% endif %}
+
+							<button onclick="shuffleLead()"class="btn btn-info pull-right">{% if is_granted('ROLE_SALES_MANAGER') %}Distribute on team members {% else %}
+							    Distribute on team leaders{% endif %}</button>
+						</div>
+					</div>
+				</div>
+				<script type="text/javascript">
+				jQuery(document).ready(function($)
+				{
+					$("#Leads").dataTable({
+						responsive:true,
+						"order": [[ 3, "desc" ]]
+					});
+				});
+				</script>
+				{% for flashMessage in app.session.flashbag.get('notice') %}
+				<div class="alert alert-success">
+					{{flashMessage}}
+				</div>
+
+				{% endfor %}	
+				<table class="display responsive no-wrap table table-bordered table-striped table-hover" width="100%" id="Leads">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Mobile</th>
+							<th>Creation Date</th>
+							<th>Created By</th>
+							<th>Managed By</th>
+							<th>Agent</th>
+						</tr>
+					</thead>
+
+					
+					<tbody>
+						{% for lead in leads %}
+						<tr>
+							{% if lead.contact is not null %}
+								<td><a href="{{path('sales_dashboard_admin_contact_history', {contact: lead.contact.id})}}">{{lead.contact.name}}</a></td>
+								<td>{{lead.contact.email}}</td>
+								<td>{{(lead.contact.mobile)}}</td>
+							{% else %}
+								<td></td>
+								<td></td>
+								<td></td>
+							{% endif %}
+							 {% if lead.date is not null %}
+								<td>{{lead.date|date('Y-m-d')}}</td>
+							 {% else %}
+							 <td>N/A</td>
+							{% endif %}
+							<td>
+								{% if lead.user %}
+									{{lead.user.name}}
+								{% endif %}
+							</td>
+							<td>
+								{% if lead.owner %}
+									{{lead.owner.name}}
+								{% endif %}
+							</td>
+							<td class="text-center">
+								<div class="form-group">
+									
+									
+									<script type="text/javascript">
+										jQuery(document).ready(function($)
+										{
+											$("#s2example-{{lead.id}}").select2({
+												placeholder: 'Select Agent...',
+												allowClear: true
+											}).on('select2-open', function()
+											{
+												// Adding Custom Scrollbar
+												$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+											});
+											
+										});
+									</script>
+									
+									<select class="form-control" id="s2example-{{lead.id}}">
+										{% if lead.assignedSalesRep is not null %}
+											<option selected="selected">{{lead.assignedSalesRep.name}}</option>
+										{% else %}
+											<option selected="selected"></option>
+										{% endif %}
+										
+										{% for salesRep in salesReps %}
+											<option id="{{salesRep.id}}" leadId="{{lead.id}}">{{salesRep.name}}</option>
+										{% endfor %}
+
+									</select>
+
+									<script>
+										$('#s2example-{{lead.id}}').change(function() {
+											var salesRep = $('#s2example-{{lead.id}} option:selected').attr("id");
+											var leadId = $('#s2example-{{lead.id}} option:selected').attr("leadId");
+											var url = Routing.generate('sales_assign_lead_sales_rep', { lead : leadId, salesRep : salesRep});
+											$.ajax({
+												type:"GET",
+												url : url,
+												success : function(response) {
+													toastr.success('Successfuly updated assignment');
+												},
+												error: function(e) {
+													toastr.error('<i class=fa-info></i>An error has occured, please re-assign the Sales Rep.');
+												}
+											});
+										});
+									</script>	
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+
+
+
+
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+<script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+
+
+<script type="text/javascript">
+		function shuffleLead(){
+				var includeMe = $('#includeMe').val();
+				if(includeMe =="on")
+					includeMe = 1;
+				else
+					includeMe = 0;
+
+				var url = Routing.generate('sales_shuffle_lead', {includeMe: includeMe});
+				$.ajax({
+						type: 'GET',
+						url: url,
+						success: function(response){
+								toastr.success('Leads are shuffled!');
+								var url = Routing.generate('sales_assign_leads');
+								window.location = url;
+						},
+						error: function() {
+							toastr.error('<i class=fa-info></i>An error has occured while shuffling leads, please try again!')
+							// alert("An error has occured while setting potential lead, please try again!");
+						}
+					});
+			}
+</script>
+
+
+{% endblock %}

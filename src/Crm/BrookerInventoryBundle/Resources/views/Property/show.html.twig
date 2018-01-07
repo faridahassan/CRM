@@ -1,0 +1,680 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_data %}
+  <style type="text/css">
+    .gallery-image-container img {
+      float: left;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .clip-image{
+      height:300px;
+      overflow: hidden;
+    }
+  </style>
+{% endblock %}
+{% block page_content %}
+
+  {% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false, 'include_bootstrap': false} %}    
+  <div class="row">
+    <div class="col-sm-12">
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">Admin Information</div>
+        <div class="panel-body">
+           <div class="row">
+                      <div class="col-md-12 text-right">
+                  {% if entity.deal is empty %}
+                 <a href="{{url('deal_new', {id: entity.id})}}" class="btn btn-primary btn-single btn-sm">  
+                     Sell Property
+                 </a>
+                 {% else %}
+                 <a href="{{url('sales_show_deal', {deal: entity.deal.id})}}" class="btn btn-primary btn-single btn-sm">  
+                     View Deal
+                  </a>
+                 {% endif %}
+                 <a href="javascript:;" onclick="jQuery('#modal-6').modal('show', {backdrop: 'static'});" class="btn btn-primary btn-single btn-sm">Send Email</a>
+                 <a href="{{url('property_edit', {id: entity.id})}}" class="btn btn-primary btn-single btn-sm">
+                     Edit Property
+                 </a>
+                 <a href="{{url('property_gallery', {id: entity.id})}}" class="btn btn-primary btn-single btn-sm">
+                     View Gallery
+                 </a>
+                 {% if hasHistory %}
+                   <a href="{{url('property_history', {propertyId: entity.id})}}" class="btn btn-primary btn-single btn-sm">
+                       History
+                   </a>
+                {% endif %}
+             </div>
+          </div>
+          <div class="row">
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MARKETING') %}
+              <label class="control-label col-md-2">Featured</label>
+              <div class="col-md-4">
+                {{(entity.featured)}}
+              </div>
+              <div id="slider" class="hidden">
+                <label class="col-md-2 control-label">Slider</label>
+                <div class="col-md-4">
+                  {{(entity.superFeatured)}}
+                </div>
+              </div>
+              <script type="text/javascript">
+                $("#crm_brookerinventorybundle_property_featured").change(function(){
+                  if($(this).is(":checked"))
+                    $("#slider").removeClass("hidden")
+                  else
+                    $("#slider").addClass("hidden")
+                })
+              </script>
+
+            {% endif %}
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Prime</i></label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.prime)}}
+              </p>
+            </div>
+
+            <label class="col-sm-2 control-label">Active</i></label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.isActive)}}
+              </p>
+
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Exclusivity</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.exclusivity)}}
+              </p>
+            </div>
+            <script type="text/javascript">
+              jQuery(document).ready(function($)
+              {
+                $("#crm_brookerinventorybundle_property_exclusivity").selectBoxIt().on('open', function()
+                {
+                          // Adding Custom Scrollbar
+                          $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                        });
+              });
+            </script>
+            <label class="col-sm-2 control-label">Legal</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.legal)}}
+              </p>
+            </div>
+            <script type="text/javascript">
+              jQuery(document).ready(function($)
+              {
+                $("#crm_brookerinventorybundle_property_legal").selectBoxIt().on('open', function()
+                {
+                          // Adding Custom Scrollbar
+                          $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                        });
+              });
+            </script>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Commercial</label>
+            <div class="col-sm-4">
+              {{(entity.commercial)}}
+            </div>
+            <label class="col-sm-2 control-label">Broker <i>*if any</i></label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.broker)}}
+              </p>
+              <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                  $("#crm_brookerinventorybundle_property_broker").select2({
+                    placeholder: 'Select a broker',
+                    allowClear: true
+                  }).on('select2-open', function()
+                  {
+                    // Adding Custom Scrollbar
+                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                  });
+                });
+              </script>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Links</label>
+            <div class="col-sm-10">
+              <p>
+                {{(entity.links)}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Property Information</div>
+        <div class="panel-body">
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-5">Name</label>
+            <div class="col-sm-10">
+              {{(entity.name)}}
+              
+            </div>
+
+
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Unit #</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.unitNumber)}}
+              </p>
+            </div>
+            <label class="col-sm-2 control-label">Building #</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.buildingNumber)}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Location</label>
+            <div class="col-sm-4">
+              <div class="date-and-time">
+                {{(entity.location)}}
+                <script type="text/javascript">
+                  jQuery(document).ready(function($)
+                  {
+                    $("#crm_brookerinventorybundle_property_location").select2({
+                      placeholder: 'Select a location',
+                      allowClear: true
+                    }).on('select2-open', function()
+                    {
+                      // Adding Custom Scrollbar
+                      $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                  });
+                </script>
+              </div>
+            </div>
+            <label class="col-sm-2 control-label">Purpose</label>
+            <div class="col-sm-4">
+              {{(entity.sellingType)}}
+              <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                  $("#crm_brookerinventorybundle_property_sellingType").selectBoxIt().on('open', function()
+                  {
+                          // Adding Custom Scrollbar
+                          $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                        });
+                });
+              </script>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Developer</label>
+            <div class="col-sm-4">
+              <div class="date-and-time">
+                {{(entity.developer)}}
+                <script type="text/javascript">
+                  jQuery(document).ready(function($)
+                  {
+                    $("#crm_brookerinventorybundle_property_developer").select2({
+                      placeholder: 'Select a developer',
+                      allowClear: true
+                    }).on('select2-open', function()
+                    {
+                    // Adding Custom Scrollbar
+                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                  });
+                  });
+                </script>
+              </div>
+            </div>
+
+            <label class="col-sm-2 control-label">Phase</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.phase)}}
+                
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Project</label>
+            <div class="col-sm-4">
+              <div class="date-and-time">
+                {{(entity.project)}}
+                <script type="text/javascript">
+                  jQuery(document).ready(function($)
+                  {
+                    $("#crm_brookerinventorybundle_property_project").select2({
+                      placeholder: 'Select a project',
+                      allowClear: true
+                    }).on('select2-open', function()
+                    {
+                      // Adding Custom Scrollbar
+                      $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                    });
+                  });
+                </script>
+              </div>              
+            </div>
+
+            <label class="col-sm-2 control-label">Address</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.address)}}
+              </p>
+            </div>
+            <div class="row">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Property Type</label>
+            <div class="col-sm-4">
+              {{ (entity.propertyType is not null) ? entity.propertyType : entity.propertyTypeDynamic}}
+            </div>
+            <label class="col-sm-2 control-label">Model</label>
+            <div class="col-sm-4">
+              {{(entity.propertyType)}}
+              
+            </div>
+          </div>
+          <script type="text/javascript">
+            $("#crm_brookerinventorybundle_property_featured").change(function(){
+              if($(this).is(":checked")){
+                $("#onWebsite").removeClass("hidden")
+              }
+              else{
+                $("#onWebsite").addClass("hidden")
+              }
+            })
+            $("#crm_brookerinventorybundle_property_superFeatured").change(function(){
+              if($(this).is(":checked")){
+                $("#sliderImage").removeClass("hidden")
+              }
+              else{
+                $("#sliderImage").addClass("hidden")
+              }
+            })
+          </script>
+          <div id="onWebsite" class="hidden">
+            <div class="row">
+              <label class="col-sm-2 control-label" for="field-5">Website Title</label>
+              <div class="col-sm-4">
+                {{(entity.websiteTitle)}}
+              </div>
+              <label class="col-sm-2 control-label" for="field-5">Website Info</label>
+              <div class="col-sm-4">
+                {{(entity.websiteInfo)}}
+              </div>
+            </div>
+            <div class="row hidden" id="sliderImage" >
+              <label class="col-sm-2 control-label" for="field-5">Slider Image<br><span style="font-size:12px;">(2460*1640)</span></label>
+              <div class="col-sm-10 clip-image">
+                {{(entity.slider)}}
+              </div>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 control-label" for="field-5">Thumbnail<br><span style="font-size:12px;">(1230*820)</span></label>
+              <div class="col-sm-10 clip-image">
+                {{(entity.thumbnail)}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Land Area(sqm)</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.landArea)}}
+              </p>
+              
+            </div>
+            <label class="col-sm-2 control-label" for="field-2">Built Area(sqm)</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.buildupArea)}}
+              </p>
+              
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Garden Area</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.gardenArea)}}
+              </p>
+              
+            </div>
+            <label class="col-sm-2 control-label" for="field-2">Floors</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.floors)}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Bedrooms</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.bedrooms)}}
+              </p>
+            </div>
+            <label class="col-sm-2 control-label" for="field-2">Bathrooms</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.bathrooms)}}
+              </p>
+            </div>
+
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Features (Website: Amenities) </label>
+            <div class="col-sm-10">
+              {% for feature in entity.features %}
+                  {{feature.name}}
+              {% endfor %}
+              
+              <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                  $("#crm_brookerinventorybundle_property_features").multiSelect({
+                    afterInit: function()
+                    {
+                            // Add alternative scrollbar to list
+                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar();
+                          },
+                          afterSelect: function()
+                          {
+                            // Update scrollbar size
+                            this.$selectableContainer.add(this.$selectionContainer).find('.ms-list').perfectScrollbar('update');
+                          }
+                        });
+                });
+              </script>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Finishing</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.finishing)}}
+              </p>
+
+            </div>
+            <label class="col-sm-2 control-label" for="field-2">Furnishing</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.furnishing)}}
+              </p>
+            </div>
+
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">View</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.view)}}
+              </p>
+            </div>
+
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Delivered </label>
+            <div class="col-sm-4">
+              {{(entity.delivered)}}
+            </div>
+            <div id="deliveryDate">
+              <label class="col-sm-2 control-label" for="field-2">Delivery date</label>
+              <div class="col-sm-4">
+                {{(entity.deliveryDate| date('d-M-y'))}}
+              </div>
+            </div>
+          </div>
+          <script type="text/javascript">
+            $("#crm_brookerinventorybundle_property_delivered").change(function(){
+              if($(this).is(":checked"))
+                $("#deliveryDate").addClass("hidden")
+              else
+                $("#deliveryDate").removeClass("hidden")
+            })
+          </script>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Notes</label>
+            <div class="col-sm-10">
+              <p>
+                {{(entity.notes)}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Payment Information</div>
+        <div class="panel-body">
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Price</label>
+            <div class="col-sm-4">
+              {{(entity.askingPrice)}}
+              
+            </div>
+            <label class="col-sm-2 control-label">Final Price</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.totalPrice)}}
+              </p>  
+              
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Rent Price</label>
+            <div class="col-sm-4">
+              {{(entity.rentPrice)}}
+              
+            </div>
+            <label class="col-sm-2 control-label">Rent Final Price</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.rentFinalPrice)}}
+              </p>  
+              
+            </div>
+          </div>
+          <div class="row-separator"></div>
+          <div class="row">
+            <label class="col-sm-2 control-label" for="field-2">Transfer</label>
+            <div class="col-sm-4">
+              <p>
+                {{entity.transfer}}
+              </p>
+              
+            </div>
+            {# <label id="transferValue" class="col-sm-1 control-label"></label> #}
+            <label class="col-sm-2 control-label" for="field-2">Maintenance</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.maintenance)}}
+              </p>
+              
+            </div>
+            {# <label class="col-sm-1" id="maintenanceValue"></label> #}
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Payment Plan</label>
+            <div class="col-sm-4">
+              {{(entity.paymentPlan)}}
+              <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                  $("#crm_brookerinventorybundle_property_paymentPlan").select2({
+                    placeholder: 'Select a developer',
+                    allowClear: true
+                  }).on('select2-open', function()
+                  {
+                    $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                  });
+                });
+              </script>
+            </div>
+            <div id="instalmentDetails" class="hidden">
+              <label class="col-sm-2 control-label">Installments Details</label>
+              <div class="col-sm-4">
+                {{(entity.instalments)}}
+              </div>
+              <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                  var plan = $('#crm_brookerinventorybundle_property_paymentPlan').find(":selected").text();
+                  if(plan == "Installments")
+                  {
+                    $("#instalmentDetails").removeClass("hidden") 
+                  } 
+                  else{
+                    $("#instalmentDetails").addClass("hidden")  
+                  }
+                  $('#crm_brookerinventorybundle_property_paymentPlan').on('change', function (e) {
+                      
+                      var plan =$("option:selected", this).text();
+                      console.log(plan)
+                    if(plan == "Installments")
+                    {
+                      $("#instalmentDetails").removeClass("hidden") 
+                    }
+                    else{
+                      $("#instalmentDetails").addClass("hidden")    
+                    }
+                  });
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Owner Information</h3>
+        </div>
+        <div class="panel-body">
+          <h5>Current Owner Information</h5>
+          <div class="row">
+            <label class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.contactName)}}
+              </p>
+            </div>
+            <label class="col-sm-2 control-label">Number</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.contactNumber)}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">E-mail</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.contactEmail)}}
+              </p>
+            </div>
+            <label class="col-sm-2 control-label">Address</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.contactAddress)}}
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-2 control-label">Last Sold Date</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.soldDate | date('d-M-Y'))}}
+              </p>
+            </div>
+            <label class="col-sm-2 control-label">Last Sold Price</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.soldPrice)}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2 control-label">Eagerness To Sell</label>
+            <div class="col-sm-4">
+              <p>
+                <span class="date-time">
+                  {{(entity.eagerness)}}
+                </span>
+              </p>
+            </div>
+            <script type="text/javascript">
+              jQuery(document).ready(function($)
+              {
+                $("#crm_brookerinventorybundle_property_eagerness").selectBoxIt().on('open', function()
+                {
+                          // Adding Custom Scrollbar
+                          $(this).data('selectBoxSelectBoxIt').list.perfectScrollbar();
+                        });
+              });
+            </script>
+          </div>
+          <div class="row-separator"></div>
+          <h5>Previous Owner Information</h5>
+          <div class="row">
+            <label class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.previousContactName)}}
+              </p>
+            </div>
+            <label class="col-sm-2 control-label">Number</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.previousContactNumber)}}
+              </p>
+            </div>
+          </div>
+          <div class="row">
+
+            <label class="col-sm-2 control-label">E-mail</label>
+            <div class="col-sm-4">
+              <p>
+                {{(entity.previousContactEmail)}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+{% endblock %}
+{% block javascripts %}
+  {{parent()}}
+
+  <script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+  <script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+  <script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+  <script src="{{asset('assets/js/colorpicker/bootstrap-colorpicker.min.js')}}"></script>
+  <script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+  <script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+  <script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+  <script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+  <script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+  <script src="{{asset('assets/js/handlebars.min.js')}}"></script>
+  <link rel="stylesheet" href="{{asset('assets/js/multiselect/css/multi-select.css')}}">
+  <script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+  <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+  <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+{% endblock %}

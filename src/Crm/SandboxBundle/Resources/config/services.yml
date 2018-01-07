@@ -1,0 +1,7 @@
+services:
+#    crm_sandbox.example:
+#        class: Crm\SandboxBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    crm_sandbox.form.type.deal:
+        class : Crm\SandboxBundle\Form\DealType
+        arguments: [ "@doctrine.orm.entity_manager" ]

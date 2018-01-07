@@ -1,0 +1,188 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+
+{% endblock %}
+{% block page_content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Manage Users in {{app.user.ledteam.name}}</h3>
+
+                <div class="panel-options">
+                    <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                    </a>
+                    <a href="#" data-toggle="remove">
+                        &times;
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <script type="text/javascript">
+                jQuery(document).ready(function($)
+                {
+                    $("#users").dataTable({});
+                    $(window).bind('resize', function () {
+                        oTable.fnAdjustColumnSizing();
+                    } );
+                });
+                </script>
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success">
+                    {{flashMessage}}
+                </div>
+
+                {% endfor %}    
+                <table class="table table-bordered table-striped nowrap" id="users">
+                    <thead>
+                        <tr>
+                            <th>Rep. Name</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Current Target</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>                    
+                    <tbody>
+                        {% for user in salesManagers %}
+                        <tr>
+                            <td>{{user.username}}</td>
+                            <td>{{user.name}}</td>
+                            <td>{{user.email}}</td>
+                            <td id="renew-target-{{user.id}}">
+                               {{user.target|number_format}}
+                            </td>
+                            <td class="text-center">
+
+                                <a href="javascript:;" class="btn btn-primary btn-single btn-sm announce" myTarget="{{user.target}}" myName="{{user.name}}" myId="{{user.id}}">Target</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-6">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="agentNameModal"></h4>
+                <h4 class="modal-title" id="agentTargetModal"></h4>
+            </div>
+            
+            <div class="modal-body">
+            
+                <div class="row">
+                    <div class="col-md-6">
+                        
+                        <div class="form-group">
+                            
+                            <input type="text" class="form-control" id="field-1" placeholder="Target..">
+                        </div>  
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                <button onClick="assignTarget()" type="button" class="btn btn-info">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modal-6">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="agentNameModal"></h4>
+                <h4 class="modal-title" id="agentTargetModal"></h4>
+            </div>
+            
+            <div class="modal-body">
+            
+                <div class="row">
+                    <div class="col-md-6">
+                        
+                        <div class="form-group">
+                            
+                            <input type="text" class="form-control" id="field-1" placeholder="Target..">
+                        </div>  
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                <button onClick="assignTarget()" type="button" class="btn btn-info">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script type="text/javascript">
+    $(document).ready(function(){
+       $(".announce").click(function(){ 
+            window.userName = $(this).attr("myName");
+            window.userId = $(this).attr("myId");
+            $("#agentNameModal").text("Set target for: "+$(this).attr('myName'));
+            $("#agentTargetModal").text("Current target: "+$(this).attr('myTarget'));
+            $("#modal-6").modal("show");
+       });
+    });
+
+    function assignTarget(){
+        $("#modal-6").modal("hide");
+        var target = $("#field-1").val();
+        var url = Routing.generate('crm_sandbox_user_management_assign_target', { user : window.userId, target : target});
+        $.ajax({
+            type:"GET",
+            url : url,
+            dataType: 'json',
+            success : function(response) {
+                var toUpdate = "#renew-target-" + response.userId
+                $(toUpdate).html(response.amount)
+                toastr.success('New target assigned successfully!');
+                
+            },
+            error: function() {
+                toastr.error("An error has occured, please try again!");
+            }
+        });
+    }
+    
+</script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+<script src="{{asset('assets/js/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{asset('assets/js/datatables/yadcf/jquery.dataTables.yadcf.js')}}"></script>
+<script src="{{asset('assets/js/xenon-toggles.js')}}"></script>
+<script src="{{asset('assets/js/toastr/toastr.min.js')}}"></script>
+{% endblock %}

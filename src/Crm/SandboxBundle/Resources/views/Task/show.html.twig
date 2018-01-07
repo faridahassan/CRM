@@ -1,0 +1,53 @@
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+   <i class="fa fa-tasks"></i>
+   {% if entities %}
+      <span class="badge badge-red">{{ entities | length}}</span>
+      {% else %}
+      <span class="badge badge-green">{{ entities | length}}</span>
+   {% endif %}
+   
+</a>
+<ul class="dropdown-menu messages">
+  {% if entities %}
+   <li>
+    <ul class="dropdown-menu-list list-unstyled ps-scrollbar ps-container ps-active-y">
+        {% for entity in entities %}
+            <li class="{% if entity.done ==  false %}active{% endif %}"><!-- "active" class means message is unread -->
+              {% set iscall = 0 %}
+                {% if entity.type =="call" %}
+                  {% set iscall = 1 %}
+                {% endif %}
+              <a href="{{path('callcenter_log_outbound_call', {id: entity.lead.id, orientation: iscall, task: entity.id }) }}">
+
+                <span class="line">
+                    <strong>
+                        {% if iscall %}
+                            <i class="fa fa-phone"></i>
+                            {% else %}
+                            <i class="fa fa-users"></i>
+                        {% endif %}
+                        {{entity.lead.contact.name|default('N/A')}}
+                    </strong>
+                    <span class="light small"> {{entity.date | date('d-m-y | H:m')}}</span>
+                </span>
+
+                <span class="line desc small">
+                    {{entity.comment}}
+                </span>
+            </a>
+        </li>
+    {% endfor %}
+    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; right: 2px; height: 300px;"><div class="ps-scrollbar-y" style="top: 0px; height: 150px;"></div></div></ul>
+</li>
+{% else %}
+  <li class="external">
+    <a href="void:javascript(0)" style="cursor:default">
+      <span>You have nothing to be reminded of.</span>
+       <i class="fa-link-ext"></i>
+    </a>
+  </li>    
+{% endif %}
+
+</ul>
+
+

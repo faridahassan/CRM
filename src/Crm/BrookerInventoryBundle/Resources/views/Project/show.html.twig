@@ -1,0 +1,342 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+<link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+{% endblock %}
+{% block page_data %}
+<script>
+    var xenonPalette = ['#68b828','#7c38bc','#0e62c7','#fcd036','#4fcdfc','#00b19d','#ff6264','#f7aa47'];
+</script>
+{% endblock %}
+{% block page_content %}
+{% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false, 'include_bootstrap': false} %}    
+<div class="row">
+    <div class="col-md-12">
+
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            
+            <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>Well done!</strong> {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <form class="form-horizontal">
+            <div id="brokerColor" class="panel panel-color panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">General info</h3>
+                    <div class="panel-options">
+                        <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                        </a>
+                        <a href="#" data-toggle="remove">
+                        &times;
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-md-6  col-md-offset-6 text-right">
+                                 <a href="{{path('project_gallery', {id: project.id})}}" class="btn btn-primary btn-single btn-sm">
+                                     View Gallery
+                                 </a>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-4">
+                            <div class="date-and-time">
+                                {{project.name}}
+                            </div>
+                        </div>
+                        <label class="col-sm-2 control-label">Slogan</label>
+                        <div class="col-sm-4">
+                            <div class="date-and-time">
+                                {{project.slogan}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Developer</label>
+                        <div class="col-sm-4">
+                            <div class="date-and-time">
+                                {{project.developer}}
+                            </div>
+                        </div>
+                        {# <label class="col-sm-2 control-label">Properties</label>
+
+                        <div class="col-sm-4">
+
+                            <div class="date-and-time">
+                                {{project.properties}}
+                            </div>
+                        </div> #}
+                        
+                        
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Land Area</label>
+                        <div class="col-sm-4">
+                            <div class="date-and-time">
+                                {{project.landArea}}
+                            </div>
+                        </div>
+                        <label class="col-sm-2 control-label">Number of units</label>
+                        <div class="col-sm-4">
+                            {{project.numberOfUnits}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Unit Types</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.unitTypes}}
+                            </p>
+                        </div>
+                        <label class="col-sm-2 control-label">Average Price</label>
+                        <div class="col-sm-4">
+                            {{project.averagePrice}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Project Built Density</label>
+                        <div class="col-sm-4">
+                            {{project.projectBuiltDensity}}
+                        </div>
+                        <label class="col-sm-2 control-label">Maximum Height</label>
+                        <div class="col-sm-4">
+                            {{project.maxHeight}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.description}}
+                            </p>
+                        </div>
+                        <label class="col-sm-2 control-label">Amenities</label>
+                        <div class="col-sm-4">
+
+                            <p>
+                                {% for amenity in project.amenities %}
+                                    {{amenity}} 
+                                {% endfor %}
+                                
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">finishing</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.finishing}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Location Info</h3>
+                    <div class="panel-options">
+                        <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                        </a>
+                        <a href="#" data-toggle="remove">
+                        &times;
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {# 
+                    <div class="alert alert-error">
+                        {{ form_errors(form) }}
+                    </div>
+                    #}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Address</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.address}}
+                            </p>
+                        </div>
+                        <label class="col-sm-2 control-label">GPS Coordinates</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.gpsCoordinates}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Landmarks</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.landMarks}}
+                            </p>
+                        </div>
+                        <label class="col-sm-2 control-label">Location</label>
+                        <div class="col-sm-4">
+                            <div class="date-and-time">
+                                {{project.location}}
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Phasing &amp; Delivery</h3>
+                    <div class="panel-options">
+                        <a href="#" data-toggle="panel">
+                        <span class="collapse-icon">&ndash;</span>
+                        <span class="expand-icon">+</span>
+                        </a>
+                        <a href="#" data-toggle="remove">
+                        &times;
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Number of phases</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.numberOfPhases}}
+                            </p>
+                        </div>
+                        <label class="col-sm-2 control-label">Current Phase</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.currentPhase}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-2">Next Delivery By</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.nextDeliveryBy|date('d/m/Y')}}
+                            </p>
+                            {# {{form_errors(project.buildupArea)}}         #}
+                        </div>
+                        <label class="col-sm-2 control-label">Payment Plans</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.paymentPlans}}
+                            </p>
+                            {# {{form_errors(project.landArea)}}        #}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="field-2">Master Plan</label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.masterPlan}}
+                            </p>
+                            {# {{form_errors(project.gardenArea)}}      #}
+                        </div>
+                        <label class="col-sm-2 control-label" for="field-2"></label>
+                        <div class="col-sm-4">
+                            <p>
+                                {{project.masterPlan}}
+                            </p>
+                            {# {{form_errors(project.gardenArea)}}      #}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{parent()}}
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $('#crm_brookerinventorybundle_property_deliveryDate').datepicker( {
+            format: "mm-yyyy",
+            startView: "months",
+            minViewMode: "months"
+        });
+        $('.inputNumberss').keyup(function(event){
+              
+              var $this = $(this);
+              var num = $this.val().replace(/,/gi, "").split("").reverse().join("");
+              
+              var num2 = RemoveRougeChar(num.replace(/(.{3})/g,"$1,").split("").reverse().join(""));
+              
+              console.log(num2);
+              
+              
+              // the following line has been simplified. Revision history contains original.
+              $this.val(num2);
+          });
+        $('.inputNumberss').keydown(function(event){
+            // skip for arrow keys
+              if(event.which >= 37 && event.which <= 40){
+                  event.preventDefault();
+              }
+        });
+        $("#crm_brookerinventorybundle_property_broker").on('input', function() {
+            var broker = $(this).val();
+            if(broker.length > 0)
+                $("#brokerColor").attr('class',  'panel panel-color panel-warning');
+            else
+                $("#brokerColor").attr('class',  'panel panel-color panel-success');
+    
+        });
+    });
+    function RemoveRougeChar(convertString){
+        
+        
+        if(convertString.substring(0,1) == ","){
+            
+            return convertString.substring(1, convertString.length)            
+            
+        }
+        return convertString;
+        
+    }
+</script>
+<script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+<script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+<script src="{{asset('assets/js/colorpicker/bootstrap-colorpicker.min.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+<script src="{{asset('assets/js/tagsinput/bootstrap-tagsinput.min.js')}}"></script>
+<script src="{{asset('assets/js/typeahead.bundle.js')}}"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+<script>
+    var unsaved = false;
+    
+    $(":input").change(function(){ //trigers change in all input fields including text type
+        unsaved = true;
+    });
+    
+    function unloadPage(){ 
+        if(unsaved){
+            return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+        }
+    }
+    
+    window.onbeforeunload = unloadPage;
+</script>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+{% endblock %}
+
+{% block page_content %}
+
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<a href="{{path('sales_dashboard_specific_leads', {type: 1, agent: showingId})}}">
+					<div class="xe-widget xe-counter text-center"  data-count=".num" data-from="0" data-to="{{potentialLeads}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-cloud"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>Potential Leads</span>
+						</div>
+					</div>
+				</a>
+				<a href="{{path('sales_dashboard_specific_leads', {type: 2, agent: showingId})}}">
+					<div class="xe-widget xe-counter text-center xe-counter-blue"  data-count=".num" data-from="0" data-to="{{nonPotentialLeads}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-lightbulb"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>No Potential Leads</span>
+						</div>
+					</div>
+				</a>
+				<a href="{{path('sales_dashboard_specific_leads', {type: 3, agent: showingId})}}">
+					<div class="xe-widget xe-counter text-center xe-counter-red"  data-count=".num" data-from="0" data-to="{{trashedLeads}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-user"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>Trashed Leads</span>
+						</div>
+					</div>
+				</a>
+				<a href="{{path('sales_dashboard_specific_leads', {type: 4, agent: showingId})}}">
+					<div class="xe-widget xe-counter text-center xe-counter-red"  data-count=".num" data-from="0" data-to="{{clients}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-user"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>Clients</span>
+						</div>
+					</div>
+				</a>
+				{# <a href="{{path('sales_dashboard_leads', {agent: showingId})}}"> #}
+					<div class="xe-widget xe-counter text-center xe-counter-red"  data-count=".num" data-from="0" data-to="{{total}}"  data-duration="2">
+						<div class="xe-icon">
+							<i class="linecons-user"></i>
+						</div>
+						<div class="xe-label">
+							<strong class="num">0.0%</strong>
+							<span>Total Leads</span>
+						</div>
+					</div>
+				{# </a> #}
+			</div>
+		</div>
+	</div>
+	{# <div class="col-sm-9">
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-yellow"  data-count=".num" data-from="0" data-to="{{target}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Target</span>
+				</div>
+			</div>
+		</div>
+		{% set percentageTartget = (totalClosedDeals / (target or 1) ) * 100 %}
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-yellow"  data-count=".num" data-from="0" data-to="{{percentageTartget|number_format(0)}}" data-suffix=" %" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Percentage Target</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-yellow"  data-count=".num" data-from="0" data-to="{{totalValue}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Total Value Of Deals</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-purple"  data-count=".num" data-from="0" data-to="{{totalClosedDeals}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Total Closed Deals</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="xe-widget xe-counter text-center xe-counter-gray"  data-count=".num" data-from="0" data-to="{{totalDealsInProgress}}" data-suffix=" EGP" data-duration="2">
+				<div class="xe-icon">
+					<i class="linecons-cloud"></i>
+				</div>
+				<div class="xe-label">
+					<strong class="num">0.0%</strong>
+					<span>Total Deals In Progress</span>
+				</div>
+			</div>
+		</div>
+		{% if isAll %}
+		<a href="{{path('sales_dashboard_upcoming_properties')}}">
+			<div class="col-sm-6">
+				<div class="xe-widget xe-counter text-center xe-counter-gray"  data-count=".num" data-from="0" data-to="{{instToBePaid}}" data-suffix=" EGP" data-duration="2">
+					<div class="xe-icon">
+						<i class="linecons-cloud"></i>
+					</div>
+					<div class="xe-label">
+						<strong class="num">0.0%</strong>
+						<span>Upcoming installments</span>
+					</div>
+				</div>
+			</div>
+		</a>
+		{% endif %}
+	</div> #}
+</div>
+			
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+
+
+	
+
+	<script src="{{asset('assets/js/xenon-widgets.js')}}"></script>
+	<script src="{{asset('assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
+	<script src="{{asset('assets/js/jvectormap/regions/jquery-jvectormap-world-mill-en.js')}}"></script>
+
+	<script src="{{asset('assets/js/devexpress-web-14.1/js/globalize.min.js')}}"></script>
+	<script src="{{asset('assets/js/devexpress-web-14.1/js/dx.chartjs.js')}}"></script>
+	<script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+	<script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+
+{% endblock %}

@@ -1,0 +1,434 @@
+{# src/Crm/WebsiteBundle/Resources/views/Page/index.html.twig #}
+{% extends 'WebsiteBundle::layout.html.twig' %}
+
+
+{% block body %}
+
+  <div  class="slider slider--wide slider-wide">
+    <div class="slider__block js-slick-slider">
+      {%for property in homepage_properties%}
+      <div class="slider__item">
+        <div class="slider__preview">
+          <div class="slider__img slider__img--lg"><img src="{{asset('/images/properties/' ~ property.folder ~ '/' ~ property.slider)}}"alt=""></div>
+          <div class="slider__img slider__img--sm"><img src="{{asset('/images/properties/' ~ property.folder ~ '/' ~ property.slider)}}" alt=""></div>
+        </div>
+        <div class="slider__caption">
+          <div class="slider__price">
+            
+            {% if property.sellingType == "Sale" %}
+              <span class="properties__price-period" style="color:black;font-size:17px">For Sale: </span> 
+              {% elseif property.sellingType == "Rent" %}
+              <span class="properties__price-period" style="color:black;font-size:17px">For Rent: </span>
+              {% elseif property.sellingType == "Both" %}
+              <span class="properties__price-period" style="color:black;font-size:17px">For Rent/Sale: </span>
+            {% endif %}
+            <strong>{{(property.askingPrice|number_format) | default('')}}</strong>
+            <samp class="samp-float-right">EGP</samp>
+          </div>
+
+
+          <!-- end of block .slider__price-->
+          <a href="{{url('WebsiteBundle_proprety_details', {property : property.id})}}" class="slider__address">
+            <b> {{property.propertyTypeDynamic.name | default('')}} </b>
+            <span class="slider__address-city">in {{property.project.name | default('')}}<br> {{property.location.name | default('')}} </span>
+          </a>
+          <!-- end of block .slider__address-->
+          <div class="slider__params">
+            <dl>
+             {#  <dt>Type:</dt>
+              <dd><b>{{property.propertyTypeDynamic.name | default('')}}</b></dd> #}
+              <dt>Land Area:  </dt>
+              <dd>{{property.landArea| default('')}} <spam class="sqmfont">Sqm</spam></dd>
+              <dt>Build Up Area:</dt>
+              <dd>{{property.buildUpArea| default('')}} <spam class="sqmfont">Sqm</spam></dd>
+            </dl>
+            <dl>
+              <dt>Bedrooms:</dt>
+              <dd>{{property.bedrooms| default('')}}</dd>
+              <dt>Bathrooms:</dt>
+              <dd>{{property.bathrooms| default('')}}</dd>
+            </dl>
+          </div>
+          <!-- end of block .slider__params--><a href="{{url('WebsiteBundle_proprety_details', {property : property.id})}}" class="slider__more">VIEW DETAILS</a>
+        </div>
+        <!-- end of block .slider__caption-->
+      </div>
+      {%endfor%}
+    </div>
+    <!-- end of block .slider__block-->
+    <div class="slider__controls">
+      <button class="slider__control slider__control--prev js-banner-prev"></button>
+      <button class="slider__control slider__control--next js-banner-next"></button>
+    </div>
+  </div>
+  <!-- END SLIDER-->
+  <!-- BEGIN SEARCH-->
+  <div class="search js-search-form search--index">
+    <div class="container">
+      <div class="search__header">
+        <h3 class="search__title">Find The Perfect Home</h3>
+        <!-- <h4 class="search__headline">Find your apartment or house on the exact key parameters. Adjust them so to find exactly what you need.</h4> -->
+      </div>
+      <!-- end of block .search__header-->
+      {{form_start(form)}}
+
+      <div class="search__row">
+        <div class="col-lg-3 col-md-4 col-sm-12">
+          <label for="in-contract-type" class="search__form-label control-label">Looking To</label>
+          {{form_widget(form.contract_type, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+        </div>
+         <div class="col-lg-3 col-md-4 col-sm-12">
+          <label for="in-contract-type" class="search__form-label control-label">Project</label>
+          {{form_widget(form.project, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12">
+          <label for="in-contract-type" class="search__form-label control-label">Location</label>
+          {{form_widget(form.location, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-12">
+          <label for="in-contract-type" class="search__form-label control-label">Property Type</label>
+          {{form_widget(form.property_type, {'attr': {'class' : 'search__form-control search__form-control--select form-control js-in-select'}})}}
+        </div>
+
+        <div class="col-lg-4 col-md-4   col-sm-12 ">
+          <label for="range_area" class="search__form-label control-label">Build Up Area range</label>
+          <div class="search__ranges">
+            {{form_widget(form.area, {'attr' : {'class' : 'js-search-range search__ranges-in'}})}}
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4  col-sm-12 ">
+          <label for="range_area" class="search__form-label control-label">Land Area range</label>
+          <div class="search__ranges">
+            {{form_widget(form.landarea, {'attr' : {'class' : 'js-search-range search__ranges-in'}})}}
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4  col-sm-12 ">
+          <label for="range_room" class="search__form-label control-label">Room range</label>
+          <div class="search__ranges">
+            {{form_widget(form.rooms, {'attr' : {'class' : 'js-search-range search__ranges-in'}})}}
+          </div>
+        </div>
+      </div>
+      <div class="search__row search__row--buttons">
+        <div class="search__buttons">
+          <button type="button" class="search__btn search__btn--reset js-form-reset">Clear</button>
+          {{form_widget(form.submit, {'attr' : {'class' : 'search__btn search__btn--action', 'label' : 'Search'}})}}
+        </div>
+      </div>
+      {{form_end(form)}}
+      <!-- end of block .search__form#search-form-->
+    </div>
+  </div>
+  <!-- END SEARCH-->
+  <!-- BEGIN PROPERTIES INDEX-->
+  <section class="properties properties--index">
+    <div class="container">
+      <header class="properties__header">
+        <h3 class="properties__title">Browse properties</h3>
+        <!-- <h4 class="properties__headline">Our agents are licensed professionals that specialise in searching, evaluating and negotiating the purchase of property on behalf of the buyer. They will sell you real estate. Insights, tips & how-to guides on selling property and preparing your home or investment property for sale and working to maximise your sale price.</h4> -->
+      </header>
+      <!-- end of block .properties__header-->
+      <div role="tabpanel">
+        <ul role="tablist" class="properties__filter">
+          <li class="active"><a href="#tab-all" aria-controls="tab-popular" role="tab" data-toggle="tab" class="properties__btn js-pgroup-tab">All</a></li>
+          {% for location in locations %}
+          <li ><a href="#tab-{{location|replace(' ', '-') }}" aria-controls="tab-popular" role="tab" data-toggle="tab" class="properties__btn js-pgroup-tab">{{location}}</a></li>
+                <!-- <li><a href="#tab-recent" aria-controls="tab-recent" role="tab" data-toggle="tab" class="properties__btn js-pgroup-tab">Recent</a></li>
+                <li><a href="#tab-featured" aria-controls="tab-featured" role="tab" data-toggle="tab" class="properties__btn js-pgroup-tab">Featured</a></li> -->
+                {%endfor%}
+              </ul>
+              <!-- end of block .properties__filter-->
+              <div class="tab-content properties__tab-content">
+                <div id="tab-all" class="properties__list tab-pane in active ">
+                    {% for popular in homepage_properties %}
+                        <div class="properties__item" style="opacity:1 !important;">
+                          <div class="properties__thumb"><a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="item-photo"><img src="{% if popular.gallery|length > 0 %}{{asset('/images/properties/' ~ popular.folder ~ '/gallery/' ~ popular.gallery[0])}}{% endif %}" alt="">
+                            <figure class="item-photo__hover item-photo__hover--params">
+                              {# <span class="properties__param-type">{{popular.propertyTypeDynamic.name | default('')}}</span>
+                              <span class="properties__param-type">in {{popular.location.name | default('')}}</span>
+                              <span class="properties__param-type">, {{popular.project.name | default('')}}</span> #}
+                              <span class="properties__param"><span class="properties__param-column"><span class="properties__param-label">Land Area:</span><span class="properties__param-value">{{popular.landArea | default('')}} <span class="sqmfont">sqm</span></span></span><span class="properties__param-column"><span class="properties__param-label">Beds:</span><span class="properties__param-value">{{popular.bedrooms | default('')}}</span></span><span class="properties__param-column"><span class="properties__param-label">Baths:</span><span class="properties__param-value">{{popular.bathrooms | default('')}}</span></span></span></figure></a>
+                             {#  <span class="properties__ribon">{{popular.propertyTypeDynamic.name | default('')}}</span> #}
+                               {% if popular.sellingType == "Sale" %}
+                                    <span class="properties__ribon">For Sale</span>
+                                {% endif %}
+                                {% if popular.sellingType == "Rent" %}
+                                    <span class="properties__ribon">For Rent</span>
+                                {% endif %}
+                                {% if popular.sellingType == "Both" %}
+                                    <span class="properties__ribon">For Sale / Rent </span>
+                                {% endif %}
+                            </div>
+                            <!-- end of block .properties__thumb-->
+
+                            <div class="properties__info"><a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__address"><span class="properties__address-street">{{popular.address}}</span>
+                               <span class="properties__address-city">{{popular.propertyTypeDynamic.name | default('')}} in {{popular.location.name|default('')}} ,{{popular.project.name | default('')}} 
+                              </span>
+                            </a>
+                             <span class="properties__price">
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                             </span>
+                            {#  {% if popular.sellingType == "Sale" %}
+                              <span class="properties__price">
+                               <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                               <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                             </span>
+                           {% endif %}
+                           {% if popular.sellingType == "Rent" %}
+                            <span class="properties__price">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span>{{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                            </span>
+                          {% endif %}
+                          {% if popular.sellingType == "Both" %}
+                            <span class="properties__price" style="display:block">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                            </span>
+                            <span class="properties__price" >
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span> {{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                            </span>
+
+                          {% endif %} #}
+                          <!-- end of block .properties__param-->
+                        </div>
+                        <!-- end of block .properties__info-->
+                      </div>
+                    {%endfor%}
+                </div>
+                {% for location in locations %}
+
+                  <div id="tab-{{location|replace(' ', '-')}}" class="properties__list tab-pane ">
+                    {% for popular in homepage_properties %}
+                      {% if popular.location.name == location %}
+                        <div class="properties__item" style="opacity:1 !important;">
+                          <div class="properties__thumb"><a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="item-photo"><img src="{% if popular.gallery|length > 0 %}{{asset('/images/properties/' ~ popular.folder ~ '/gallery/' ~ popular.gallery[0])}}{% endif %}" alt="">
+                            <figure class="item-photo__hover item-photo__hover--params">
+                              {# <span class="properties__param-type">{{popular.propertyTypeDynamic.name | default('')}}</span>
+                              <span class="properties__param-type">in {{popular.location.name | default('')}}</span>
+                              <span class="properties__param-type">, {{popular.project.name | default('')}}</span> #}
+                              <span class="properties__param"><span class="properties__param-column"><span class="properties__param-label">Land Area:</span><span class="properties__param-value">{{popular.landArea | default('')}} <span class="sqmfont">sqm</span></span></span><span class="properties__param-column"><span class="properties__param-label">Beds:</span><span class="properties__param-value">{{popular.bedrooms | default('')}}</span></span><span class="properties__param-column"><span class="properties__param-label">Baths:</span><span class="properties__param-value">{{popular.bathrooms | default('')}}</span></span></span></figure></a>
+                              {# <span class="properties__ribon">{{popular.propertyTypeDynamic.name | default('')}}</span> #}
+                              {% if popular.sellingType == "Sale" %}
+                                    <span class="properties__ribon">For Sale</span>
+                                {% endif %}
+                                {% if popular.sellingType == "Rent" %}
+                                    <span class="properties__ribon">For Rent</span>
+                                {% endif %}
+                                {% if popular.sellingType == "Both" %}
+                                    <span class="properties__ribon">For Sale / Rent </span>
+                                {% endif %}
+                            </div>
+                            <!-- end of block .properties__thumb-->
+
+                            <div class="properties__info"><a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__address"><span class="properties__address-street">{{popular.address}}</span>
+                             <span class="properties__address-city">{{popular.propertyTypeDynamic.name | default('')}} in {{popular.location.name|default('')}} ,{{popular.project.name | default('')}} 
+                              </span>
+                            </a>
+                             <span class="properties__price">
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                             </span>
+                            {#  {% if popular.sellingType == "Sale" %}
+                              <span class="properties__price">
+                               <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                               <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                             </span>
+                           {% endif %}
+                           {% if popular.sellingType == "Rent" %}
+                            <span class="properties__price">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span>{{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                            </span>
+                          {% endif %}
+                          {% if popular.sellingType == "Both" %}
+                            <span class="properties__price" style="display:block">
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Sale: </span> {{popular.askingPrice|number_format}}<span class="properties__price-period">EGP</span>
+                            </span>
+                            <span class="properties__price" >
+                              <span class="properties__price-period" style="color:black;font-size:12px">For Rent: </span> {{popular.rentPrice|number_format}}<span class="properties__price-period">EGP</span>
+                              <a href="{{url('WebsiteBundle_proprety_details', {property : popular.id})}}" class="properties__more">View details</a>
+                            </span>
+
+                          {% endif %} #}
+                          <!-- end of block .properties__param-->
+                        </div>
+                        <!-- end of block .properties__info-->
+                      </div>
+                      <!-- end of block .properties__item-->
+                    {% endif %}
+                    {%endfor%}
+                    <!-- end of block .properties__item-->
+                    </div>
+                  {% endfor %}
+                
+              </div>
+              <!-- end of block .properties__tab-content-->
+            </div><a href="{{url('WebsiteBundle_properties')}}" class="properties__btn-more">More properties</a>
+          </div>
+        </section>
+        <!-- END PROPERTIES INDEX-->
+        <!-- BEGIN SECTION FEATURE-->
+        <section class="feature">
+          <div class="feature__picture"></div>
+          <!-- end of .feature__picture-->
+          <div class="container">
+            <div class="feature__content">
+              <div class="feature__header">
+                <h3 data-sr="enter right ease-in-out 150px" class="feature__title">Meet Alissta</h3>
+                <h4 data-sr="enter right ease-in-out 250px" class="feature__headline">Our mission is to change the way people approach and interact with real estate in Egypt, empowering our clients with the information needed to make smart decisions. We understand that the process of buying or selling property is complicated and time-consuming. From choosing the right home for your family to finding a suitable workplace for conducting your business, we are here to guide you every step of the way.</h4>
+              </div>
+              <!-- end of block .feature__header-->
+              <div class="feature__list">
+                <div data-sr="enter right ease 150px" class="feature__item">
+                  <svg class="feature__icon feature__icon--money-save">
+                    <use xlink:href="#icon-money-save"></use>
+                  </svg>
+                  <div class="feature__item-content">
+                    <h3 class="feature__item-title">Save time</h3>
+                    <div class="feature__text">
+                      <p>We make the market work for you by matching properties that fit your needs, reducing the time it takes to find what you want.</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- end of block .feature__item-->
+                <div data-sr="enter right ease 250px" class="feature__item">
+                  <svg class="feature__icon feature__icon--good-sales">
+                    <use xlink:href="#icon-good-sales"></use>
+                  </svg>
+                  <div class="feature__item-content">
+                    <h3 class="feature__item-title">Trust</h3>
+                    <div class="feature__text">
+                      <p>In addition, RealtySpace operates the largest real estate and rental advertising networks in the U.S. in partnership with Livemile Homes!</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- end of block .feature__item-->
+                <div data-sr="enter right ease 150px" class="feature__item">
+                  <svg class="feature__icon">
+                    <use xlink:href="#icon-comfort"></use>
+                  </svg>
+                  <div class="feature__item-content">
+                    <h3 class="feature__item-title">Keep Comfort</h3>
+                    <div class="feature__text">
+                      <p>We are transforming the way clients make real estate decisions and connect with professionals.</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- end of block .feature__item-->
+                <div data-sr="enter right ease 250px" class="feature__item">
+                  <svg class="feature__icon">
+                    <use xlink:href="#icon-easy"></use>
+                  </svg>
+                  <div class="feature__item-content">
+                    <h3 class="feature__item-title">Easy to find</h3>
+                    <div class="feature__text">
+                      <p>It starts with our living database of more than 110 million U.S. homes &ndash; including homes for sale, homes for rent and homes not currently on the market.</p>
+                    </div>
+                  </div>
+                </div>
+                <!-- end of block .feature__item-->
+              </div>
+              <!-- end of block .feature__list-->
+            </div>
+            <!-- end of .feature__content-->
+          </div>
+        </section>
+        <!-- END SECTION FEATURE-->
+        <!-- BEGIN SECTION WORKER INDEX-->
+        
+        <!-- END SECTION ARTICLE-->
+        <!-- BEGIN SECTION ACHIEVEMENT-->
+        <!-- <div class="achievement">
+          <div class="container">
+            <div class="row">
+              <div data-sr="enter right move 0 over 0 wait 0s" data-animate-callback="countUp" data-animate-end="achievement__item--animate-end" class="achievement__item">
+                <svg class="achievement__icon">
+                  <use xlink:href="#icon-transactions"></use>
+                </svg>
+                <div data-count-end="755300" data-count-duration="1" class="achievement__counter achievement__counter--lg js-count-up"></div>
+                <div class="achievement__counter">755 300</div>
+                <div class="achievement__name">Transactions</div>
+              </div>
+              <div data-sr="enter right move 0 over 0 wait 0.5s" data-animate-callback="countUp" data-animate-end="achievement__item--animate-end" class="achievement__item">
+                <svg class="achievement__icon">
+                  <use xlink:href="#icon-customers"></use>
+                </svg>
+                <div data-count-end="17620" data-count-duration="1" class="achievement__counter achievement__counter--lg js-count-up"></div>
+                <div class="achievement__counter">17 620</div>
+                <div class="achievement__name">Satisfied Customers</div>
+              </div>
+              <div data-sr="enter right move 0 over 0 wait 1s" data-animate-callback="countUp" data-animate-end="achievement__item--animate-end" class="achievement__item">
+                <svg class="achievement__icon">
+                  <use xlink:href="#icon-agency"></use>
+                </svg>
+                <div data-count-end="790" data-count-duration="1" class="achievement__counter achievement__counter--lg js-count-up"></div>
+                <div class="achievement__counter">790</div>
+                <div class="achievement__name">Agencies</div>
+              </div>
+              <div data-sr="enter right move 0 over 0 wait 1.5s" data-animate-callback="countUp" data-animate-end="achievement__item--animate-end" class="achievement__item">
+                <svg class="achievement__icon">
+                  <use xlink:href="#icon-sales"></use>
+                </svg>
+                <div data-count-end="1528715" data-count-duration="1" class="achievement__counter achievement__counter--lg js-count-up"></div>
+                <div class="achievement__counter">1528715</div>
+                <div class="achievement__name">Sales &amp; Rents</div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <!-- END SECTION ACHIEVEMENT-->
+        <!-- BEGIN SECTION REVIEW-->
+        <section class="review review--wide review--undefined">
+          <div class="container">
+            <div class="review__header">
+              <h3 class="review__title">Testimonials</h3>
+              <!--  <h4 class="review__headline">Insights, tips & how-to guides on selling property and preparing your home or investment property for sale.</h4> -->
+            </div>
+            <!-- end of block .review__header-->
+            <div id="review-slider" class="review__list">
+              <div class="review__slider js-slick-slider">
+                {%for i in range(0,4)%}
+                <div class="review__item">
+                  <div class="review__photo"><img src="{{asset('website_assets/media-demo/testimonials/01.jpg')}}" alt="ALT" class="review__photo-img"></div>
+                  <div class="review__details"><span class="review__name">Vanessa Kasinsky</span><span class="review__post">Brand Manager</span>
+                    <div class="review__stars"><i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i><i class="glyphicon glyphicon-star"></i></div>
+                  </div>
+                  <div class="review__info">
+                    <div class="review__info-quote review__info-quote--open">&rdquo;</div>
+                    <p>Mariusz always addressed my questions professionally and in a very timely manner. Working with him was a pleasure and would come with my recommendation.
+                    </p>
+                    <div class="review__info-quote review__info-quote--close">&ldquo;</div>
+                  </div>
+                  <div class="clearfix"></div>
+                  <!-- end of block .review__item-->
+                </div>
+                {%endfor%}
+                <!--  -->
+              </div>
+            </div>
+            <!-- end of block .review__list-->
+          </div>
+        </section>
+        <!-- END SECTION REVIEW-->
+        <!-- BEGIN BLOCK GO SUBMIT-->
+        <div data-sr="flip 45deg over 0.5s" class="gosubmit">
+          <div class="container">
+            <div class="gosubmit__title">
+              <div class="gosubmit__title__row gosubmit__title__row--first">Looking to</div>
+              <div class="gosubmit__title__row gosubmit__title__row--second"><span class="gosubmit__title__option">Sell</span>  or  <span class="gosubmit__title__option">Rent</span></div>
+              <div class="gosubmit__title__row gosubmit__title__row--third">Your Property?</div>
+            </div>
+            <!-- end of block .gosubmit__title--><a href="my_listings_add_edit.html" class="gosubmit__btn">Submit now</a>
+          </div>
+        </div>
+        <!-- END BLOCK GO SUBMIT-->
+        <div class="center">
+          <div class="container">
+          </div>
+        </div>
+        <!-- END CENTER SECTION-->
+        <!-- BEGIN AFTER CENTER SECTION-->
+        <!-- END AFTER CENTER SECTION-->
+        <!-- BEGIN PARTNERS-->
+        
+      {% endblock %}

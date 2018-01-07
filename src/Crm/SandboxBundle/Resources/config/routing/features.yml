@@ -1,0 +1,30 @@
+features:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Features:index" }
+
+features_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:Features:show" }
+
+features_new:
+    path:     /new
+    defaults: { _controller: "CrmSandboxBundle:Features:new" }
+
+features_create:
+    path:     /create
+    defaults: { _controller: "CrmSandboxBundle:Features:create" }
+    methods:  POST
+
+features_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Features:edit" }
+
+features_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Features:update" }
+    methods:  [POST, PUT]
+
+features_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Features:delete" }
+    methods:  [POST, DELETE]

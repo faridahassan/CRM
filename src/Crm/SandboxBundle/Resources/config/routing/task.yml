@@ -1,0 +1,48 @@
+task:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Task:index" }
+
+task_show:
+    path:     /show
+    defaults: { _controller: "CrmSandboxBundle:Task:show" }
+
+task_new:
+    path:     /new
+    defaults: { _controller: "CrmSandboxBundle:Task:new" }
+
+task_create:
+    path:     /create
+    defaults: { _controller: "CrmSandboxBundle:Task:create" }
+    methods:  POST
+
+task_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Task:edit" }
+
+task_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Task:update" }
+    methods:  [POST, PUT]
+
+task_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Task:delete" }
+    methods:  [POST, DELETE]
+task_reschudle:
+    path: /{id}/{date}/{time}/reschudle
+    defaults: { _controller: "CrmSandboxBundle:Task:rescheduleTask" }
+    methods:  GET
+    options:
+        expose : true
+task_meetings_on_date:
+    path: /{user}/{date}/meetings
+    defaults: { _controller: "CrmSandboxBundle:Task:getMeetingsOnDate" }
+    methods:  GET
+    options:
+        expose : true
+task_cancel:
+    path: /{id}/{reason}/cancel
+    defaults: { _controller: "CrmSandboxBundle:Task:cancel" }
+    methods:  GET
+    options:
+        expose : true

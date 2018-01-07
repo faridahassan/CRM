@@ -1,0 +1,30 @@
+visit:
+    path:     /
+    defaults: { _controller: "CrmSandboxBundle:Visit:index" }
+
+visit_show:
+    path:     /{id}/show
+    defaults: { _controller: "CrmSandboxBundle:Visit:show" }
+
+visit_new:
+    path:     /new
+    defaults: { _controller: "CrmSandboxBundle:Visit:new" }
+
+visit_create:
+    path:     /create
+    defaults: { _controller: "CrmSandboxBundle:Visit:create" }
+    methods:  POST
+
+visit_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CrmSandboxBundle:Visit:edit" }
+
+visit_update:
+    path:     /{id}/update
+    defaults: { _controller: "CrmSandboxBundle:Visit:update" }
+    methods:  [POST, PUT]
+
+visit_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "CrmSandboxBundle:Visit:delete" }
+    methods:  [POST, DELETE]

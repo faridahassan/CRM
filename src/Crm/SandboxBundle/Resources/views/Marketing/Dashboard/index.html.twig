@@ -1,0 +1,200 @@
+{% extends '::base.html.twig' %}
+{% block page_content %}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-default">
+      
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <label class="col-sm-2 control-label">Filter Range <i class="fa fa-calendar"></i></label>
+            <div class="col-sm-9">
+              <input type="text" id="reportrange" class="form-control" name="daterange" />
+              
+            </div>         
+          </div>
+        </div>
+      </div>   
+    </div>
+  </div>
+ </div>
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title">Total Leads</h3>
+            <div class="panel-options">
+               <a href="#" data-toggle="panel">
+                  <span class="collapse-icon">&ndash;</span>
+                  <span class="expand-icon">+</span>
+               </a>
+               <a href="#" data-toggle="remove">
+                  &times;
+               </a>
+            </div>
+         </div>
+         <div class="panel-body">
+            <div id="chart">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title">Channels</h3>
+            <div class="panel-options">
+               <a href="#" data-toggle="panel">
+                  <span class="collapse-icon">&ndash;</span>
+                  <span class="expand-icon">+</span>
+               </a>
+               <a href="#" data-toggle="remove">
+                  &times;
+               </a>
+            </div>
+         </div>
+         <div class="panel-body" id="channels">
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title">Leads By Campaign</h3>
+            <div class="panel-options">
+               
+                  </div>
+               </div>
+               <div class="row" style="margin-top:10px">
+                <div class="col-md-6 col-md-offset-6">
+                 <div class="form-group">
+                  <script type="text/javascript">
+                    jQuery(document).ready(function($)
+                    {
+                      $("#channel").select2({
+                        placeholder: 'Select your country...',
+                        allowClear: true
+                      }).on('select2-open', function()
+                      {
+                        // Adding Custom Scrollbar
+                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                      });
+                      
+                    });
+                  </script>
+                  <select class="form-control" id="channel">
+                     {% set i = 0 %}
+                        {% for channelName,channeldata in leadsByChannel %}
+                           <option value={{i}}>{{channelName}}</option>
+                           {% set i = i+1 %}
+                           {% endfor %}
+                        </select>
+                     </div>
+                     </div>
+               </div>
+               <div class="panel-body" id="leadsByCampaign">
+                  
+
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+  {{parent()}}
+  <link rel="stylesheet" href="{{asset('assets/js/select2/select2.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/js/select2/select2-bootstrap.css')}}">
+  <script src="{{asset('assets/js/select2/select2.min.js')}}"></script>
+
+  <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+  <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+  <link rel="stylesheet" href="{{asset('assets/js/daterangepicker/daterangepicker-bs3.css')}}">
+  <script src="{{asset('assets/js/datepicker/bootstrap-datepicker.js')}}"></script>
+  <script src="{{asset('assets/js/moment.min.js')}}"></script>
+  <script src="{{asset('assets/js/daterangepicker/daterangepicker.js')}}"></script>
+  <script src="{{asset('assets/js/timepicker/bootstrap-timepicker.min.js')}}"></script>
+  <script src="{{asset('assets/js/multiselect/js/jquery.multi-select.js')}}"></script>
+  <script src="{{asset('assets/js/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
+  <script src="{{asset('assets/js/jvectormap/regions/jquery-jvectormap-world-mill-en.js')}}"></script>
+  <script src="{{asset('assets/js/devexpress-web-14.1/js/globalize.min.js')}}"></script>
+  <script src="{{asset('assets/js/devexpress-web-14.1/js/dx.chartjs.js')}}"></script>
+  <script src="{{asset('assets/js/jquery-ui/jquery-ui.min.js')}}"></script>
+  <script src="{{asset('assets/js/selectboxit/jquery.selectBoxIt.min.js')}}"></script>
+  <script>
+          $(function() {
+
+       function cb(start, end) {
+            console.log("callback");
+            $("#reportrange").val(start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            var syear = start.format('YYYY');
+            var smonth = start.format('MM');
+            var sday = start.format('DD');
+            var eyear = end.format('YYYY');
+            var emonth = end.format('MM');
+            var eday = end.format('DD');
+            
+            var url1 = Routing.generate('marketing_dashboard_update_chart', { beginDate : sday, endDate: eday, emonth: emonth, smonth:smonth, syear :syear, eyear:eyear});
+            var url2 = Routing.generate('marketing_dashboard_update_channel', { beginDate : sday, endDate: eday, emonth: emonth, smonth:smonth, syear :syear, eyear:eyear});
+            var url3 = Routing.generate('marketing_dashboard_update_campaign', { beginDate : sday, endDate: eday, emonth: emonth, smonth:smonth, syear :syear, eyear:eyear});
+            $.ajax({
+               type:"GET",url : url2,
+               success : function(response) {
+                  $("#channels").html(response);
+               },
+               error: function() {
+                  $("#channels").html("An error has occured while trying to update the dashboard");
+               }
+            });
+             $.ajax({
+               type:"GET",url : url1,
+               success : function(response) {
+                  $("#chart").html(response);
+               },
+               error: function() {
+                  $("#chart").html("An error has occured while trying to update the dashboard");
+               }
+            });
+             $.ajax({
+               type:"GET",url : url3,
+               success : function(response) {
+                  $("#leadsByCampaign").html(response);
+               },
+               error: function() {
+                  $("#leadsByCampaign").html("An error has occured while trying to update the dashboard");
+               }
+            });
+       }
+       cb(moment().startOf('month'), moment().endOf('month'));
+       $('#reportrange').daterangepicker({
+             locale: {
+               format: 'DD/MM/YYYY'
+           },
+           autoUpdateInput: true,
+           "autoApply": false,
+           startDate: moment(),
+           endDate: moment(),
+           ranges: {
+              'Today': [moment(), moment().add(1, 'days')],
+          'Yesterday': [moment().subtract(1, 'days'), moment()],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month').add(1, 'days')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month').add(1, 'days')],
+          'Q1': [moment().month(0).startOf('month'),moment().month(2).endOf('month').add(1, 'days')],
+          'Q2': [moment().month(3).startOf('month'),moment().month(5).endOf('month').add(1, 'days')],
+          'Q3': [moment().month(6).startOf('month'),moment().month(8).endOf('month').add(1, 'days')],
+          'Q4': [moment().month(9).startOf('month'),moment().month(11).endOf('month').add(1, 'days')],
+
+             }
+
+       }, cb);
+
+   });
+
+  </script>
+{% endblock %}
